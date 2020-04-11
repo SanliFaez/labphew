@@ -4,24 +4,24 @@ with open("README.md") as f:
     long_description = f.read()
 
 setup(
-    name='PythonForTheLab',
-    version="0.1.1",
+    name='Labphew',
+    version="0.1.0",
     packages=find_packages(),
-    url='https://github.com/PFTL/SimpleDaq',
+    url='https://github.com/sanlifaez/labphew',
     license='GPLv3',
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
-    author='Aquiles Carattino',
-    author_email='aquiles@uetke.com',
-    description='Code for Python for the Lab Workshop',
+    author='Sanli Faez',
+    author_email='s.faez@uu.nl',
+    description='Fun with computer-controlled experiments for beginners',
     long_description=long_description,
     test_suite='testsuite.testsuite',
     entry_points={
         'console_scripts': [
-            'py4lab = PythonForTheLab.start:start'
+            'Labphew = Labphew.start:start'
         ],
     },
     install_requires=[
