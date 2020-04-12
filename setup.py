@@ -4,8 +4,10 @@ with open("README.md") as f:
     long_description = f.read()
 
 setup(
+
     name="labphew",
     version="0.1.0",
+
     packages=find_packages(),
     url="https://github.com/sanlifaez/labphew",
     license='GPLv3',
@@ -18,8 +20,10 @@ setup(
     author_email='s.faez@uu.nl',
     description='Fun with computer-controlled experiments for beginners',
     long_description=long_description,
+
     long_description_content_type="text/markdown",
     include_package_data=True,
+
     entry_points={
         'console_scripts': [
             'labphew = labphew.__main__:main'
