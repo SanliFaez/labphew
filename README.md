@@ -1,37 +1,35 @@
 # Welcome to Labphew documentation!
 ==============================================
-[![Documentation Status](https://readthedocs.org/projects/python-for-the-lab/badge/?version=latest)](http://python-for-the-lab.readthedocs.io/en/latest/?badge=latest) [![Build Status](https://travis-ci.org/PFTL/SimpleDaq.svg?branch=master)](https://travis-ci.org/PFTL/SimpleDaq) [![Coverage Status](https://coveralls.io/repos/github/PFTL/SimpleDaq/badge.svg?branch=master)](https://coveralls.io/github/PFTL/SimpleDaq?branch=master)
+![Labphew logo](lapphew_logo.png)
 
-*Labphew* is a minimalist code and starters kit for computer-controlled instrumentation in Python. The main purpose of Labphew is to provide a simple structure for those with little experience with coding to build their own user interface for a piece of hardware or an experiment. 
+*Labphew* is a starters minimalist code and folder structure for developing a computer-controlled experiment in Python. The main purpose of Labphew is to provide a basis for those with little coding experience to build their own user-interface for a piece of hardware or to control a measurement. 
 
-This project is based on the instruction exercise written by Aquiles Carattino, the mastermind behind [Python for the Lab](https://www.pythonforthelab.com/) 
 
-## Python for the Lab
+### Python for the Lab
 -------------
-Python for the Lab (PFTL) is a simple program to acquire data from a DAQ device. It is designed following the MVC design pattern, splitting the code into Controllers for defining drivers, Models for specifying the logic on how to use devices and perform an experiment. The View is where all the GUI is developed.
-PFTL was developed by [Uetke](https://www.uetke.com) to explain to researchers, through simple examples, what can be achieved quickly with little programming knowledge. The ultimate goal of this project is to serve as a reference place for people interested in instrumentation written in Python.
+This project is heavily inspired by the instruction exercise written by [Dr. Aquiles Carattino](https://www.uetke.com), the mastermind behind [Python for the Lab](https://www.pythonforthelab.com/). If you want to learn more (serious!) coding for lab automation with Python, check the excellent [PTFL website](https://www.pythonforthelab.com/) or book him for a course.
 
-You can find the code of the original package at [Github](https://github.com/PFTL/SimpleDaq/), the documentation is hosted at [Read The Docs](https://readthedocs.org/projects/python-for-the-lab/). If you are interested in learning more about Python For The Lab, you can check [Uetke's courses](https://uetke.com/courses/).
+Python for the Lab (PFTL) is a code architecture and a programming course for computer-controlled instrumentation. PTFL codes are designed following the MVC design pattern, splitting the code into Controllers for defining drivers, Models for specifying the logic of the experiment, and View for parking the GUI.
+PFTL was developed by [Uetke](https://www.uetke.com) to explain to researchers, through simple examples, what can be achieved quickly with little programming experience. The ultimate goal of this project is to serve as a reference place for people interested in instrumentation written in Python.
 
-## The GUI
+You can find the code of the original exercise at [Github](https://github.com/PFTL/SimpleDaq/), the documentation is hosted at [Read The Docs](https://readthedocs.org/projects/python-for-the-lab/). If you are interested in learning more about Python For The Lab, you can check [Uetke's courses](https://uetke.com/courses/).
+
+## The Labphew package
 -------------
-![Alt text](Docs/source/_static/GUI_Python_For_The_Lab.png?raw=true "GUI of Python For The Lab")
+Currently, the labphew package contains more wishes than executable pieces. However you can use its framework as a (hopefully convenient) starting point to write your own code. Please note that this package is published under [GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/).
 
-If you follow the Python for the Lab course, the GUI is going to be the last step. You perform an analog output scan while acquiring the voltage on a different port. This will allow the users to acquire an I-V scan or any other voltage-dependent measurement.
+However, labphew comes with a couple of modules that actually work
+### Hello world with mouse clicks
 
-## The basic package
--------------
-![Alt text](Docs/source/_static/PFTL_Real_Device_r.JPG?raw=true "GUI of Python For The Lab")
-
-## without external hardware: Mouse click
-
-## with external hardware: Arduino 
+### practic with external hardware: an Arduino 
 The objective of PFTL is to control a device to measure the IV curve of an LED. The device is built on an Arduino DUE which has two Digital-to-Analog channels. The program monitors the voltage across a resistance while increasing the voltage applied to an LED. We can change all the parameters of the scan, including the input and output channels, the range, time delay, etc.
 
 ## Documentation
 -------------
-Aditional documentation can be found at [Read the Docs](http://python-for-the-lab.readthedocs.io/en/latest/)
+Documentation of labphew should be instructive, especially for the beginners. This is generally more difficult than writing an executable code and therefore will be done in the second phase of the project. 
 
+The original PTFL documentation can be found at [Read the Docs](http://python-for-the-lab.readthedocs.io/en/latest/)
 
 ## How to contribute
 -------------
+The labphew roadmap is still incomplete. If your interests are aligned with the main purpose of this project and you want to get involved, you can send a few lines to Sanli.

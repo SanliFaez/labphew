@@ -12,13 +12,11 @@ import numpy as np
 import pyqtgraph as pg
 from PyQt5 import QtCore, uic, QtWidgets
 
-from PythonForTheLab import Q_
+from labphew import Q_
 
 from .config_window import ConfigWindow
 from .general_worker import WorkThread
 from .scan_window import ScanWindow
-
-
 
 
 class MonitorWindow(QtWidgets.QMainWindow):

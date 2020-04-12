@@ -11,8 +11,7 @@ import numpy as np
 import yaml
 from time import time, sleep
 
-from PythonForTheLab import Q_
-
+from labphew import Q_
 
 class Experiment:
     """Class for performing a measurement of an I-V curve of a light emitting photodiode (LED).

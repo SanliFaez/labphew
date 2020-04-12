@@ -1,4 +1,4 @@
-from PythonForTheLab.Model.experiment.IV_measurement import Experiment
+from labphew.Model.experiment.IV_measurement import Experiment
 
 e = Experiment()
 e.load_config('Config/experiment.yml')

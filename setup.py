@@ -4,10 +4,10 @@ with open("README.md") as f:
     long_description = f.read()
 
 setup(
-    name='Labphew',
+    name="labphew",
     version="0.1.0",
     packages=find_packages(),
-    url='https://github.com/sanlifaez/labphew',
+    url="https://github.com/sanlifaez/labphew",
     license='GPLv3',
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -18,10 +18,10 @@ setup(
     author_email='s.faez@uu.nl',
     description='Fun with computer-controlled experiments for beginners',
     long_description=long_description,
-    test_suite='testsuite.testsuite',
+    include_package_data=True,
     entry_points={
         'console_scripts': [
-            'Labphew = Labphew.start:start'
+            'labphew = labphew.__main__:main'
         ],
     },
     install_requires=[

@@ -1,9 +1,9 @@
 """
 Start Function
 ==============
-After installing Python for the Lab it is possible to start it directly from within the command line using `pftl.start`. It takes one argument that is the path to the configuration file.
+After installing labphew it is possible to start it directly from within the command line using `labphew.start`. It takes one argument that is the path to the configuration file.
 
-    $ pftl.start Config/experiment.yml
+    $ labphew.start Config/experiment.yml
 
 """
 
@@ -18,8 +18,8 @@ def start():
         print(help_message)
         return
 
-    from PythonForTheLab.Model.experiment.IV_measurement import Experiment
-    from PythonForTheLab.View.start import start_gui
+    from labphew.Model.experiment.IV_measurement import Experiment
+    from labphew.View.start import start_gui
 
     experiment = Experiment()
     experiment.load_config(args[0])
@@ -29,13 +29,13 @@ def start():
 
 help_message = \
 """
-Welcome to Python For The Lab
+Congratulations! 
+You're almost ready to run a labphew module
 -----------------------------
-In order to run the program, you need to supply the path to the config file.
+In order to run a module with labphew, you need to insert the path to the config file.
 For example, you can invoke this program as:
-py4lab Config/experiment.yml
+labphew Config/experiment_dummy.yml
 """
-
 
 if __name__ == "__main__":
     start()
