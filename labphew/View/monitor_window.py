@@ -20,10 +20,10 @@ from .scan_window import ScanWindow
 
 
 class MonitorWindow(QtWidgets.QMainWindow):
-    def __init__(self, experiment, parent=None):
+    def __init__(self, application, parent=None):
         super().__init__(parent)
 
-        self.experiment = experiment
+        self.application = application
 
         p = os.path.dirname(__file__)
         uic.loadUi(os.path.join(p, 'GUI/main_window.ui'), self)
@@ -45,18 +45,18 @@ class MonitorWindow(QtWidgets.QMainWindow):
         self.xdata = np.zeros((0))
         self.p = self.main_plot.plot(self.xdata, self.ydata)
 
-        self.config_window = ConfigWindow(experiment, parent=self)
+        self.config_window = ConfigWindow(application, parent=self)
         self.config_window.propertiesChanged.connect(self.update_properties)
         self.actionConfig.triggered.connect(self.config_window.show)
 
-        self.scan_window = ScanWindow(experiment)
+        self.scan_window = ScanWindow(application)
         self.actionScan.triggered.connect(self.scan_window.show)
 
     def update_properties(self, props):
         """Method triggered when the signal for updating parameters is triggered.
         """
-        self.experiment.properties['Monitor'] = props
-        self.delayLine.setText(self.experiment.properties['Monitor']['time_resolution'])
+        self.application.properties['Monitor'] = props
+        self.delayLine.setText(self.application.properties['Monitor']['time_resolution'])
 
     def start_monitor(self):
         """Starts a  monitor in a separated Worker Thread. There will be a delay for the update of the plot.
@@ -67,10 +67,10 @@ class MonitorWindow(QtWidgets.QMainWindow):
             return
         self.running_monitor = True
         delay = Q_(self.delayLine.text())
-        self.experiment.properties['time_resolution'] = delay
-        self.worker_thread = WorkThread(self.experiment.monitor_signal)
+        self.application.properties['time_resolution'] = delay
+        self.worker_thread = WorkThread(self.application.monitor_signal)
         self.worker_thread.start()
-        refresh_time = Q_(self.experiment.properties['Monitor']['refresh_time'])
+        refresh_time = Q_(self.application.properties['Monitor']['refresh_time'])
         self.update_timer.start(refresh_time.m_as('ms'))
 
     def stop_monitor(self):
@@ -87,8 +87,8 @@ class MonitorWindow(QtWidgets.QMainWindow):
     def update_monitor(self):
         """This method is called through a timer. It updates the data displayed in the main plot.
         """
-        self.xdata = self.experiment.xdata
-        self.ydata = self.experiment.ydata
+        self.xdata = self.application.xdata
+        self.ydata = self.application.ydata
 
         self.p.setData(self.xdata, self.ydata)
 

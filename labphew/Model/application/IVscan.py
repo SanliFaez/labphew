@@ -1,8 +1,8 @@
- # coding=utf-8
+# coding=utf-8
 """
-Experiment Model
+IV scan application
 ================
-Building a model for the experiment allows developers to have a clear picture of the logic of their
+Building a model for the application allows developers to have a clear picture of the logic of their
 experiments. It allows to build simple GUIs around them and to easily share the code with other users.
 
 """
@@ -13,7 +13,7 @@ from time import time, sleep
 
 from labphew import Q_
 
-class Experiment:
+class Application:
     """Class for performing a measurement of an I-V curve of a light emitting photodiode (LED).
     """
 
@@ -91,10 +91,10 @@ class Experiment:
     def load_config(self, filename=None):
         """Loads the configuration file to generate the properties of the Scan and Monitor.
 
-        :param str filename: Path to the filename. Defaults to Config/experiment.yml if not specified.
+        :param str filename: Path to the filename. Defaults to Config/application.yml if not specified.
         """
         if filename is None:
-            filename = 'Config/experiment.yml'
+            filename = 'Config/application.yml'
 
         with open(filename, 'r') as f:
             params = yaml.load(f, Loader=yaml.FullLoader)
@@ -150,7 +150,7 @@ class Experiment:
             file_path = filename + '_' + str(i) + ext
             i += 1
 
-        header = "# Data saved by Python For the Lab\n"
+        header = "# Data saved by labphew IVscan application\n"
         header += "# First Column X-Axis channel: {}, units: {}\n".format(
                 self.properties['Scan']['channel_out'], self.xdata_scan[0].u)
         header += "# Second Column Y-Axis channel: {}, units: {}\n".format(
@@ -165,5 +165,5 @@ class Experiment:
 
 
 if __name__ == "__main__":
-    e = Experiment()
+    e = Application()
     data = e.read_analog(1)

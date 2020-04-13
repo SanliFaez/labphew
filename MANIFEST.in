@@ -3,8 +3,8 @@ include README.md
 include setup.py
 include LICENSE
 include Examples/*
-include labphew/View/GUI/Icons/*
-include labphew/View/GUI//UI/*
-include docs/
-include extras/
-exclude labphew/View/attic/
+include labphew/View/design/Icons/*
+include labphew/View/design//UI/*
+include docs/*
+include extras/*
+exclude labphew/View/attic/*

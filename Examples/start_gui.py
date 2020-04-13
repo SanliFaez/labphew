@@ -6,11 +6,11 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 
-from PythonForTheLab.Model import Experiment
-from PythonForTheLab.View.scan_window import ScanWindow
+from labphew.Model.application import IVscan
+from labphew.View.scan_window import ScanWindow
 
-e = Experiment()
-e.load_config('Config/experiment.yml')
+e = IVscan.Application
+e.load_config('Config/experiment_dummy.yml')
 e.load_daq()
 
 ap = QApplication(sys.argv)

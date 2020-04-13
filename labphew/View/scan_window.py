@@ -97,7 +97,7 @@ class ScanWindow(QtWidgets.QMainWindow):
         self.update_timer.start(refresh_time.m_as('ms'))
 
     def update_scan(self):
-        """Updates the plot with the available data in the experiment model. This method is triggered
+        """Updates the plot with the available data in the application model. This method is triggered
         through a timer that starts with the start_scan method.
         The method also monitors whether the scan is still running or not. If it has stopped it will update
         the GUI in order to know it.
@@ -111,7 +111,7 @@ class ScanWindow(QtWidgets.QMainWindow):
             self.stop_scan()
 
     def stop_scan(self):
-        """Stops the scan if it is running. It sets the proper variable to the experiment model in order
+        """Stops the scan if it is running. It sets the proper variable to the application model in order
         to finish it in an elegant way. It stops the update timer and calls the update plot one last time
         in order to display the very last available data.
         """
@@ -129,7 +129,7 @@ class ScanWindow(QtWidgets.QMainWindow):
 
     def save_data(self):
         """Saves the data to disk. It opens a Dialog for selecting the directory. The default filename for
-        the data is 'scan_data.dat'. The experiment model takes care of handling the saving itself.
+        the data is 'scan_data.dat'. The application model takes care of handling the saving itself.
         """
         self.directory = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Directory", self.directory))
         filename = 'scan_data.dat'
@@ -145,9 +145,9 @@ class ScanWindow(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     import sys
     from PyQt5.QtWidgets import QApplication
-    from labphew.Model.experiment.IV_measurement import Experiment
+    from labphew.Model.application.IVscan import Application
 
-    e = Experiment()
+    e = Application()
     session = {'port_monitor': 1,
                'time_resolution': Q_('1ms'),
                'refresh_time': Q_('100ms'),

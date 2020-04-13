@@ -1,7 +1,7 @@
-from labphew.Model.experiment.IV_measurement import Experiment
+from labphew.Model.application.IVscan import Application
 
-e = Experiment()
-e.load_config('Config/experiment.yml')
+e = Application()
+e.load_config('Config/application.yml')
 e.load_daq()
 e.do_scan()
 e.save_scan_data('filename.txt')

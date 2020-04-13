@@ -2,8 +2,8 @@
 Analog DAQ
 ==========
 Class for communicating with a real device. It implements the base for communicating with the device
-through a Controller. The experiment in mind is measuring the I-V curve of a diode, adding the logic
-into a separate Model for the experiment may seem redundant, but incredibly useful in bigger projects.
+through a Controller. The application in mind is measuring the I-V curve of a diode, adding the logic
+into a separate Model for the application may seem redundant, but incredibly useful in bigger projects.
 
 """
 from PythonForTheLab.Controller.simple_daq import SimpleDaq

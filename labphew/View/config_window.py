@@ -39,8 +39,8 @@ if __name__ == "__main__":
     import sys
     from PyQt5.Qt import QApplication
     ap = QApplication(sys.argv)
-    from labphew.Model.experiment.IV_measurement import Experiment
-    e = Experiment()
+    from labphew.Model.application.IVscan import Application
+    e = Application()
     session = {'port_monitor': 1,
                'time_resolution': Q_('1ms'),
                'refresh_time': Q_('20ms'),

@@ -1,9 +1,9 @@
-# Welcome to Labphew documentation!
+# Welcome to labphew!
 ==============================================
-![Labphew logo](lapphew_logo.png)
 
-*Labphew* is a starters minimalist code and folder structure for developing a computer-controlled experiment in Python. The main purpose of Labphew is to provide a basis for those with little coding experience to build their own user-interface for a piece of hardware or to control a measurement. 
+![labphew logo](https://www.dropbox.com/s/3o1rp254f13myla/labphew_logo.png?dl=0)
 
+*labphew* is a minimalist code and folder structure for developing a computer-controlled experiment in Python. The main purpose of Labphew is to provide a basis for those with little coding experience to build their own user-interface(s) for a piece of hardware or to control a measurement. 
 
 ### Python for the Lab
 -------------
@@ -14,14 +14,15 @@ PFTL was developed by [Uetke](https://www.uetke.com) to explain to researchers, 
 
 You can find the code of the original exercise at [Github](https://github.com/PFTL/SimpleDaq/), the documentation is hosted at [Read The Docs](https://readthedocs.org/projects/python-for-the-lab/). If you are interested in learning more about Python For The Lab, you can check [Uetke's courses](https://uetke.com/courses/).
 
-## The Labphew package
+## The labphew package
 -------------
 Currently, the labphew package contains more wishes than executable pieces. However you can use its framework as a (hopefully convenient) starting point to write your own code. Please note that this package is published under [GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/).
 
-However, labphew comes with a couple of modules that actually work
+However, labphew comes with a couple of modules that actually work:
+
 ### Hello world with mouse clicks
 
-### practic with external hardware: an Arduino 
+### practice with an external hardware: an Arduino 
 The objective of PFTL is to control a device to measure the IV curve of an LED. The device is built on an Arduino DUE which has two Digital-to-Analog channels. The program monitors the voltage across a resistance while increasing the voltage applied to an LED. We can change all the parameters of the scan, including the input and output channels, the range, time delay, etc.
 
 ## Documentation
