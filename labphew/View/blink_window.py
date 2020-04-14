@@ -10,7 +10,7 @@ from PyQt5.QtGui import QFont
 
 class StartWindow(QMainWindow):
     def __init__(self):
-
+        super().__init__()
         self.central_widget = QWidget()
         self.button_start = QPushButton('Blink', self.central_widget)
         self.button_stop = QPushButton('Stop', self.central_widget)
@@ -24,7 +24,7 @@ class StartWindow(QMainWindow):
         self.layout = QVBoxLayout(self.central_widget)
         self.layout.addWidget(self.button_start)
         self.layout.addWidget(self.button_stop)
-        self.layout.addWidget(self.message)
+        self.layout.addWidget(self.message, alignment=Qt.AlignCenter)
         self.layout.addWidget(self.slider)
         self.setCentralWidget(self.central_widget)
 
@@ -50,9 +50,10 @@ class StartWindow(QMainWindow):
 
     def stop_blinking(self):
         self.blinking = False
-        self.blink_timer.killTimer()
+        #self.blink_timer.killTimer()
         self.message.setText('blinking stopped!')
         self.message.setFont(QFont("Arial", 12, QFont.Normal))
+        self.message.setStyleSheet("color: black;")
 
     def change_state(self):
         self.blink_state = 1 - self.blink_state
@@ -60,9 +61,13 @@ class StartWindow(QMainWindow):
     def refresh_monitor(self):
         if self.blinking:
             if self.blink_state:
-                self.message.setFont(QFont("Arial", 12, QFont.Thin))
-            else:
                 self.message.setFont(QFont("Arial", 12, QFont.Bold))
+                self.message.setStyleSheet("color: red;")
+            else:
+                self.message.setFont(QFont("Arial", 12, QFont.Thin))
+                self.message.setStyleSheet("color: white;")
+        else:
+            pass
 
     def update_frequency(self, value):
         if self.blinking:
