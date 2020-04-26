@@ -17,10 +17,10 @@ def main():
         print(help_message)
         return
 
-    from labphew.Model.application.IVscan import Application
+    from labphew.Model.application.IVscan import Operator
     from labphew.View.start import start_gui
 
-    e = Application()
+    e = Operator()
     e.load_config(args[0])
     e.load_daq()
     start_gui(e)

@@ -6,10 +6,10 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 
-from labphew.Model.application import IVscan
+from labphew.Model.application import IVscan_aquic as IVscan
 from labphew.View.scan_window import ScanWindow
 
-e = IVscan.Application
+e = IVscan.Operator
 e.load_config('Config/experiment_dummy.yml')
 e.load_daq()
 

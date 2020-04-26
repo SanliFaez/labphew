@@ -5,9 +5,9 @@ Simple QDialog that provides a form to update some values for the monitor.
 
 """
 import os
-from PyQt5 import QtCore, QtWidgets, QtGui, uic
+from PyQt5 import QtCore, QtWidgets, uic
 
-from PythonForTheLab import Q_
+from labphew import Q_
 
 
 class ConfigWindow(QtWidgets.QDialog):
@@ -39,8 +39,8 @@ if __name__ == "__main__":
     import sys
     from PyQt5.Qt import QApplication
     ap = QApplication(sys.argv)
-    from labphew.Model.application.IVscan import Application
-    e = Application()
+    from labphew.Model.application.IVscan_aquic import Operator
+    e = Operator()
     session = {'port_monitor': 1,
                'time_resolution': Q_('1ms'),
                'refresh_time': Q_('20ms'),

@@ -6,10 +6,10 @@ through a Controller. The application in mind is measuring the I-V curve of a di
 into a separate Model for the application may seem redundant, but incredibly useful in bigger projects.
 
 """
-from PythonForTheLab.Controller.simple_daq import SimpleDaq
+from labphew.Controller.simple_daq import SimpleDaq
 
-from PythonForTheLab.Model.daq import DAQBase
-from PythonForTheLab import Q_
+from labphew.Model.daq.base import DAQBase
+from labphew import Q_
 
 
 class AnalogDaq(DAQBase):

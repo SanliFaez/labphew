@@ -7,8 +7,8 @@ It is useful for debugging and timing applications.
 
 """
 import numpy as np
-from PythonForTheLab import Q_
-from PythonForTheLab.Model.daq import DAQBase
+from labphew import Q_
+from labphew.Model.daq import DAQBase
 
 
 class DummyDaq(DAQBase):

@@ -1,9 +1,11 @@
 # coding=utf-8
 """
-IV scan application
+labphew basic blink application
 ================
-Building a model for the application allows developers to have a clear picture of the logic of their
-experiments. It allows to build simple GUIs around them and to easily share the code with other users.
+blink.py contains a very simple operator for communicating with an arduino.
+It also serves as an example for the minimal structure of an Operator class in labphew.
+
+The stripped version of this class structure can be copied from Model/application/blank.py
 
 """
 import os
@@ -20,14 +22,8 @@ class Operator:
     def __init__(self):
         self.daq = None
         self.properties = {}
-        self.stop_monitor = False
-        self.xdata = np.zeros(0)
-        self.ydata = np.zeros(0)
-        self.xdata_scan = np.zeros(0)
-        self.ydata_scan = np.zeros(0)
-        self.running_scan = False
-        self.stop_scan = False
-        self.delta_x = 0
+        self.blink_state = 0
+        self.blinking = False
         self.t0 = time()
 
     def read_analog(self, port: int):
@@ -91,10 +87,10 @@ class Operator:
     def load_config(self, filename=None):
         """Loads the configuration file to generate the properties of the Scan and Monitor.
 
-        :param str filename: Path to the filename. Defaults to Config/application.yml if not specified.
+        :param str filename: Path to the filename. Defaults to Model/default/blink.yml if not specified.
         """
         if filename is None:
-            filename = 'Config/application.yml'
+            filename = 'Model/default/blink.yml'
 
         with open(filename, 'r') as f:
             params = yaml.load(f, Loader=yaml.FullLoader)
@@ -104,7 +100,8 @@ class Operator:
         self.properties['User'] = self.properties['User']['name']
 
     def load_daq(self, daq_model=None):
-        """ Loads a DAQ Model already initialized or loads from yaml specifications. The DAQ that can
+        """
+        Loads a DAQ Model already initialized or loads from yaml specifications. The DAQ that can
         be provided through the YAML are 'DummyDaq' and 'RealDaq'. There are no limitations regarding
         an already initialized DAQ provided that follows the Daq Model.
 
@@ -115,15 +112,15 @@ class Operator:
                 name = self.properties['DAQ']['name']
                 port = self.properties['DAQ']['port']
                 if name == 'DummyDaq':
-                    from PythonForTheLab.Model.daq import DummyDaq
+                    from labphew.Model.daq import DummyDaq
                     self.daq = DummyDaq(port)
 
                 elif name == 'RealDaq':
-                    from PythonForTheLab.Model.daq.analog_daq import AnalogDaq
+                    from labphew.Model.daq.analog_daq import AnalogDaq
                     self.daq = AnalogDaq(port)
 
                 elif name == 'VisaDaq':
-                    from PythonForTheLab.Model.daq.visa_daq import AnalogDaq
+                    from labphew.Model.daq.visa_daq import AnalogDaq
                     self.daq = AnalogDaq(port)
                 else:
                     filename = self.properties['config_file']
@@ -134,34 +131,6 @@ class Operator:
         else:
             self.daq = daq_model
 
-    def save_scan_data(self, file_path=None):
-        """Saves the data from the scan into the specified file. If the file already exists, it will
-        automatically append a number before the extension.
-
-        :param str file_path: Full path to the file. It should end with an extension (a dot and 3
-        letters).
-        """
-        if file_path is None:
-            file_path = self.properties['Save_File']['filename']
-        i = 0
-        ext = file_path[-4:]  # Get the file extension (it assumes is a dot and three letters)
-        filename = file_path[:-4]
-        while os.path.exists(file_path):
-            file_path = filename + '_' + str(i) + ext
-            i += 1
-
-        header = "# Data saved by labphew IVscan application\n"
-        header += "# First Column X-Axis channel: {}, units: {}\n".format(
-                self.properties['Scan']['channel_out'], self.xdata_scan[0].u)
-        header += "# Second Column Y-Axis channel: {}, units: {}\n".format(
-                self.properties['Scan']['channel_in'], self.ydata_scan[0].u)
-
-        with open(file_path, 'wb') as f:
-            f.write(header.encode('ascii'))
-            scan_data = np.vstack((self.xdata_scan, self.ydata_scan))
-            np.savetxt(f, scan_data.T, fmt='%7.5f')
-
-        print('Data saved to {}'.format(file_path))
 
 
 if __name__ == "__main__":

@@ -1,3 +1,7 @@
+# an example of a configuration file
+# also used for running the blink operations
+#############
+
 User:
   name: Aquiles
   role: Teacher

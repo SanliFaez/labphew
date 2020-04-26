@@ -1,16 +1,19 @@
 """
-Blink Window
+labphew.View.blink_window.py
 ==============
-The simplest interactive window based on PyQt, used to show the elements of the GUI and test correct installation of the labphew module and its dependencies
+An interactive window based on PyQt, used to show the elements of the GUI and test correct installation of the labphew
+module and its dependencies.
+This code can be used as a basis for building more complex user interfaces.
 """
 
 from PyQt5.QtCore import Qt, QThread, QTimer
 from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QIcon
 
-class StartWindow(QMainWindow):
-    def __init__(self):
+class MonitorWindow(QMainWindow):
+    def __init__(self, operator=None, parent=None):
         super().__init__()
+        self.setWindowTitle('labphew blinks at you')
         self.central_widget = QWidget()
         self.button_start = QPushButton('Blink', self.central_widget)
         self.button_stop = QPushButton('Stop', self.central_widget)
@@ -50,7 +53,6 @@ class StartWindow(QMainWindow):
 
     def stop_blinking(self):
         self.blinking = False
-        #self.blink_timer.killTimer()
         self.message.setText('blinking stopped!')
         self.message.setFont(QFont("Arial", 12, QFont.Normal))
         self.message.setStyleSheet("color: black;")
@@ -76,6 +78,8 @@ class StartWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication([])
-    window = StartWindow()
+    app_icon = QIcon("labphew/View/design/Icons/labphew_icon.png")
+    app.setWindowIcon(app_icon)
+    window = MonitorWindow()
     window.show()
     app.exit(app.exec_())
