@@ -1,7 +1,7 @@
 _Development notes for Sanli_
 
 ## Wishlist to develop
-* [ ] easy game with mouse clicks
+* [x] easy blink code with buttons
 * [ ] test and control using an arduino
 * [ ] test and control using the digilent
 * [ ] documentation of using digilent
@@ -13,13 +13,14 @@ _Development notes for Sanli_
 * [x] where to add long description?
 * [x] how to credit Aquiles in authors?
 * [x] what is the logic of directories for start files?
+* [ ] why is icon not showing?
 
 ## Project roadmap
-- make simple package with easy installation
-- make docs on aims and scope of the project
-- write how to contribute
-- make simple presentation for first time users
-- make list of initiatives and ongoing projects
+- [x] make simple package with easy installation
+- [ ] make docs on aims and scope of the project
+- [ ] write how to contribute
+- [ ] make simple presentation for first time users
+- [ ] make list of initiatives and ongoing projects
 
 
 ## workflow of adapting the code

@@ -13,7 +13,7 @@ from time import time, sleep
 
 from labphew import Q_
 
-class Application:
+class Operator:
     """Class for performing a measurement of an I-V curve of a light emitting photodiode (LED).
     """
 
@@ -165,5 +165,5 @@ class Application:
 
 
 if __name__ == "__main__":
-    e = Application()
+    e = Operator()
     data = e.read_analog(1)
