@@ -6,9 +6,9 @@ here I collect all the notes about understanding the logic of the code and chose
 Glossary of terms and name conventions
 --------------------------------------
 * submodules
-    * Controller
-    * Model
-    * View
+    * controller
+    * model
+    * view
 
 * important files
     * start.py

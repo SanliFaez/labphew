@@ -5,7 +5,7 @@ A Worker Thread is a simple class that re-implements QThread in order to perform
 separate thread.
 This is a very simple example, that could be further expanded, but it is sufficient for
 working with methods(operations) from an Operator class.
-The only requisite of QThreads is to reimplement the ``run``
+The only requisite of QThreads is to re-implement the ``run``
 method.
 Although it works, this may not be the optimum/correct way of doing things, as pointed out in this `blog post
 <https://mayaposch.wordpress.com/2011/11/01/how-to-really-truly-use-qthreads-the-full-explanation/>`_

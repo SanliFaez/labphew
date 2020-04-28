@@ -1,5 +1,5 @@
 """
-labphew.View.blink_window.py
+labphew.view.blink_window.py
 ==============
 An interactive window based on PyQt, used to show the elements of the GUI and test correct installation of the labphew
 module and its dependencies.

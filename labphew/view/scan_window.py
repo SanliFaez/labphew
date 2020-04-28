@@ -1,5 +1,5 @@
 """
-labphew.View.scan_window.py
+labphew.view.scan_window.py
 ===========
 The main purpose of the scan_window and its derivatives is to view the progress of one-time operations
 called by an operator that is already initialized in the monitor_window.
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     """
     import sys
     from PyQt5.QtWidgets import QApplication
-    from labphew.Model.application.blink import Operator
+    from labphew.model.application.blink import Operator
 
     e = Operator()
     session = {'port_monitor': 1,
