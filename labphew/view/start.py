@@ -10,7 +10,9 @@ The Operator class should be created outside and passed as argument.
     >>> e.load_config('filename')
     >>> e.load_daq()
     >>> start_gui(e)
-
+TODO:
+    - test
+    - implement gui and cli options as parameters
 """
 import sys
 
@@ -20,7 +22,7 @@ def start_gui(operator, config):
         operator: an operator object with a loaded config.
     """
     from PyQt5.QtWidgets import QApplication
-    from labphew.View.blink_window import MonitorWindow
+    from labphew.view.blink_view import MonitorWindow
 
     ap = QApplication(sys.argv)
     m = MonitorWindow(operator)
@@ -39,8 +41,8 @@ def start_cli(operator, config, output = None):
 
 
 if __name__ == '__main__':
-    from labphew.Model.application import blink
-    op = blink.Operator
+    from labphew.model import blink_model
+    op = blink_model.Operator
     pa = './Model/default/blink.yml'
     f = '../tempfile.txt'
     start_cli(op, pa, output=f)

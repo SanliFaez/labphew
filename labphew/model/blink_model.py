@@ -2,10 +2,12 @@
 """
 labphew basic blink application
 ================
+
 blink.py contains a very simple operator for communicating with an arduino.
 It also serves as an example for the minimal structure of an Operator class in labphew.
 
-The stripped version of this class structure can be copied from Model/application/blank.py
+TODO
+- make stripped version for _blank_model.py
 
 """
 import os

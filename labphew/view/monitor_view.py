@@ -6,6 +6,9 @@ The only parameter that can be changed within the window is the delay between tw
 To change other parameters the user needs to open the configuration window.
 To execute a special routine, one should run an instance of scan_window.
 For inspitration: the initiation of scan_window routines can be implemented as buttons on the monitor_window
+TODO:
+    - build the UI without a design file necessary
+    - think about and add a default operation
 """
 
 import os

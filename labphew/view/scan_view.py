@@ -8,7 +8,7 @@ and delay between measurements. It has control also over the output port and ran
 
 TODO:
     - build the UI without a design file
-    - think of and add a default operation
+    - think about and add a default operation
 
 """
 import os
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     """
     import sys
     from PyQt5.QtWidgets import QApplication
-    from labphew.model.application.blink import Operator
+    from labphew.model.blink_model import Operator
 
     e = Operator()
     session = {'port_monitor': 1,
