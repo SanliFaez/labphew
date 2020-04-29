@@ -17,7 +17,7 @@ _Development notes for Sanli_
 
 ## Project roadmap
 - [x] make simple package with easy installation
-- [ ] make docs on aims and scope of the project
+- [x] make docs on aims and scope of the project
 - [ ] write how to contribute
 - [ ] make simple presentation for first time users
 - [ ] make list of initiatives and ongoing projects
