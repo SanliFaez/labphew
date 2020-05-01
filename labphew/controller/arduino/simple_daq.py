@@ -11,6 +11,7 @@ value by value and not a sequence. This forces the developer to think on how to 
 purely on Python.
 """
 
+import labphew
 import serial
 from time import sleep, time
 
@@ -114,16 +115,69 @@ class SimpleDaq():
 
         return line.decode(self.DEFAULTS['encoding'])
 
-if __name__ == "__main__":
-    import pint
-    ur = pint.UnitRegistry()
 
-    d = SimpleDaq('/dev/ttyACM0')
-    # input('Waiting to ready')
-    print(d.query('IDN'))
-    #d.write('OUT:CH0:4000')
-    input('Press to read value')
-    print(d.query('IN:CH0'))
-    out_value = ur('3.0V')
-    d.set_analog_value(0, out_value)
+import math
+
+class SimulatedSimpleDaq:
+    """ Simulated version of the SimpleDaq class to use for testing.
+        It mimics getting and setting analog values.
+        Set channel 0 is "linked" to get channel 1
+        Set channel 2 is "linked" to get channel 3
+        Get channel 4 returns a sine
+    """
+
+    def __init__(self, *args, **kwargs):
+        self._analog_values = {}  # empty dictionary to hold simulated analog values
+        self._translate_set_to_get = {0: 1, 2: 3}  # specify to which "get channel" a "set channel" is linked
+
+    def idn(self):
+        return 'Simulated Simple DAQ'
+
+    def __simulate_iv_relation(self, set_value, get_channel):
+        """ Converts an input value to an output value as if it were an IV curve,
+            And stores it in the internal memory"""
+        self._analog_values[get_channel] = math.exp(set_value - 0.7)/20
+
+    def get_analog_value(self, channel):
+
+        # If channel is not specfied yet, initialize it to 0
+        if channel not in self._analog_values:
+            self._analog_values[channel] = 0
+
+        if channel == 4:
+            self._analog_values[channel] += 0.2
+            return math.sin(self._analog_values[channel])
+
+        return self._analog_values[channel]
+
+    def set_analog_value(self, channel, value):
+        self.__simulate_iv_relation(value, self._translate_set_to_get[channel])
+
+    def finalize(self):
+        pass
+
+
+
+
+if __name__ == "__main__":
+
+    labphew.simulate_hardware = True  # change this to False for testing an actual device attached to computer
+
+    if labphew.simulate_hardware:
+        d = SimulatedSimpleDaq('/dev/ttyACM0')
+    else:
+        d = SimpleDaq('/dev/ttyACM0')
+
+    print('Identification of device: ', d.idn())
+    print('\nMeasuring IV curve:\nset get')
+    for i in range(11):
+        set_voltage = i/2
+        d.set_analog_value(0, set_voltage)
+        get_voltage = d.get_analog_value(1)
+        print(set_voltage, get_voltage)
+
+    print('\nChannel 4:')
+    for i in range(30):
+        print(d.get_analog_value(4))
+
     d.finalize()
