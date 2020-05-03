@@ -1,26 +1,22 @@
 import time
-from threading import Event
+#from threading import Event
 
 from pypylon import pylon, _genicam
 
-from experimentor import Q_
-from experimentor.lib.log import get_logger
-from experimentor.models.cameras.exceptions import WrongCameraState
-from experimentor.models.devices.cameras.base_camera import BaseCamera
-from experimentor.models.devices.cameras.exceptions import CameraNotFound
-# noinspection SpellCheckingInspection
-from experimentor.models.model_properties import ModelProp
-
+from labphew import Q_
+#from experimentor.core.log import get_logger
+from labphew.core.base.camera_base import BaseCamera
+#from experimentor.models.devices.cameras.exceptions import CameraNotFound
 
 class BaslerCamera(BaseCamera):
     _acquisition_mode = BaseCamera.MODE_SINGLE_SHOT
 
     def __init__(self, camera):
         super().__init__(camera)
-        self.logger = get_logger(__name__)
+        #self.logger = get_logger(__name__)
         self.friendly_name = ''
         self.free_run_running = False
-        self._stop_free_run = Event()
+        #self._stop_free_run = Event()
         self.fps = 0
 
     def initialize(self):
@@ -31,72 +27,69 @@ class BaslerCamera(BaseCamera):
             synchronize with other hardware.
 
         """
-        self.logger.debug('Initializing Basler Camera')
+        #self.logger.debug('Initializing Basler Camera')
         tl_factory = pylon.TlFactory.GetInstance()
         devices = tl_factory.EnumerateDevices()
         if len(devices) == 0:
-            raise CameraNotFound('No camera found')
+            print('No camera found')
 
         for device in devices:
-            if self.camera in device.GetFriendlyName():
+            if self.cam_num in device.GetFriendlyName():
                 self._driver = pylon.InstantCamera()
                 self._driver.Attach(tl_factory.CreateDevice(device))
                 self._driver.Open()
                 self.friendly_name = device.GetFriendlyName()
+            print(device.GetFriendlyName())
 
         if not self._driver:
-            msg = f'Basler {self.camera} not found. Please check if the camera is connected'
-            self.logger.error(msg)
-            raise CameraNotFound(msg)
+            msg = f'Basler {self.cam_num} not found. Please check if the camera is connected'
+            #self.logger.error(msg)
+            print(msg)
 
-        self.logger.info(f'Loaded camera {self._driver.GetDeviceInfo().GetModelName()}')
+        #self.logger.info(f'Loaded camera {self._driver.GetDeviceInfo().GetModelName()}')
 
-        self._driver.RegisterConfiguration(pylon.SoftwareTriggerConfiguration(), pylon.RegistrationMode_ReplaceAll,
-                                           pylon.Cleanup_Delete)
+        #self._driver.RegisterConfiguration(pylon.SoftwareTriggerConfiguration(), pylon.RegistrationMode_ReplaceAll,
+        #                                   pylon.Cleanup_Delete)
 
-        self.config.fetch_all()
+        #self.config.fetch_all()
 
-    @ModelProp()
-    def exposure(self) -> Q_:
+    def get_exposure(self) -> Q_:
         """ The exposure of the camera, defined in units of time """
         try:
             exposure = float(self._driver.ExposureTime.ToString()) * Q_('us')
             return exposure
         except _genicam.TimeoutException:
-            self.logger.error('Timeout getting the exposure')
+            #self.logger.error('Timeout getting the exposure')
             return self.config['exposure']
 
-    @exposure.setter
-    def exposure(self, exposure: Q_):
-        self.logger.info(f'Setting exposure to {exposure}')
+    def set_exposure(self, exposure: Q_):
+        #self.logger.info(f'Setting exposure to {exposure}')
         try:
             self._driver.ExposureTime.SetValue(exposure.m_as('us'))
         except _genicam.TimeoutException:
-            self.logger.error(f'Timed out setting the exposure to {exposure}')
+            pass
+            #self.logger.error(f'Timed out setting the exposure to {exposure}')
 
-    @ModelProp()
-    def gain(self):
+    def get_gain(self):
         """ Gain is a float """
         try:
             return float(self._driver.Gain.Value)
         except _genicam.TimeoutException:
-            self.logger.error('Timeout while reading the gain from the camera')
+            #self.logger.error('Timeout while reading the gain from the camera')
             return self.config['gain']
 
-    @gain.setter
-    def gain(self, gain: float):
-        self.logger.info(f'Setting gain to {gain}')
+    def set_gain(self, gain: float):
+        #self.logger.info(f'Setting gain to {gain}')
         try:
             self._driver.Gain.SetValue(gain)
         except _genicam.TimeoutException:
-            self.logger.error('Problem setting the gain')
+            pass
+            #self.logger.error('Problem setting the gain')
 
-    @ModelProp()
-    def acquisition_mode(self):
+    def get_acquisition_mode(self):
         return self._acquisition_mode
 
-    @acquisition_mode.setter
-    def acquisition_mode(self, mode):
+    def set_acquisition_mode(self, mode):
         if self._driver.IsGrabbing():
             self.logger.warning(f'{self} Changing acquisition mode for a grabbing camera')
 
@@ -109,50 +102,42 @@ class BaslerCamera(BaseCamera):
             self.logger.debug(f'Setting buffer to 1')
             self._acquisition_mode = mode
 
-    @ModelProp()
-    def auto_exposure(self):
+    def get_auto_exposure(self):
         """ Auto exposure can take one of three values: Off, Once, Continuous """
         return self._driver.ExposureAuto.Value
 
-    @auto_exposure.setter
-    def auto_exposure(self, mode: str):
+    def set_auto_exposure(self, mode: str):
         modes = ('Off', 'Once', 'Continuous')
         if mode not in modes:
             raise ValueError(f'Mode must be one of {modes} and not {mode}')
         self._driver.ExposureAuto.SetValue(mode)
 
-    @ModelProp()
-    def auto_gain(self):
+    def get_auto_gain(self):
         """ Auto Gain must be one of three values: Off, Once, Continuous"""
         return self._driver.GainAuto.Value
 
-    @auto_gain.setter
-    def auto_gain(self, mode):
+    def set_auto_gain(self, mode):
         modes = ('Off', 'Once', 'Continuous')
         if mode not in modes:
             raise ValueError(f'Mode must be one of {modes} and not {mode}')
         self._driver.GainAuto.SetValue(mode)
 
-    @ModelProp()
-    def pixel_format(self):
+    def get_pixel_format(self):
         """ Pixel format must be one of Mono8, Mono12, Mono12p"""
         return self._driver.PixelFormat.GetValue()
 
-    @pixel_format.setter
-    def pixel_format(self, mode):
+    def set_pixel_format(self, mode):
         self.logger.info(f'Setting pixel format to {mode}')
         self._driver.PixelFormat.SetValue(mode)
 
-    @ModelProp()
-    def ROI(self):
+    def get_ROI(self):
         offset_X = self._driver.OffsetX.Value
         offset_Y = self._driver.OffsetY.Value
         width = self._driver.Width.Value - 1
         height = self._driver.Height.Value - 1
         return ((offset_X, offset_X+width),(offset_Y, offset_Y+height))
 
-    @ROI.setter
-    def ROI(self, vals):
+    def set_ROI(self, vals):
         X = vals[0]
         Y = vals[1]
         width = int(X[1] - X[1] % 4)
@@ -177,12 +162,10 @@ class BaslerCamera(BaseCamera):
         self.width = self._driver.Width.Value
         self.height = self._driver.Height.Value
 
-    @ModelProp()
-    def ccd_height(self):
+    def get_ccd_height(self):
         return self._driver.Height.Max
 
-    @ModelProp()
-    def ccd_width(self):
+    def get_ccd_width(self):
         return self._driver.Width.Max
 
     def __str__(self):
@@ -265,16 +248,16 @@ class BaslerCamera(BaseCamera):
 if __name__ == '__main__':
     cam = BaslerCamera('da')
     cam.initialize()
-    print(cam.config)
-    cam.config['roi'] = ((16, 1200-1), (16, 800-1))
-    # print(cam.config.to_update())
-    cam.config.apply_all()
-    print(cam.config)
-    # cam.clear_ROI()
-    # cam.config.fetch_all()
     # print(cam.config)
-    cam.start_free_run()
-    time.sleep(1)
-    for i in range(10):
-        img = cam.read_camera()
-        print(img)
+    # cam.config['roi'] = ((16, 1200-1), (16, 800-1))
+    # # print(cam.config.to_update())
+    # cam.config.apply_all()
+    # print(cam.config)
+    # # cam.clear_ROI()
+    # # cam.config.fetch_all()
+    # # print(cam.config)
+    # cam.start_free_run()
+    # time.sleep(1)
+    # for i in range(10):
+    #     img = cam.read_camera()
+    #     print(img)

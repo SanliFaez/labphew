@@ -20,22 +20,20 @@
     has to be referenced to the already cropped area.
 
 
-    .. note:: **IMPORTANT** Whatever new function is implemented in a specific model, it should be first declared in the BaseCamera class. In this way the other models will have access to the method and the program will keep running (perhaps with non intended behavior though).
+    .. note:: **IMPORTANT** Whatever new function is implemented in a specific model,
+    it should be first declared in the BaseCamera class. In this way the other models will have access to the method
+    and the program will keep running (perhaps with non intended behavior though).
 
-    :copyright:  Aquiles Carattino <aquiles@uetke.com>
-    :license: GPLv3, see LICENSE for more details
 """
 import numpy as np
 
-from experimentor import Q_
-from experimentor.lib.log import get_logger
-from experimentor.models.decorators import not_implemented
-from experimentor.models.models import BaseModel
+from labphew import Q_
+#from experimentor.lib.log import get_logger
 
-logger = get_logger(__name__)
+#logger = get_logger(__name__)
 
 
-class BaseCamera(BaseModel):
+class BaseCamera():
     MODE_CONTINUOUS = 1
     MODE_SINGLE_SHOT = 0
     MODE_LAST = 2
@@ -56,19 +54,19 @@ class BaseCamera(BaseModel):
         self.data_type = np.uint16  # The data type that the camera generates when acquiring images. It is very
                                     # important to have it available in order to create the buffer and saving to disk.
 
-        self.logger = get_logger(name=__name__)
+        #self.logger = get_logger(name=__name__)
         self._threads = []
         self.temp_image = None
 
     def configure(self, properties: dict):
-        self.logger.info('Updating config')
+        #self.logger.info('Updating config')
         update_cam = False
         update_roi = False
         update_exposure = False
         update_binning = False
         update_gain = False
         for k, new_prop in properties.items():
-            self.logger.debug('Updating {} to {}'.format(k, new_prop))
+            #self.logger.debug('Updating {} to {}'.format(k, new_prop))
 
             update_cam = False
             if k in self.config:
@@ -89,11 +87,11 @@ class BaseCamera(BaseModel):
                     update_gain = True
 
         if update_cam:
-            self.logger.info('There are things to update in the new config')
+            #self.logger.info('There are things to update in the new config')
             if update_roi:
                 X = sorted([properties['roi_x1'], properties['roi_x2']])
                 Y = sorted([properties['roi_y1'], properties['roi_y2']])
-                self.logger.info(f'Updating ROI {X}, {Y}')
+                #self.logger.info(f'Updating ROI {X}, {Y}')
                 self.set_ROI(X, Y)
                 self.config.update({'roi_x1': X[0],
                                     'roi_x2': X[1],
@@ -102,7 +100,7 @@ class BaseCamera(BaseModel):
 
             if update_exposure:
                 exposure = properties['exposure_time']
-                self.logger.info(f'Updating exposure to {exposure}')
+                #self.logger.info(f'Updating exposure to {exposure}')
                 if isinstance(exposure, str):
                     exposure = Q_(exposure)
 
@@ -110,16 +108,15 @@ class BaseCamera(BaseModel):
                 self.config['exposure_time'] = new_exp
 
             if update_binning:
-                self.logger.info('Updating binning')
+                #self.logger.info('Updating binning')
                 self.set_binning(properties['binning_x'], properties['binning_y'])
                 self.config.update({'binning_x': properties['binning_x'],
                                     'binning_y': properties['binning_y']})
 
             if update_gain:
-                self.logger.info(f'Updating gain to {properties["gain"]}')
+                #self.logger.info(f'Updating gain to {properties["gain"]}')
                 self.set_gain(properties['gain'])
 
-    @not_implemented
     def initialize(self):
         """
         Initializes the camera.
@@ -128,14 +125,12 @@ class BaseCamera(BaseModel):
         self.max_height = self.GetCCDHeight()
         return True
 
-    @not_implemented
     def trigger_camera(self):
         """
         Triggers the camera.
         """
         pass
 
-    @not_implemented
     def set_acquisition_mode(self, mode):
         """
         Set the readout mode of the camera: Single or continuous.
@@ -150,35 +145,30 @@ class BaseCamera(BaseModel):
         """
         return self.mode
 
-    @not_implemented
     def acquisition_ready(self):
         """
         Checks if the acquisition in the camera is over.
         """
         pass
 
-    @not_implemented
     def set_exposure(self, exposure):
         """
         Sets the exposure of the camera.
         """
         self.exposure = exposure
 
-    @not_implemented
     def get_exposure(self):
         """
         Gets the exposure time of the camera.
         """
         return self.exposure
 
-    @not_implemented
     def read_camera(self):
         """
         Reads the camera
         """
         pass
 
-    @not_implemented
     def set_ROI(self, X, Y):
         """ Sets up the ROI. Not all cameras are 0-indexed, so this is an important
         place to define the proper ROI.
@@ -195,38 +185,32 @@ class BaseCamera(BaseModel):
         """
         self.set_ROI([0, self.max_width], [0, self.max_height])
 
-    @not_implemented
     def get_size(self):
         """Returns the size in pixels of the image being acquired. This is useful for checking the ROI settings.
         """
         pass
 
-    @not_implemented
     def getSerialNumber(self):
         """Returns the serial number of the camera.
         """
         pass
 
-    @not_implemented
     def GetCCDWidth(self):
         """
         Returns the CCD width in pixels
         """
         pass
 
-    @not_implemented
     def GetCCDHeight(self):
         """
         Returns: the CCD height in pixels
         """
         pass
 
-    @not_implemented
     def stopAcq(self):
         """Stops the acquisition without closing the connection to the camera."""
         pass
 
-    @not_implemented
     def set_gain(self, gain: float) -> float:
         """Sets the gain on the camera, if possible
 
@@ -234,7 +218,6 @@ class BaseCamera(BaseModel):
         """
         pass
 
-    @not_implemented
     def set_binning(self, xbin, ybin):
         """
         Sets the binning of the camera if supported. Has to check if binning in X/Y can be different or not, etc.
@@ -245,14 +228,12 @@ class BaseCamera(BaseModel):
         """
         pass
 
-    @not_implemented
     def clear_binning(self):
         """
         Clears the binning of the camera to its default value.
         """
         pass
 
-    @not_implemented
     def stop_camera(self):
         """Stops the acquisition and closes the connection with the camera.
         """
