@@ -2,6 +2,7 @@ import time
 #from threading import Event
 
 from pypylon import pylon, _genicam
+import logging
 
 from labphew import Q_
 #from experimentor.core.log import get_logger
@@ -13,7 +14,7 @@ class BaslerCamera(BaseCamera):
 
     def __init__(self, camera):
         super().__init__(camera)
-        #self.logger = get_logger(__name__)
+        self.logger = logging.getLogger(__name__)
         self.friendly_name = ''
         self.free_run_running = False
         #self._stop_free_run = Event()
@@ -31,7 +32,7 @@ class BaslerCamera(BaseCamera):
         tl_factory = pylon.TlFactory.GetInstance()
         devices = tl_factory.EnumerateDevices()
         if len(devices) == 0:
-            print('No camera found')
+            self.logger.warning('No camera found')
 
         self._driver = None
         for device in devices:
@@ -45,7 +46,7 @@ class BaslerCamera(BaseCamera):
         if not self._driver:
             msg = f'Basler {self.cam_num} not found. Please check if the camera is connected'
             #self.logger.error(msg)
-            print(msg)
+            self.logger.error(msg)
 
         #self.logger.info(f'Loaded camera {self._driver.GetDeviceInfo().GetModelName()}')
 
