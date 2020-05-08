@@ -33,6 +33,7 @@ class BaslerCamera(BaseCamera):
         if len(devices) == 0:
             print('No camera found')
 
+        self._driver = None
         for device in devices:
             if self.cam_num in device.GetFriendlyName():
                 self._driver = pylon.InstantCamera()
