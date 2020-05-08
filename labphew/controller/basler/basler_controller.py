@@ -15,6 +15,7 @@ class BaslerCamera(BaseCamera):
     def __init__(self, camera):
         super().__init__(camera)
         self.logger = logging.getLogger(__name__)
+        self.logger.debug('Creating BaslerCamera object')
         self.friendly_name = ''
         self.free_run_running = False
         #self._stop_free_run = Event()
@@ -28,7 +29,7 @@ class BaslerCamera(BaseCamera):
             synchronize with other hardware.
 
         """
-        #self.logger.debug('Initializing Basler Camera')
+        self.logger.debug('Initializing Basler Camera')
         tl_factory = pylon.TlFactory.GetInstance()
         devices = tl_factory.EnumerateDevices()
         if len(devices) == 0:
@@ -47,10 +48,11 @@ class BaslerCamera(BaseCamera):
             msg = f'Basler {self.cam_num} not found. Please check if the camera is connected'
             #self.logger.error(msg)
             self.logger.error(msg)
+            return
 
-        #self.logger.info(f'Loaded camera {self._driver.GetDeviceInfo().GetModelName()}')
+        # self.logger.info(f'Loaded camera {self._driver.GetDeviceInfo().GetModelName()}')
 
-        #self._driver.RegisterConfiguration(pylon.SoftwareTriggerConfiguration(), pylon.RegistrationMode_ReplaceAll,
+        # self._driver.RegisterConfiguration(pylon.SoftwareTriggerConfiguration(), pylon.RegistrationMode_ReplaceAll,
         #                                   pylon.Cleanup_Delete)
 
         #self.config.fetch_all()
@@ -248,6 +250,10 @@ class BaslerCamera(BaseCamera):
 
 
 if __name__ == '__main__':
+
+    logging.basicConfig(level=logging.DEBUG)  # This allows logging comments of levels DEBUG and above (i.e. all levels)
+    # Change this to INFO or WARNING to see less logging prints.
+
     cam = BaslerCamera('da')
     cam.initialize()
     # print(cam.config)
