@@ -16,17 +16,23 @@ import yaml
 from time import time, sleep
 
 from labphew import Q_
+import labphew
+
+import logging
 
 class Operator:
     """Class for performing a measurement of an I-V curve of a light emitting photodiode (LED).
     """
 
-    def __init__(self):
-        self.daq = None
+    def __init__(self, daq):
+        self.logger = logging.getLogger(__name__)
+        self.daq = daq
         self.properties = {}
         self.blink_state = 0
         self.blinking = False
         self.t0 = time()
+
+        self.running_scan = False
 
     def read_analog(self, port: int):
         """Re-implements the function as provided by the model.
@@ -44,6 +50,7 @@ class Operator:
         if self.running_scan:
             raise Warning('Trying to start a second scan')
 
+        self.logger.info('Starting IV scan')
         start = Q_(self.properties['Scan']['start'])
         stop = Q_(self.properties['Scan']['stop'])
         step = Q_(self.properties['Scan']['step'])
@@ -51,10 +58,11 @@ class Operator:
         channel_out = self.properties['Scan']['channel_out']
         delay = Q_(self.properties['Scan']['delay'])
         units = start.u
+        self.logger.debug(f'Units for scan are: {units}')
         stop = stop.to(units)
         num_points = (stop - start) / step
         num_points = round(num_points.m_as('')) + 1
-        scan = np.linspace(start, stop, num_points) * units
+        scan = np.linspace(start, stop, num_points)
         self.xdata_scan = scan
         self.ydata_scan = np.zeros(num_points) * units
         i = 0
@@ -136,5 +144,28 @@ class Operator:
 
 
 if __name__ == "__main__":
-    e = Operator()
-    data = e.read_analog(1)
+
+    logging.basicConfig(level=logging.DEBUG)  # Change base logging level
+    labphew.simulate_hardware = True
+
+    if labphew.simulate_hardware:
+        from labphew.controller.arduino.simple_daq import SimulatedSimpleDaq as SimpleDaq
+    else:
+        from labphew.controller.arduino.simple_daq import SimpleDaq
+
+    daq = SimpleDaq()
+    op = Operator(daq)
+
+    # In this case we manually set the properties, but those can also be loaded from a yml file with op.load_config()
+    op.properties = {'Scan': {'start': '0V', 'stop': '5V', 'step': '0.2V', 'channel_out': 0, 'channel_in': 1, 'delay': '0.1s'}}
+
+    print('test reading channel 1: ', op.read_analog(1))
+    op.do_scan()
+
+    import matplotlib.pyplot as plt
+    # Unwanted side effect of changing baselogger level to DEBUG is that matplotlib is now also printing debugs
+    # Trying to modify that with command below, but it's not working yet
+    plt.set_loglevel('warning')
+    plt.plot(op.xdata_scan.magnitude, op.ydata_scan.magnitude)
+    plt.show()
+

@@ -18,9 +18,9 @@ from PyQt5 import QtCore, uic, QtWidgets
 
 from labphew import Q_
 
-from .config_window import ConfigWindow
+from .config_view import ConfigWindow
 from .general_worker import WorkThread
-from .scan_window import ScanWindow
+from .scan_view import ScanWindow
 
 
 class MonitorWindow(QtWidgets.QMainWindow):

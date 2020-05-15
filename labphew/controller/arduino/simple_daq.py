@@ -14,7 +14,10 @@ purely on Python.
 import labphew
 import serial
 from time import sleep, time
+import logging
 
+from labphew import Q_
+from labphew import ureg#.V as Volt
 
 class SimpleDaq():
     """ Controller for the serial devices that ships with Python for the Lab.
@@ -59,6 +62,7 @@ class SimpleDaq():
         query_string = 'IN:CH{}'.format(channel)
         value = int(self.query(query_string))
         return value
+        # shouldn't this be: # return value * 3.3 / 4095 * Volt
 
     def set_analog_value(self, channel, value):
         """ Sets a voltage to an output port.
@@ -127,39 +131,52 @@ class SimulatedSimpleDaq:
     """
 
     def __init__(self, *args, **kwargs):
+        self.logger = logging.getLogger(__name__)
         self._analog_values = {}  # empty dictionary to hold simulated analog values
         self._translate_set_to_get = {0: 1, 2: 3}  # specify to which "get channel" a "set channel" is linked
+        self.logger.debug('SimulatedSimpleDaq object created')
+
+    def __getattr__(self, item):
+        """This method is called when an undefined method is called"""
+        self.logger.warning(f'method {item} is not implemented in SimulatedSimpleDaq')
+
+    # When running in PyCharm console, __len__ gets called and will result in the method above printing warnings.
+    # Hence it's implemented here as an empty method
+    def __len__(self):
+        pass
 
     def idn(self):
         return 'Simulated Simple DAQ'
 
     def __simulate_iv_relation(self, set_value, get_channel):
-        """ Converts an input value to an output value as if it were an IV curve,
-            And stores it in the internal memory"""
+        """Converts an input value to an output value as if it were an IV curve,and stores it in the internal memory"""
         self._analog_values[get_channel] = math.exp(set_value - 0.7)/20
 
     def get_analog_value(self, channel):
-
-        # If channel is not specfied yet, initialize it to 0
+        # If channel is not specified yet, initialize it to 0
         if channel not in self._analog_values:
             self._analog_values[channel] = 0
-
         if channel == 4:
             self._analog_values[channel] += 0.2
-            return math.sin(self._analog_values[channel])
-
-        return self._analog_values[channel]
+            return math.sin(self._analog_values[channel]) * Q_('V')
+        return self._analog_values[channel] * Q_('V')
 
     def set_analog_value(self, channel, value):
-        self.__simulate_iv_relation(value, self._translate_set_to_get[channel])
+        if channel in self._translate_set_to_get:
+            get_channel = self._translate_set_to_get[channel]
+        else:
+            get_channel = channel
+        # print(value, type(value))
+        # print(value.m_as('volt'))
+        self.__simulate_iv_relation(value.m_as('V'), get_channel)
 
     def finalize(self):
         pass
 
 
-
-
 if __name__ == "__main__":
+
+    logging.basicConfig(level=logging.DEBUG)  # Change logging level
 
     labphew.simulate_hardware = True  # change this to False for testing an actual device attached to computer
 
@@ -170,14 +187,15 @@ if __name__ == "__main__":
 
     print('Identification of device: ', d.idn())
     print('\nMeasuring IV curve:\nset get')
-    for i in range(11):
-        set_voltage = i/2
+    for i in range(12):
+        set_voltage = i * 0.3 * ureg.V
         d.set_analog_value(0, set_voltage)
         get_voltage = d.get_analog_value(1)
-        print(set_voltage, get_voltage)
+        print(set_voltage, ' -> ', get_voltage)
 
     print('\nChannel 4:')
     for i in range(30):
         print(d.get_analog_value(4))
 
     d.finalize()
+

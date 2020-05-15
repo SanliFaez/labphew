@@ -15,14 +15,16 @@ import os
 import numpy as np
 import pyqtgraph as pg
 from PyQt5.QtCore import Qt, QThread, QTimer
-from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel
+from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QAction, QFileDialog
 from PyQt5.QtGui import QFont, QIcon
+from PyQt5 import uic
 
-from labphew import Q_
-from .general_worker import WorkThread
+from labphew import Q_, ureg
+# from .general_worker import WorkThread
+from labphew.view.general_worker import WorkThread
 
 
-class ScanWindow(QtWidgets.QMainWindow):
+class ScanWindow(QMainWindow):
     def __init__(self, operator, parent=None):
 
         super().__init__(parent)
@@ -31,15 +33,16 @@ class ScanWindow(QtWidgets.QMainWindow):
         self.directory = p
         uic.loadUi(os.path.join(p, 'design/UI/scan_window.ui'), self)
 
-        self.update_timer = QtCore.QTimer()
+        self.update_timer = QTimer()
         self.update_timer.timeout.connect(self.update_scan)
 
         self.main_plot = pg.PlotWidget()
+        # self.ydata = np.zeros((0))
+        # self.xdata = np.zeros((0))
+        self.curve = self.main_plot.plot(pen='y')
+
         layout = self.centralwidget.layout()
         layout.addWidget(self.main_plot)
-        self.ydata = np.zeros((0))
-        self.xdata = np.zeros((0))
-        self.p = self.main_plot.plot(self.xdata, self.ydata)
 
         self.startButton.clicked.connect(self.start_scan)
         self.stopButton.clicked.connect(self.stop_scan)
@@ -58,7 +61,7 @@ class ScanWindow(QtWidgets.QMainWindow):
 
         menubar = self.menuBar()
         self.scanMenu = menubar.addMenu('&Scan')
-        self.start_scan_action = QtWidgets.QAction("Start Scan", self)
+        self.start_scan_action = QAction("Start Scan", self)
         self.start_scan_action.setShortcut('Ctrl+Shift+S')
         self.start_scan_action.setStatusTip('Start the scan')
         self.start_scan_action.triggered.connect(self.start_scan)
@@ -89,8 +92,7 @@ class ScanWindow(QtWidgets.QMainWindow):
         units = self.operator.properties['Scan']['start'].u
         ylabel = self.operator.properties['Scan']['channel_in']
 
-        self.main_plot.setLabel('bottom', 'Port: {}'.format(xlabel),
-                                units=units)
+        self.main_plot.setLabel('bottom', 'Port: {}'.format(xlabel), units='V')
         self.main_plot.setLabel('left', 'Port: {}'.format(ylabel), units='V')
 
         self.worker_thread = WorkThread(self.operator.do_scan)
@@ -106,13 +108,12 @@ class ScanWindow(QtWidgets.QMainWindow):
         The method also monitors whether the scan is still running or not. If it has stopped it will update
         the GUI in order to know it.
         """
-        self.xdata = self.operator.xdata_scan
-        self.ydata = self.operator.ydata_scan
-
-        self.p.setData(self.xdata, self.ydata)
+        self.curve.setData(self.operator.xdata_scan.m_as(ureg.V), self.operator.ydata_scan.m_as(ureg.V))
+        # self.curve.setData(self.operator.xdata_scan, self.operator.ydata_scan)
 
         if not self.operator.running_scan:
             self.stop_scan()
+
 
     def stop_scan(self):
         """Stops the scan if it is running. It sets the proper variable to the application model in order
@@ -126,16 +127,16 @@ class ScanWindow(QtWidgets.QMainWindow):
         self.running_scan = False
         self.operator.stop_scan = True
         self.update_timer.stop()
-        self.xdata = self.operator.xdata_scan
-        self.ydata = self.operator.ydata_scan
+        # self.xdata = self.operator.xdata_scan
+        # self.ydata = self.operator.ydata_scan
 
-        self.p.setData(self.xdata, self.ydata)
+        self.curve.setData(self.operator.xdata_scan.m_as(ureg.V), self.operator.ydata_scan.m_as(ureg.mV))
 
     def save_data(self):
         """Saves the data to disk. It opens a Dialog for selecting the directory. The default filename for
         the data is 'scan_data.dat'. The application model takes care of handling the saving itself.
         """
-        self.directory = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Directory", self.directory))
+        self.directory = str(QFileDialog.getExistingDirectory(self, "Select Directory", self.directory))
         filename = 'scan_data.dat'
         file = os.path.join(self.directory, filename)
 
@@ -155,23 +156,44 @@ if __name__ == "__main__":
     """
     import sys
     from PyQt5.QtWidgets import QApplication
+    import labphew
     from labphew.model.blink_model import Operator
 
-    e = Operator()
+    labphew.simulate_hardware = True
+    if labphew.simulate_hardware:
+        from labphew.controller.arduino.simple_daq import SimulatedSimpleDaq as SimpleDaq
+    else:
+        from labphew.controller.arduino.simple_daq import SimpleDaq
+
+    daq = SimpleDaq('your_COM_port_here')
+    op = Operator(daq)
+
+    # In this case we manually set the properties, but those can also be loaded from a yml file with op.load_config()
     session = {'port_monitor': 1,
-               'time_resolution': Q_('1ms'),
-               'refresh_time': Q_('100ms'),
-               'total_time': Q_('15s'),
+               'time_resolution': '1ms',
+               'refresh_time': '100ms',
+               'total_time': '15s',
                'scan_port_out': 1,
-               'scan_start': Q_('0.1V'),
-               'scan_stop': Q_('0.7V'),
-               'scan_step': Q_('0.1V'),
+               'scan_start': '0.1V',
+               'scan_stop': '0.7V',
+               'scan_step': '0.1V',
                'scan_port_in': 2,
-               'scan_delay': Q_('10ms'),
+               'scan_delay': '10ms',
                }
-    e.properties = session
+    session = {'Scan':
+                   {'start': '0V',
+                    'stop': '3V',
+                    'step': '0.2V',
+                    'channel_in': 1,
+                    'channel_out': 0,
+                    'delay': '0.1s'},
+               'GUI':
+                   {'refresh_time': '100ms'}
+               }
+    op.properties = session
 
     app = QApplication(sys.argv)
-    s = ScanWindow(e)
+    s = ScanWindow(op)
     s.show()
-    app.exit(app.exec_())
+    app.exec_()
+    # app.exit()
