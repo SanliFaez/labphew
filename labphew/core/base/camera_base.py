@@ -34,8 +34,8 @@ from labphew import Q_
 
 
 class BaseCamera():
-    MODE_CONTINUOUS = 1
     MODE_SINGLE_SHOT = 0
+    MODE_CONTINUOUS = 1
     MODE_LAST = 2
     ACQUISITION_MODE = {
         MODE_CONTINUOUS: 'Continuous',
