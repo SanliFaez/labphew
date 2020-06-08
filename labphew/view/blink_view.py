@@ -6,7 +6,7 @@ module and its dependencies.
 This code can be used as a basis for building more complex user interfaces.
 """
 
-from PyQt5.QtCore import Qt, QThread, QTimer
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel
 from PyQt5.QtGui import QFont, QIcon
 
@@ -78,7 +78,7 @@ class MonitorWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication([])
-    app_icon = QIcon("labphew/View/design/Icons/labphew_icon.png")
+    app_icon = QIcon("../view/design/Icons/labphew_icon.png")
     app.setWindowIcon(app_icon)
     window = MonitorWindow()
     window.show()

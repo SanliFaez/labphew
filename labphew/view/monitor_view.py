@@ -1,7 +1,7 @@
 """
 labphew.View.monitor_window.py
 ==============
-The Monitor Window displays a plot or image that updates over time at a given rate.
+The Monitor Window displays a plot that updates over time at a given rate. (TODO: or view images)
 The only parameter that can be changed within the window is the delay between two consecutive reads.
 To change other parameters the user needs to open the configuration window.
 To execute a special routine, one should run an instance of scan_window.
@@ -16,11 +16,11 @@ import numpy as np
 import pyqtgraph as pg
 from PyQt5 import QtCore, uic, QtWidgets
 
-from labphew import Q_
-
-from .config_window import ConfigWindow
 from .general_worker import WorkThread
-from .scan_window import ScanWindow
+
+# TODO: the following imports are necessary for child windows, they have to be adjusted and tested
+#from .config_view import ConfigWindow  # to adjust experiment parameters
+#from .scan_view import ScanWindow      # to perform single scan
 
 
 class MonitorWindow(QtWidgets.QMainWindow):
@@ -28,14 +28,15 @@ class MonitorWindow(QtWidgets.QMainWindow):
         super().__init__(parent)
 
         self.operator = operator
+        self.refresh_time = 100
 
         p = os.path.dirname(__file__)
-        uic.loadUi(os.path.join(p, 'GUI/main_window.ui'), self)
+        uic.loadUi(os.path.join(p, 'design/UI/main_window.ui'), self)
 
         self.main_plot = pg.PlotWidget()
         self.main_plot.setLabel('bottom', 'Time', units='s')
 
-        layout = QtWidgets.QVBoxLayout()
+        # layout = QtWidgets.QVBoxLayout() # merked for dletion
 
         self.verticalLayout.addWidget(self.main_plot)
 
@@ -49,19 +50,19 @@ class MonitorWindow(QtWidgets.QMainWindow):
         self.xdata = np.zeros((0))
         self.p = self.main_plot.plot(self.xdata, self.ydata)
 
-        self.config_window = ConfigWindow(operator, parent=self)
-        self.config_window.propertiesChanged.connect(self.update_properties)
-        self.actionConfig.triggered.connect(self.config_window.show)
-
-        self.scan_window = ScanWindow(operator)
-        self.actionScan.triggered.connect(self.scan_window.show)
+        # TODO: uncomment for testing the child windows
+        # self.config_window = ConfigWindow(operator, parent=self)
+        # self.config_window.propertiesChanged.connect(self.update_properties)
+        # self.actionConfig.triggered.connect(self.config_window.show)
+        #
+        # self.scan_window = ScanWindow(operator)
+        # self.actionScan.triggered.connect(self.scan_window.show)
 
     def update_properties(self, props):
         """
         Method triggered when the signal for updating parameters is triggered.
         """
         self.operator.properties['Monitor'] = props
-        self.delayLine.setText(self.operator.properties['Monitor']['time_resolution'])
 
     def start_monitor(self):
         """
@@ -72,12 +73,9 @@ class MonitorWindow(QtWidgets.QMainWindow):
             print('Monitor already running')
             return
         self.running_monitor = True
-        delay = Q_(self.delayLine.text())
-        self.operator.properties['time_resolution'] = delay
-        self.worker_thread = WorkThread(self.operator.monitor_signal)
+        self.worker_thread = WorkThread(self.operator.scan_finished)
         self.worker_thread.start()
-        refresh_time = Q_(self.operator.properties['Monitor']['refresh_time'])
-        self.update_timer.start(refresh_time.m_as('ms'))
+        self.update_timer.start(self.refresh_time)
 
     def stop_monitor(self):
         """

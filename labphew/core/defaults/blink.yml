@@ -11,9 +11,9 @@ DAQ:
   port: /dev/ttyACM0
 
 Scan:
-  start: 0V
-  stop: 3.2V
-  step: 400mV
+  start: 0
+  stop: 20
+  step: 0.1
   channel_out: 0
   channel_in: 0
   delay: 100ms
