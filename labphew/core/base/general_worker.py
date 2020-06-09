@@ -1,5 +1,5 @@
 """
-labphew.View.general_worker
+labphew.view.general_worker
 =============
 A Worker Thread is a simple class that re-implements QThread in order to perform a task in a
 separate thread.
