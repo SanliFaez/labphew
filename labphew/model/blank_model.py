@@ -1,10 +1,14 @@
 # coding=utf-8
 """
-labphew blink modle
+labphew basic blank application
 ================
 
-blink_model.py is a minimalist class for demonstrating the concept view-model-controller to beginner
+blink_model.py contains the skeleton of a model that can be called by the default labphew windows:
+- MonitorWindow: GUI and interactions for monitoring operations that run continuously
+- Config_Window: Interface for updating the measurement parameters or loading/saving them from/into a config file
+- Scan_Window: GUI and update inquiries for one-time operations that can be called from another window or the command line
 
+TODO
 
 """
 import os
