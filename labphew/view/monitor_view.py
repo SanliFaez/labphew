@@ -79,6 +79,7 @@ class MonitorWindow(QMainWindow):
             self.layout.addWidget(self.main_view)
             self.main_view.setLabel('bottom', 'time', units='s')
             self.plot = self.main_view.plot([0], [0])
+
         elif display == "image":
             self.main_view = pg.ImageView(view=pg.PlotItem())
             self.layout.addWidget(self.main_view)
