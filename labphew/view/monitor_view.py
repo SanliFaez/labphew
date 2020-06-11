@@ -16,7 +16,6 @@ TODO:
 import os
 import numpy as np
 import pyqtgraph as pg   # used for additional plotting features
-#from PyQt5 import QtCore, uic, QtWidgets
 
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QMessageBox
@@ -43,15 +42,6 @@ class MonitorWindow(QMainWindow):
 
         # p = os.path.dirname(__file__)
         # uic.loadUi(os.path.join(p, 'design/UI/main_window.ui'), self)
-
-        ### for plotting data
-        # self.main_view = pg.PlotWidget()
-        # self.main_view.setLabel('bottom', 'time', units='s')
-        # self.ydata = np.zeros((0))
-        # self.xdata = np.zeros((0))
-        # self.p = self.main_plot.plot(self.xdata, self.ydata)
-
-
 
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self.update_monitor)

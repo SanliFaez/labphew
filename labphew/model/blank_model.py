@@ -32,6 +32,8 @@ class Operator:
         self.done = False  # signal for the end of a complete scan
         self.t0 = time()
         self.tloop = time()
+        self.scan=[]
+        self.output=[]
 
     def main_loop(self):
         """
@@ -75,7 +77,7 @@ class Operator:
             raise Warning('Trying to start simultaneous operations')
         self.done = False
         if param == None:
-            start, stop, step = 1, 10, 1
+            start, stop, step = 1, 100, 1
         else:
             pass
             # example of filling in variables from loaded class properties
@@ -90,11 +92,17 @@ class Operator:
 
         ### here comes the main actions of the scan
         for i in range(np.size(scan)):
-            self.indicator = scan[i]
-            output[i] = 1/scan[i]
+            if not self.paused:
+                self.indicator = scan[i]
+                output[i] = 1/scan[i]
 
         self.blinking = False
-        self.scan_finished()
+        if not self.paused:
+            self.scan_finished()
+
+        self.scan = scan
+        self.output = output
+
         return scan, output
 
     def scan_finished(self):
@@ -128,6 +136,14 @@ class Operator:
             pass #TODO: put here commands for initializing a primitive controller like blink_controller
         else:
             self.instrument = inst
+
+    def save_scan_data(self, fname):
+        """
+        TODO: make proper save function
+        :param fname: 
+        :return: 
+        """
+        pass
 
 
 
