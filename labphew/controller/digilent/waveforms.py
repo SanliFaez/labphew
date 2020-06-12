@@ -105,10 +105,8 @@ if __name__ == '__main__':
     # daq.ao.nodeFunctionSet(ch, daq.ao.NODE.CARRIER, daq.ao.FUNC.SINE)
 
 
-    print("\nConfigure and start first analog out channel")
+    print("\nConfigure and first analog out channel")
     ch_out = 0
-
-
 
     print('Carrier: "sine", 0.4V, 6kz, offset 1V')
     daq.ao.nodeEnableSet(ch_out, daq.ao.NODE.CARRIER, True)
@@ -132,17 +130,16 @@ if __name__ == '__main__':
     daq.ao.nodePhaseSet(ch_out, daq.ao.NODE.FM, 90)
     daq.ao.nodeAmplitudeSet(ch_out, daq.ao.NODE.FM, 20)
 
-    print("Configure analog in")
+    print("\nConfigure analog in")
     print('Sampling rate 100kHz, 1000 points (i.e. 10ms)')
     n_points = 1000
     daq.ai.frequencySet(1e5)
     print("Set range for all channels")
     daq.ai.channelRangeSet(-1, 4.0)
     daq.ai.bufferSizeSet(n_points)
-    print('')
     daq.ai.channelAttenuationSet(0, 0.5)
 
-    print("Starting output and starting acquisition")
+    print("\nStarting output and starting acquisition")
     daq.ao.configure(ch_out, True)
     daq.ai.configure(True, True)
 
@@ -174,6 +171,28 @@ if __name__ == '__main__':
     plt.plot(rg)
     plt.show()
 
+    # daq.ao.configure(ch_out, 0)
+    # daq.ao.reset()
+    # daq.ao.nodeFunctionSet(ch_out, daq.ao.NODE.CARRIER, daq.ao.FUNC.DC)
+    # daq.ao.nodeOffsetSet(ch_out, daq.ao.NODE.CARRIER, -0.7)
+    # print("\nStarting output")
+    # daq.ao.configure(ch_out, True)
+    #
+    # n_points = 10
+    # daq.ai.frequencySet(1000)
+    # print("Set range for all channels")
+    # daq.ai.channelRangeSet(-1, 4.0)
+    # daq.ai.bufferSizeSet(n_points)
+    #
+    # print("\nStarting input")
+    # daq.ai.configure(True, True)
+    #
+    # while daq.ai.status(True):
+    #     time.sleep(0.001)
+    #
+    # print("   reading data")
+    # rg = daq.ai.statusData(0, n_points)
+    # print(rg)
 
 
 # TODO:
