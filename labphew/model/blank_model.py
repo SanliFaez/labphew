@@ -31,15 +31,20 @@ class Operator:
         self.paused = False  # signalling scan in progress or instrument is engaged
         self.done = False  # signal for the end of a complete scan
         self.t0 = time()
+        self.tloop = time()
+        self.scan=[]
+        self.output=[]
 
     def main_loop(self):
         """
-        primitive function that is called in the MonitorWindow
-        in blank_model, this function just tells the time
+        primitive function that is called in the MonitorWindow in blank_model,
+        this function just tells the time
         """
         if not self.paused:
             self.blinking = True
-            output = strftime("%H:%M:%S", localtime(time()))
+            t = time()
+            self.tloop = t
+            output = strftime("%H:%M:%S", localtime(t))
             sleep(0.03)
 
         return output
@@ -66,12 +71,13 @@ class Operator:
     def do_scan(self, param=None):
         """
         primitive function for calling by the ScanWindow
+        this functions counts down inverses down to 1/10
         """
         if self.blinking:
             raise Warning('Trying to start simultaneous operations')
         self.done = False
         if param == None:
-            start, stop, step = 1, 10, 1
+            start, stop, step = 1, 100, 1
         else:
             pass
             # example of filling in variables from loaded class properties
@@ -79,18 +85,24 @@ class Operator:
             #stop = self.properties['Scan']['stop']
             #step = self.properties['Scan']['step']
 
-        num_points = np.int((stop-start)/step)
+        num_points = np.int((stop-start+1)/step)
         scan = np.linspace(start, stop, num_points)
         output = 0 * scan
         self.blinking = True
 
         ### here comes the main actions of the scan
         for i in range(np.size(scan)):
-            self.indicator = scan[i]
-            output[i] = 1/scan[i]
+            if not self.paused:
+                self.indicator = scan[i]
+                output[i] = 1/scan[i]
 
         self.blinking = False
-        self.scan_finished()
+        if not self.paused:
+            self.scan_finished()
+
+        self.scan = scan
+        self.output = output
+
         return scan, output
 
     def scan_finished(self):
@@ -125,12 +137,20 @@ class Operator:
         else:
             self.instrument = inst
 
+    def save_scan_data(self, fname):
+        """
+        TODO: make proper save function
+        :param fname: 
+        :return: 
+        """
+        pass
+
 
 
 if __name__ == "__main__":
     e = Operator()
     #e.load_config()
     #e.load_instrument()
-    #x, data = e.do_scan()
-    d = e.main_loop()
-    print(d)
+    x, data = e.do_scan()
+    #d = e.main_loop()
+    print(data)
