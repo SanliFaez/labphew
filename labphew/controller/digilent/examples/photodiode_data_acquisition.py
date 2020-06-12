@@ -6,7 +6,7 @@ Created on Thu Sep 26 14:26:43 2019
 """
 
 from ctypes import *
-from dwfconstants import *
+from labphew.controller.digilent.examples.dwfconstants import *
 import math
 import time
 import matplotlib.pyplot as plt
@@ -194,8 +194,9 @@ while yes_or_no(question):
     stddc2 = np.std(dc2list)
 
     print(dc1mean)
-    print(stddc1) print("Acquisition done")
-        print("You can now remove the mass")
+    print(stddc1)
+    print("Acquisition done")
+    print("You can now remove the mass")
     make_voltage_list(str(n)+" "+str(xi)+" "+str(dc1mean)+" "+str(stddc1)+" "+str(dc2mean)+" "+str(stddc2)+"\n")
     n=n+1
     #wait 1 ms before acquiring another measurement

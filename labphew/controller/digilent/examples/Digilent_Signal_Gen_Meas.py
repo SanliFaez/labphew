@@ -10,7 +10,7 @@ Fix the analyses such that it can be integrated into this code
 """    
 
 from ctypes import *
-from dwfconstants import *
+from labphew.controller.digilent.examples.dwfconstants import *
 import math
 import time
 import sys
