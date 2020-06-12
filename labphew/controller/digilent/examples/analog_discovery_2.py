@@ -26,9 +26,9 @@ if len(cdevices) == 0:
     quit()
 
 print("Opening first device")
-hdwf = dwf.Dwf(0, 1)
+hdwf = dwf.Dwf(0, 2)  # idxDevice, idxCfg
 
-n_points = 16000
+n_points = 1000
 
 print("Configure and start first analog out channel")
 dwf_ao = dwf.DwfAnalogOut(hdwf)
@@ -36,7 +36,8 @@ dwf_ao.nodeEnableSet(0, dwf_ao.NODE.CARRIER, True)
 print("1 = Sine wave")
 dwf_ao.nodeFunctionSet(0, dwf_ao.NODE.CARRIER, dwf_ao.FUNC.SINE)
 dwf_ao.nodeFrequencySet(0, dwf_ao.NODE.CARRIER, 3000.0)
-print()
+# tmp = dwf_ao.nodeFrequencyGet(0, dwf_ao.NODE.CARRIER)   # WHY DOES THIS NOT WORK????!
+# print(tmp)
 dwf_ao.configure(0, True)
 
 print("Configure analog in")
@@ -62,7 +63,7 @@ print("   done")
 print("   reading data")
 rg = dwf_ai.statusData(0, n_points)
 
-hdwf.close()
+# hdwf.close()  # DONT CLOSE, I WANT TO EXPLORE
 
 dc = sum(rg) / len(rg)
 print("DC: " + str(dc) + "V")
