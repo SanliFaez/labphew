@@ -18,13 +18,11 @@ Using an autocompleting IDE it's possible to explore the available methods and f
 In addition to the DfwController class this module contains functions to explore which devices are connected and to close connections.
 
 """
-
 import logging
 import dwf
-
 import time
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class DfwController(dwf.Dwf):
@@ -56,7 +54,6 @@ class DfwController(dwf.Dwf):
         self._time_stabilized = time.time()  # will be overwritten by write_analog()
         self.preset_basic_analog()
 
-
     def preset_basic_analog(self, n=84, freq=10000, range=50.0, return_std=False):
         """
         Apply settings for read_analog() and write_analog()
@@ -84,7 +81,6 @@ class DfwController(dwf.Dwf):
         # self._read_timeout = 1.9 + self.ai.bufferSizeGet() / self.ai.frequencyGet()
         self.ao.configure(-1, 1)
 
-
     def stop_analog_out(self, channel=-1):
         """
         Basic method to stop analog output.
@@ -93,7 +89,6 @@ class DfwController(dwf.Dwf):
         :type channel: int
         """
         self.ao.configure(channel, 0)
-
 
     def write_analog(self, volt, channel=-1):
         """
@@ -150,7 +145,6 @@ class DfwController(dwf.Dwf):
         else:
             return c0.mean(), c1.mean()
 
-
     def wait_for_ai_acquisition(self, start_timestamp=None):
         """
         Waits while ai status is busy. Uses the AI frequency and buffersize in combination with start_timestamp to
@@ -169,6 +163,79 @@ class DfwController(dwf.Dwf):
             if time.time() > start_timestamp + read_timeout:
                 self.logger.error('AI read timeout occured')
                 return True
+
+
+class SimulatedDfwController:
+    """
+    Rudimentary simulated version of DfwController for the purpose of developing without a connected device.
+    Note that it is far from a complete simulation, it just mimics a few basic methods.
+    You can add any simulation function to relate read_analog() to a value set with write_analog() via _analog_simulation_functions.
+    """
+    def __init__(self, *args, **kwargs):
+        self.logger = logging.getLogger(__name__)
+        self._analog_out_values = [0.0, 0.0]  # empty dictionary to hold simulated analog values
+        self._analog_simulation_functions = [lambda v: np.exp(v-0.7)/20, lambda v: np.random.normal(1,.5)]
+        from collections import defaultdict
+
+        class Dummy:
+            def __init__(s2, *args, **kwargs):
+                s2.__dict__.update(kwargs)
+                s2.getset = defaultdict(lambda: 0)
+
+            def __getattr__(s2, name):
+                if 'Set' in name:
+                    return lambda *args, **kwargs: s2.getset.__setitem__(tuple([name.strip('Set')])+args[:-1], args[-1])
+                elif 'Get' in name:
+                    return lambda *args, **kwargs: s2.getset[tuple([name.strip('Get')])+args]
+                else:
+                    return lambda *args, **kwargs: None
+
+        self.AnalogIn = Dummy()
+        self.AnalogIn.statusData = lambda ch, n: tuple(np.random.normal(size=n))
+        self.AnalogOut = Dummy()
+        self.AnalogOut.NODE = Dummy(CARRIER=0, FM=1, AM=2)
+        self.AnalogOut.FUNC = Dummy(DC=0, SINE=1, SQUARE=2, TRIANGLE=3, RAMP_UP=4, RAMP_DOWN=5, NOISE=6, CUSTOM=30, PLAY=31)
+        self.DigitalIn = Dummy()
+        self.DigitalOut = Dummy()
+        self.AnalogIO = Dummy()
+        self.DigitalIO = Dummy()
+        # create short name references
+        self.ai = self.AnalogIn
+        self.ao = self.AnalogOut
+        self.di = self.DigitalIn
+        self.do = self.DigitalOut
+
+        self.logger.debug('SimulatedDfwController object created')
+
+    def __getattr__(self, item):
+        """This method is called when an undefined method is called"""
+        self.logger.warning(f'method {item} is not implemented (in SimulatedDfwController)')
+
+    # When running in PyCharm console, __len__ gets called and will result in the method above printing warnings.
+    # Hence it's implemented here as an empty method
+    def __len__(self):
+        pass
+
+    def read_analog(self):
+        return [func(v) for func, v in zip(self._analog_simulation_functions, self._analog_out_values)]
+
+    def write_analog(self, volt, channel=-1):
+        if channel == 0 or channel == -1:
+            self._analog_out_values[0] = volt
+        if channel == 1 or channel == -1:
+            self._analog_out_values[1] = volt
+
+    def wait_for_ai_acquisition(self, start_timestamp=None):
+        time.sleep(0.1)
+
+    def wait_for_stabilization(self):
+        time.sleep(0.1)
+
+    def preset_basic_analog(self):
+        pass
+
+    def close(self):
+        pass
 
 
 def close_all():
@@ -271,7 +338,6 @@ def print_device_list(devices_list=None):
 
 
 if __name__ == '__main__':
-
     # Display a list of devices and their possible configurations
     devs = enumerate_devices()
     print_device_list(devs)
@@ -279,6 +345,8 @@ if __name__ == '__main__':
     # Create object for device number 0, with config number 0
     daq = DfwController(0, 0)
 
+    # Use the following line instead of the previous line for testing the simulated device
+    # daq = SimulatedDfwController(0, 0)
 
     print("\nTo be able to read signals we're about to generate: connect W1 to 1+, W2 to 2+, and 1- and 2- to ground (down arrow)")
 
