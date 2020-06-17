@@ -52,9 +52,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Python For The Lab'
-copyright = '2018, Aquiles Carattino'
-author = 'Aquiles Carattino'
+project = 'labphew'
+copyright = '2020, Sanli Faez'
+author = 'Sanli Faez, Aron Opheij'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -113,7 +113,6 @@ html_sidebars = {
         'navigation.html',
         'relations.html',  # needs 'show_related': True theme option to display
         'searchbox.html',
-        'donate.html',
     ]
 }
 
@@ -121,7 +120,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'PythonForTheLabdoc'
+htmlhelp_basename = 'labphewdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -148,8 +147,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'PythonForTheLab.tex', 'Python For The Lab Documentation',
-     'Aquiles Carattino', 'manual'),
+    (master_doc, 'labphew.tex', 'Learn to automate with labphew',
+     'Sanli Faez', 'manual'),
 ]
 
 
@@ -158,7 +157,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pythonforthelab', 'Python For The Lab Documentation',
+    (master_doc, 'labphew', 'Learn to automate with labphew',
      [author], 1)
 ]
 
@@ -169,8 +168,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'PythonForTheLab', 'Python For The Lab Documentation',
-     author, 'PythonForTheLab', 'One line description of project.',
+    (master_doc, 'labphew', 'Learn to automate with labphew',
+     author, 'labphew', 'control a measurement with python',
      'Miscellaneous'),
 ]
 

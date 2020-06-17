@@ -1,140 +1,132 @@
 # coding=utf-8
 """
-labphew basic blink application
+labphew blink modle
 ================
 
-blink.py contains a very simple operator for communicating with an arduino.
-It also serves as an example for the minimal structure of an Operator class in labphew.
+blink_model.py is a minimalist class for demonstrating the concept view-model-controller to beginner
 
-TODO
-- make stripped version for _blank_model.py
 
 """
 import os
 import numpy as np
 import yaml
-from time import time, sleep
-
-from labphew import Q_
+from time import time, sleep, localtime, strftime
 
 class Operator:
-    """Class for performing a measurement of an I-V curve of a light emitting photodiode (LED).
+    """
+    A primitive class generating a synthetic time series.
+    the main purpose of this class it to provide the minimal functions required for running a view
+    and can serve as the basis for a customized model
     """
 
     def __init__(self):
-        self.daq = None
-        self.properties = {}
-        self.blink_state = 0
+        self.instrument = None
+        self.properties = {}  # TODO: read properties from yml config file
+        self.indicator = 0  # instrument-specific value shared with another display during the scan
+        self.blinking = False  # signalling scan in progress or instrument is engaged
+        self.paused = False  # signalling scan in progress or instrument is engaged
+        self.done = False  # signal for the end of a complete scan
+        self.t0 = time()
+
+    def main_loop(self):
+        """
+        primitive function that is called in the MonitorWindow
+        in blank_model, this function just tells the time
+        """
+        if not self.paused:
+            self.blinking = True
+            output = strftime("%H:%M:%S", localtime(time()))
+            sleep(0.03)
+
+        return output
+
+    def pause(self):
+        """
+        primitive function to pause the main loop or readout
+        """
+        self.paused = True
         self.blinking = False
-        self.t0 = time()
 
-    def read_analog(self, port: int):
-        """Re-implements the function as provided by the model.
-
-        :param int port: Port to read
-        :return Quantity: The value read by the device model.
+    def resume(self):
         """
-        value = self.daq.get_analog_value(port)
-        return value
-
-    def do_scan(self):
-        """Does a scan of an analog output while recording an analog input. It doesn't take any arguments,
-        it relies on having the proper properties set in the dictionary properties['Scan']
+        primitive function to pause the main loop or readout
         """
-        if self.running_scan:
-            raise Warning('Trying to start a second scan')
+        self.paused = False
 
-        start = Q_(self.properties['Scan']['start'])
-        stop = Q_(self.properties['Scan']['stop'])
-        step = Q_(self.properties['Scan']['step'])
-        channel_in = self.properties['Scan']['channel_in']
-        channel_out = self.properties['Scan']['channel_out']
-        delay = Q_(self.properties['Scan']['delay'])
-        units = start.u
-        stop = stop.to(units)
-        num_points = (stop - start) / step
-        num_points = round(num_points.m_as('')) + 1
-        scan = np.linspace(start, stop, num_points) * units
-        self.xdata_scan = scan
-        self.ydata_scan = np.zeros(num_points) * units
-        i = 0
-        self.running_scan = True
-        self.stop_scan = False
-        for value in scan:
-            if self.stop_scan:
-                break
-            self.daq.set_analog_value(int(channel_out), value)
-            sleep(delay.m_as('s'))
-            self.ydata_scan[i] = self.daq.get_analog_value(int(channel_in))
-            i += 1
-        self.running_scan = False
-
-    def monitor_signal(self):
-        """Monitors a signal in a specific port. Doesn't take any parameters, it assumes there is
-        well-configured dictionary called self.properties['Monitor']
+    def shut_down(self):
         """
-        delay = Q_(self.properties['Monitor']['time_resolution'])
-        total_time = Q_(self.properties['Monitor']['total_time']).m_as('s')
-        self.xdata = np.zeros((round(total_time / delay.m_as('s'))))
-        self.delta_x = delay.m_as('s')
-        self.ydata = np.zeros(int(total_time / delay.m_as('s')))
-        self.t0 = time()
-        while not self.stop_monitor:
-            self.ydata = np.roll(self.ydata, -1)
-            self.ydata[-1] = self.read_analog(1).m_as('V')
-            self.xdata = np.roll(self.xdata, -1)
-            self.xdata[-1] = time() - self.t0  # self.xdata[-2] + self.delta_x
-            sleep(delay.m_as('s'))
+        primitive function that is called in the MonitorWindow to safely close the application
+        """
+        print("bye bye!")
+
+    def do_scan(self, param=None):
+        """
+        primitive function for calling by the ScanWindow
+        """
+        if self.blinking:
+            raise Warning('Trying to start simultaneous operations')
+        self.done = False
+        if param == None:
+            start, stop, step = 1, 10, 1
+        else:
+            pass
+            # example of filling in variables from loaded class properties
+            #start = self.properties['Scan']['start']
+            #stop = self.properties['Scan']['stop']
+            #step = self.properties['Scan']['step']
+
+        num_points = np.int((stop-start)/step)
+        scan = np.linspace(start, stop, num_points)
+        output = 0 * scan
+        self.blinking = True
+
+        ### here comes the main actions of the scan
+        for i in range(np.size(scan)):
+            self.indicator = scan[i]
+            output[i] = 1/scan[i]
+
+        self.blinking = False
+        self.scan_finished()
+        return scan, output
+
+    def scan_finished(self):
+        """
+        Here, you can put any signal that has to be returned to the parent program that has called the scan
+        """
+        self.done = True
 
     def load_config(self, filename=None):
-        """Loads the configuration file to generate the properties of the Scan and Monitor.
+        """
+        If specified, this function loads the configuration file to generate the properties of the Scan.
 
         :param str filename: Path to the filename. Defaults to Model/default/blink.yml if not specified.
         """
         if filename is None:
-            filename = 'Model/default/blink.yml'
+            filename = '../core/defaults/blink.yml'
 
         with open(filename, 'r') as f:
-            params = yaml.load(f, Loader=yaml.FullLoader)
+            params = yaml.safe_load(f)
 
         self.properties = params
         self.properties['config_file'] = filename
         self.properties['User'] = self.properties['User']['name']
 
-    def load_daq(self, daq_model=None):
+    def load_instrument(self, inst=None):
         """
-        Loads a DAQ Model already initialized or loads from yaml specifications. The DAQ that can
-        be provided through the YAML are 'DummyDaq' and 'RealDaq'. There are no limitations regarding
-        an already initialized DAQ provided that follows the Daq Model.
-
-        :param daq_model: it can be a model already initailized. If not provided, loads the default.
+        Loads an instrument that is necessary for performing the scan.
+        :param inst: it can be a model already initailized. If not provided, loads the default instrument.
         """
-        if daq_model is None:
-            if 'DAQ' in self.properties:
-                name = self.properties['DAQ']['name']
-                port = self.properties['DAQ']['port']
-                if name == 'DummyDaq':
-                    from labphew.Model.daq import DummyDaq
-                    self.daq = DummyDaq(port)
-
-                elif name == 'RealDaq':
-                    from labphew.Model.daq.analog_daq import AnalogDaq
-                    self.daq = AnalogDaq(port)
-
-                elif name == 'VisaDaq':
-                    from labphew.Model.daq.visa_daq import AnalogDaq
-                    self.daq = AnalogDaq(port)
-                else:
-                    filename = self.properties['config_file']
-                    raise Exception('The daq specified in {} does not exist in this program'.format(filename))
-            else:
-                filename = self.properties['config_file']
-                raise Exception("No DAQ specified in {}".format(filename))
+        if inst is None:
+            pass #TODO: put here commands for initializing a primitive controller like blink_controller
         else:
-            self.daq = daq_model
+            self.instrument = inst
 
 
 
 if __name__ == "__main__":
     e = Operator()
-    data = e.read_analog(1)
+    #e.load_config()
+    #e.load_instrument()
+    #x, data = e.do_scan()
+    d = e.main_loop()
+    print(d)
