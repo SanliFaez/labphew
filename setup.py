@@ -36,5 +36,6 @@ setup(
         'numpy',
         'PyYAML',
         'pyserial',
+        'dwf'       # for Digilent WaveForms devices
     ],
 )
