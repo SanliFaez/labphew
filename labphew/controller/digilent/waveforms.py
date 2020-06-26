@@ -134,12 +134,12 @@ class DfwController(dwf.Dwf):
         :return:
         :rtype: float, float [,float, float] (or None's in case of read timeout)
         """
-        daq.ai.configure(0, 1)  # start acquisition
+        self.ai.configure(0, 1)  # start acquisition
         if self.wait_for_ai_acquisition():
             return tuple([None, None])*(1+self._basic_analog_return_std)  # return the right amount of None's
-        buf = daq.ai.bufferSizeGet()
-        c0 = np.array(daq.ai.statusData(0, buf))
-        c1 = np.array(daq.ai.statusData(1, buf))
+        buf = self.ai.bufferSizeGet()
+        c0 = np.array(self.ai.statusData(0, buf))
+        c1 = np.array(self.ai.statusData(1, buf))
         if self._basic_analog_return_std:
             return c0.mean(), c1.mean(), c0.std(), c1.std()
         else:
@@ -159,7 +159,7 @@ class DfwController(dwf.Dwf):
         if start_timestamp is None:
             start_timestamp = time.time()
         read_timeout = 1.9 + self.ai.bufferSizeGet() / self.ai.frequencyGet()
-        while daq.ai.status(True) != daq.ai.STATE.DONE:
+        while self.ai.status(True) != self.ai.STATE.DONE:
             if time.time() > start_timestamp + read_timeout:
                 self.logger.error('AI read timeout occured')
                 return True
