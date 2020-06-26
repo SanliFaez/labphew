@@ -35,13 +35,10 @@ class MonitorWindow(QMainWindow):
         super().__init__(parent)
 
         self.operator = operator
-
-        self.display = display
-
         self.refresh_time = 100
 
         self.setWindowTitle('labphew monitor')
-        self.set_UI()
+        self.set_UI(display)
 
         # p = os.path.dirname(__file__)
         # uic.loadUi(os.path.join(p, 'design/UI/main_window.ui'), self)
@@ -61,7 +58,7 @@ class MonitorWindow(QMainWindow):
         # self.scan_window = ScanWindow(operator)
         # self.actionScan.triggered.connect(self.scan_window.show)
 
-    def set_UI(self):
+    def set_UI(self, display):
         """
         code-based generation of the user-interface based on PyQT
         """
@@ -72,18 +69,18 @@ class MonitorWindow(QMainWindow):
 
         # self.slider = QSlider(Qt.Horizontal)
         # self.slider.setRange(1, 10)
-        if self.display == "text":
+        if display == "text":
             self.message = QLabel('Press a button!', self.central_widget)
             self.message.setFont(QFont("Arial", 32, QFont.Normal))
             self.layout.addWidget(self.message, alignment=Qt.AlignCenter)
 
-        elif self.display == "plot":
+        if display == "plot":
             self.main_view = pg.PlotWidget()
             self.layout.addWidget(self.main_view)
             self.main_view.setLabel('bottom', 'time', units='s')
             self.plot = self.main_view.plot([0], [0])
 
-        elif self.display == "image":
+        elif display == "image":
             self.main_view = pg.ImageView(view=pg.PlotItem())
             self.layout.addWidget(self.main_view)
 
@@ -124,25 +121,16 @@ class MonitorWindow(QMainWindow):
         """
         This method is called through a timer. It updates the data displayed in the main plot.
         """
-        if self.display == "text":
-            msg = self.operator.main_loop()
-            self.message.setText(msg)
-
-        elif self.display == "plot":
-            pass
-            # self.plot.setData(xdata, ydata)
-
-        elif self.display == "image":
-            pass
-
+        msg = self.operator.main_loop()
+        self.message.setText(msg)
+        # self.plot.setData(xdata, ydata)
 
 
     def closeEvent(self, event):
-        """This method is called when you try to close the window."""
-        pass
-        # quit_msg = "Are you sure you want to exit labphew monitor?"
-        # reply = QMessageBox.question(self, 'Message', quit_msg, QMessageBox.Yes, QMessageBox.No)
-        # event.accept()
+        quit_msg = "Are you sure you want to exit labphew monitor?"
+        reply = QMessageBox.question(self, 'Message',
+                                           quit_msg, QMessageBox.Yes, QMessageBox.No)
+        event.accept()
 
 if __name__ == "__main__":
     """
