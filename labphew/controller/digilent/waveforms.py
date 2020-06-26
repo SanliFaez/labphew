@@ -174,7 +174,8 @@ class SimulatedDfwController:
     def __init__(self, *args, **kwargs):
         self.logger = logging.getLogger(__name__)
         self._analog_out_values = [0.0, 0.0]  # empty dictionary to hold simulated analog values
-        self._analog_simulation_functions = [lambda v: np.exp(v-0.7)/20, lambda v: np.random.normal(1,.5)]
+        # self._analog_simulation_functions = [lambda v: np.exp(v-0.7)/20, lambda v: np.random.normal(1,.5)]
+        self._analog_simulation_functions = [lambda v: np.random.normal(1, .5), lambda v: np.exp(v - 0.7) / 20]
         from collections import defaultdict
 
         class Dummy:

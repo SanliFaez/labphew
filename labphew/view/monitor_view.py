@@ -15,6 +15,7 @@ TODO:
 
 import os
 import numpy as np
+from time import time, sleep
 import pyqtgraph as pg   # used for additional plotting features
 
 from PyQt5.QtCore import Qt, QTimer
@@ -29,7 +30,7 @@ from labphew.core.base.general_worker import WorkThread
 
 
 class MonitorWindow(QMainWindow):
-    def __init__(self, operator, display = 'text', parent=None):
+    def __init__(self, operator, display = 'plot', parent=None):
 
 
         super().__init__(parent)
@@ -103,7 +104,10 @@ class MonitorWindow(QMainWindow):
         if self.running_monitor:
             print('Monitor already running')
             return
+        self.operator.initialize_monitor()
         self.running_monitor = True
+        self.monitor_start_time = time()
+        self.monitor_time = [0]
         self.worker_thread = WorkThread(self.operator.main_loop)
         self.worker_thread.start()
         self.update_timer.start(self.refresh_time)
@@ -129,10 +133,21 @@ class MonitorWindow(QMainWindow):
             self.message.setText(msg)
 
         elif self.display == "plot":
-            pass
-            # self.plot.setData(xdata, ydata)
+            xdata, ydata = self.operator.main_loop()
+
+            # Generate time axis if no xdata is returned:
+            if xdata is None:
+                    del(self.monitor_time[0])  # remove oldest timestamp
+                    self.monitor_time.append(time()-self.monitor_start_time)  # add current timestamp
+                    # Make sure the time axis is the same length as ydata by repeating the oldest timestamp in the time axis
+                    # (This should only happen the first time it's run)
+                    if len(self.monitor_time) < len(ydata):
+                        self.monitor_time = [self.monitor_time[0]]*(len(ydata)-len(self.monitor_time)) + self.monitor_time
+                    xdata = self.monitor_time  # set the time axis as the xdata
+            self.plot.setData(xdata, ydata)
 
         elif self.display == "image":
+            """Not impolemented yet"""
             pass
 
 
@@ -150,9 +165,26 @@ if __name__ == "__main__":
     """
     import sys
     from PyQt5.QtWidgets import QApplication
-    from labphew.model.blank_model import Operator
+    # from labphew.model.blank_model import Operator
+
+    # Demonstrate example with Digiglent Analog Discovery 2
+    from labphew.model.analog_discovery_2_model import Operator
+    # To use simulated device change the import in the model to
 
     e = Operator()
+
+    # For the purpose of having something more interesting to monitor,
+    # set up analog out 0 as function generator with a sine (connect W1 to 1+ and GND to 1-)
+    daq = e.instrument  # shorthand name
+    daq.ao.nodeEnableSet(0, daq.ao.NODE.CARRIER, True)
+    daq.ao.nodeFunctionSet(0, daq.ao.NODE.CARRIER, daq.ao.FUNC.SINE)
+    daq.ao.nodeFrequencySet(0, daq.ao.NODE.CARRIER, 2.0)
+    daq.ao.nodePhaseSet(0, daq.ao.NODE.CARRIER, 0)
+    daq.ao.nodeAmplitudeSet(0, daq.ao.NODE.CARRIER, 0.4)
+    daq.ao.nodeOffsetSet(0, daq.ao.NODE.CARRIER, 1.0)
+    daq.ao.configure(0, 1)
+    sleep(0.1)
+
 
     ### Example of putting in parameters for the operator
     # session = {'port_monitor': 1,
