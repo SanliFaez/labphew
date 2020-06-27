@@ -1,34 +1,48 @@
-Welcome to labphew documentation!
-=================================
-Python for the Lab (PFTL) is a simple program to acquire data from a DAQ device. It is designed following the MVC design pattern, splitting the code into Controllers for defining drivers, Models for specifying the logic on how to use devices and perform an experiment. The View is where all the GUI is developed.
+***********************
+Introduction to labphew
+***********************
 
-PFTL was developed by `Uetke <https://www.uetke.com>`_ to explain to researchers, through simple examples, what can be achieved quickly with little programming knowledge. The ultimate goal of this project is to serve as a reference place for people interested in instrumentation written in Python.
+:todo: why did we create labphew?
 
-You can find the code of this package at `Github <https://github.com/PFTL/SimpleDaq/>`_, the documentation is hosted at `Read The Docs <https://readthedocs.org/projects/python-for-the-lab/>`_. If you are interested in learning more about Python For The Lab, you can check `Uetke's courses <https://uetke.com/courses/>`_.
+labphew strategic choices
+-------------------------
 
-The GUI
--------
-.. image:: _static/GUI_Python_For_The_Lab.png
-   :scale: 50 %
-   :alt: Screenshot of the GUI
+In order to stay focused on the main goals of the labphew project, and do not get distracted by
+feature-creep a few strategic choices have been made:
 
-If you follow the Python for the Lab course, the GUI is going to be the last step. You perform an analog output scan while acquiring the voltage on a different port. This will allow the users to acquire an I-V scan or any other voltage-dependent measurement.
+    1. labphew is mainly a functioning template for educating beginners
+    2. users are encouraged to edit the code but preserve the folder structure
+    3. the scope of the labphew project is limited to controlling only two devices, one camera and one data acquisition card
+    4. controllers of the sister packages should be rather easy to import
+    5. labphew is not meant to be a support package for other code and backward compatibility is unnecessary
+    6. writing new applications start from writing a new model
+    7. working with labphew should be fun and convenient
 
-The Device
-----------
-.. image:: _static/PFTL_Real_Device_r.JPG
-   :scale: 50 %
-   :alt: Controlling an LED to measure the IV curve
+standard operations
+-------------------
 
-The objective of PFTL is to control a device to measure the IV curve of an LED. The device is built on an Arduino DUE which has two Digital-to-Analog channels. The program monitors the voltage across a resistance while increasing the voltage applied to an LED. We can change all the parameters of the scan, including the input and output channels, the range, time delay, etc.
+:todo: explain how should one start the program and what to expect
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+glossary of name conventions:
+-----------------------------
 
-   PythonForTheLab
-   PythonForTheLab.Controller
-   PythonForTheLab.Model
-   PythonForTheLab.View
+classes and building blocks
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    * Operator: Class containing group operations necessary for a measurement ("Experiment" in PFTL)
+    * operation: each function in the Operator class
+    * MonitorWindow: Class containing the GUI and interactions for monitoring operations that run continuously
+    * ScanWindow: Class containing the GUI and update inquiries for one-time operations that can be called from another window or command line
+    * WorkThread: same as WorkThread in PFTL
+
+folders or files
+^^^^^^^^^^^^^^^^^
+
+    * adapt : folder containing python routines from other packages that are in progress of importing
+    * attic : folder containing old versions that can be deleted before each release
+    * blink : files in the program hierarchy that can be used to guide beginners
+    * _blank : skeleton of files that can be used to develop a new driver or model
 
 
+useful python resources
+=======================
