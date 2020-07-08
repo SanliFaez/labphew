@@ -1,5 +1,6 @@
-Logging
-=======
+*********************
+Logging and debugging
+*********************
 
 It is recommended to make use of the default logging module of python.
 

@@ -1,5 +1,5 @@
 *******************
-labphew guided tour
+A short guided tour
 *******************
 
 This short guide walks you through the folder structure of the labphew package and introduces you to the main

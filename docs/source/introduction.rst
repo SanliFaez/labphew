@@ -23,8 +23,8 @@ standard operations
 
 :todo: explain how should one start the program and what to expect
 
-glossary of name conventions:
------------------------------
+glossary of terms:
+------------------
 
 classes and building blocks
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -39,6 +39,7 @@ folders structure
 ^^^^^^^^^^^^^^^^^
     * adapt : folder containing python routines from other packages that are in progress of importing
     * attic : folder containing old versions that can be deleted before each release
+
 reserved filenames
 ^^^^^^^^^^^^^^^^^^
 
@@ -47,4 +48,4 @@ reserved filenames
 
 
 useful python resources
-=======================
+-----------------------

@@ -1,7 +1,8 @@
-$labphew documentation
-======================
+**********************
+Essential as in readme
+**********************
 
-$labphew helps you to practice computer-controlled measurements using Python
+labphew helps you to practice computer-controlled measurements using Python
 by providing a functioning code and a folder structure.
 
 To test your installation run

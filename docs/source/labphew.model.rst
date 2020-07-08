@@ -1,5 +1,7 @@
-PythonForTheLab\.Model
-======================
+***********
+M for model
+***********
+
 Models are where all the logic of the ``Operator`` class should be placed.
 In this case there are two models, one for the DAQ used and one for the Experiment itself.
 Models rely on controllers to communicate with real devices and pass the information to the view in order to display it to the user.
@@ -15,3 +17,6 @@ but they become apparent for larger or long-term projects.
 A common case found in many labs is the need for exchanging the hardware.
 If the user upgrades or replaces part of the equipment, it is only needed to develop a new model,
 and the rest of the code will continue to run, including the data acquisition, post-processing, analysis, etc.
+
+Essential methods
+-----------------
