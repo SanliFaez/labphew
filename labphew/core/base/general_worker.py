@@ -12,6 +12,7 @@ Although it works, this may not be the optimum/correct way of doing things, as p
 """
 
 from PyQt5 import QtCore
+import traceback
 
 class WorkThread(QtCore.QThread):
     def __init__(self,  function, *args, **kwargs):
@@ -27,8 +28,8 @@ class WorkThread(QtCore.QThread):
         try:
             self.function(*self.args,**self.kwargs)
         except Exception as e:
-            print(str(e))
-        return
+            print("error in thread:", str(e))
+            traceback.print_exc()
 
 
 if __name__ == '__main__':
