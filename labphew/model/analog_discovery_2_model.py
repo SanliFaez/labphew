@@ -3,28 +3,17 @@
 Analog Discovery 2
 ==================
 
-
 minimal:    It should have getting and setting voltages
 
 optional:   setting output as function generator
-
-
 
 
 """
 import os.path
 import numpy as np
 import yaml
-
 from time import time, sleep, localtime, strftime
-
-# To import the actual device:
-# To import a simulated device:
-# from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
-
 import logging
-
-
 
 class Operator:
     """
@@ -82,12 +71,12 @@ class Operator:
     def analog_out(self, channel, value=None):
         """
         Set analog_out.
-        Checks if between allowed value
-
+        Forces value to be in allowed range.
+        Returns the (corrected) value.
 
         :param channel: channel 1 or 2
         :type channel: int
-        :param value:
+        :param value: voltage to set (in Volt)
         :type value: float
         :return: the value set to the channel
         :rtype: float
@@ -107,6 +96,13 @@ class Operator:
         return value
 
     def _set_monitor_time_step(self, time_step):
+        """
+        Set Monitor time step.
+        Forces the value to be at least 0.01, and warns for large values
+
+        :param time_step: time step between acquisitions in the monitor loop (seconds)
+        :type time_step: float
+        """
         if time_step < 0.01:
             time_step = 0.01
             self.logger.warning(f"time_step too small, setting: {time_step}s")
@@ -115,6 +111,13 @@ class Operator:
         self.properties['monitor']['time_step'] = time_step
 
     def _set_monitor_plot_points(self, plot_points):
+        """
+        Set number of plot points for Monitor.
+        Forces the value to be at least 2, and warns for large values.
+
+        :param plot_points: time step between acquisitions in the monitor loop (seconds)
+        :type plot_points: int
+        """
         if plot_points < 2:
             plot_points = 2
             self.logger.warning(f"points too low, setting: {plot_points}s")
@@ -123,6 +126,10 @@ class Operator:
         self.properties['monitor']['plot_points'] = plot_points
 
     def _monitor_loop(self):
+        """
+        Calles by GUI Monitor to start the monirot loop.
+        Not intended to be called from Operator. (Which should be blocked)
+        """
         if self._stop_monitor:
             self.logger.warning('Monitor should only be run from GUI')
             return
@@ -266,6 +273,10 @@ if __name__ == "__main__":
 
     # from labphew.controller.digilent.waveforms import DfwController
 
+    # To import the actual device:
+    # from labphew.controller.digilent.waveforms import DfwController
+
+    # To import a simulated device:
     from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
 
     instrument = DfwController()

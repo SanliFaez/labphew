@@ -34,22 +34,21 @@ class MonitorWindow(QMainWindow):
     def __init__(self, operator, parent=None):
         self.logger = logging.getLogger(__name__)
         super().__init__(parent)
-
+        self.setWindowTitle('Analog Discovery 2')
         self.operator = operator
-        self.refresh_time = 100
 
-        self.setWindowTitle('labphew monitor')
-        self.set_UI()
-
+        # # For loading a .ui file (created with QtDesigner):
         # p = os.path.dirname(__file__)
         # uic.loadUi(os.path.join(p, 'design/UI/main_window.ui'), self)
 
+        self.set_UI()
+
+        # create thread and timer objects
         self.monitor_timer = QTimer()
         self.monitor_timer.timeout.connect(self.update_monitor)
-
         self.monitor_thread = WorkThread(self.operator._monitor_loop)
 
-        self.show()
+        self.show()  # display the GUI
 
         # TODO: uncomment for testing the child windows
         # self.config_window = ConfigWindow(operator, parent=self)
@@ -61,13 +60,12 @@ class MonitorWindow(QMainWindow):
 
     def set_UI(self):
         """
-        code-based generation of the user-interface based on PyQT
+        Code-based generation of the user-interface based on PyQT
         """
 
         ### Graphs:
         self.graph_win = pg.GraphicsWindow()
         self.graph_win.resize(1000, 600)
-
 
         self.plot1 = self.graph_win.addPlot()
         self.curve1 = self.plot1.plot(pen='y')
@@ -100,7 +98,6 @@ class MonitorWindow(QMainWindow):
         self.ao2_label = QLabel()
         layout_ao.addRow(self.ao1_label, self.ao1_spinbox)
         layout_ao.addRow(self.ao2_label, self.ao2_spinbox)
-
 
         ### Monitor
         box_monitor = QGroupBox('Monitor')
@@ -140,6 +137,11 @@ class MonitorWindow(QMainWindow):
         self.apply_properties(self.operator.properties)
 
     def apply_properties(self, props):
+        """
+        Apply properties dictionary to gui elements
+        :param props: properties
+        :type props: dict
+        """
         self.ao1_label.setText(props['ao'][1]['name'])
         self.ao2_label.setText(props['ao'][2]['name'])
 
@@ -150,22 +152,42 @@ class MonitorWindow(QMainWindow):
         self.plot2.setTitle(props['monitor'][2]['name'])
 
     def ao1_value(self):
+        """
+        Called when AO Channel 2 spinbox is modified.
+        Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element
+        """
         value = self.operator.analog_out(1, self.ao1_spinbox.value())
         self.ao1_spinbox.setValue(value)
 
     def ao2_value(self):
+        """
+        Called when AO Channel 2 spinbox is modified.
+        Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element
+        """
         value = self.operator.analog_out(2, self.ao2_spinbox.value())
         self.ao2_spinbox.setValue(value)
 
     def time_step(self):
+        """
+        Called when time step spinbox is modified.
+        Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element
+        """
         self.operator._set_monitor_time_step(self.time_step_spinbox.value())
         self.time_step_spinbox.setValue(self.operator.properties['monitor']['time_step'])
 
     def plot_points(self):
+        """
+        Called when plot points spinbox is modified.
+        Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element
+        """
         self.operator._set_monitor_plot_points(self.plot_points_spinbox.value())
         self.plot_points_spinbox.setValue(self.operator.properties['monitor']['plot_points'])
 
     def start_monitor(self):
+        """
+        Called when start button is pressed.
+        Starts the monitor (thread and timer) and disables some gui elements
+        """
         if self.monitor_thread.isRunning():
             self.logger.debug("Monitor is already running")
             return
@@ -178,6 +200,12 @@ class MonitorWindow(QMainWindow):
             self.start_button.setEnabled(False)
 
     def stop_monitor(self):
+        """
+        Called when stop button is pressed.
+        Stops the monitor:
+        - flags the operator to stop
+        - uses the Workthread stop method to wait a bit for the operator to finish, or terminate thread if timeout occurs
+        """
         if not self.monitor_thread.isRunning():
             self.logger.debug('Monitor is not running')
             return
@@ -188,6 +216,10 @@ class MonitorWindow(QMainWindow):
             self.monitor_thread.stop(self.operator.properties['monitor']['stop_timeout'])
 
     def update_monitor(self):
+        """
+        Checks if new data is available and updates the graph.
+        Checks if thread is still running and if not: stops timer and reset gui elements
+        """
         if self.monitor_thread.isFinished():
             self.logger.debug('monitor_thread is finished')
             self.monitor_timer.stop()
@@ -199,6 +231,8 @@ class MonitorWindow(QMainWindow):
             self.curve2.setData(self.operator.analog_monitor_time, self.operator.analog_monitor_2)
 
     def closeEvent(self, event):
+        """ Gets called when the window is closed. Could be used to do some cleanup before closing. """
+
         # # Use this bit to display an "Are you sure"-dialogbox
         # quit_msg = "Are you sure you want to exit labphew monitor?"
         # reply = QMessageBox.question(self, 'Message', quit_msg, QMessageBox.Yes, QMessageBox.No)
