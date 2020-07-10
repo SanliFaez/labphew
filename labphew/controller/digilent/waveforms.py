@@ -22,16 +22,16 @@ import logging
 import dwf
 import time
 import numpy as np
+
+logging.getLogger('matplotlib').setLevel(logging.WARNING)  # put this line before matplotlib import to prevent it from showing debug messages
 import matplotlib.pyplot as plt
 
 
 class DfwController(dwf.Dwf):
     def __init__(self, device_number=0, config=0):
         self.logger = logging.getLogger(__name__)
-        self.logger.debug("")
         super().__init__(device_number, config)
 
-        self.logger.debug("")
         self.AnalogIn = dwf.DwfAnalogIn(self)
         self.AnalogOut = dwf.DwfAnalogOut(self)
         self.DigitalIn = dwf.DwfDigitalIn(self)
@@ -54,12 +54,12 @@ class DfwController(dwf.Dwf):
         self._time_stabilized = time.time()  # will be overwritten by write_analog()
         self.preset_basic_analog()
 
-    def preset_basic_analog(self, n=84, freq=10000, range=50.0, return_std=False):
+    def preset_basic_analog(self, n=80, freq=10000, range=50.0, return_std=False):
         """
         Apply settings for read_analog() and write_analog()
         Please note that there may be a significant overhead (delay) for reading which seems to be larger for lower
         frequencies and oddly seems to be larger for collecting a small number of points.
-        The default values of averaging over 84 points at 10kHz results in 10ms per averaged datapoint.
+        The default values of averaging over 82 points at 10kHz results in <10ms per averaged datapoint.
 
         :param n:     number of datapoints to collect and average (default 85)
         :type n:      int
@@ -90,7 +90,7 @@ class DfwController(dwf.Dwf):
         """
         self.ao.configure(channel, 0)
 
-    def write_analog(self, volt, channel=-1):
+    def write_analog(self, volt, channel=-1, enable=True):
         """
         Basic method to apply voltage to analog out channels.
         In the background it also approximates the timestamp when the output will be stabilize (based on the change in voltage applied).
@@ -104,7 +104,7 @@ class DfwController(dwf.Dwf):
         :type delay: float
         """
         self.ao.nodeOffsetSet(channel, self.ao.NODE.CARRIER, volt)
-        self.ao.configure(channel, 1)
+        self.ao.configure(channel, enable)
         if channel == 0 or channel == -1:
             self._time_stabilized = max(self._time_stabilized, time.time()+0.013+0.005*abs(self._last_ao0-volt))
             self._last_ao0 = volt
@@ -357,6 +357,12 @@ if __name__ == '__main__':
     # Note that this is already automatically done at instantiation of the object so technically not required at this moment.
     # But if you've those changed settings (like we'll do in the advanced example below) it is necessary.
     daq.preset_basic_analog()
+
+    t0 = time.time()
+    for k in range(10):
+        print(daq.read_analog())
+    duration = time.time()-t0
+    print(duration)
 
     daq.write_analog( 1.3, 0)  #  1.3V on analog out channel 0
     daq.write_analog(-0.7, 1)  # -0.7V on analog out channel 1

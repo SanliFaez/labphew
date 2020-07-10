@@ -13,6 +13,7 @@ Although it works, this may not be the optimum/correct way of doing things, as p
 
 from PyQt5 import QtCore
 import traceback
+from time import time, sleep
 
 class WorkThread(QtCore.QThread):
     def __init__(self,  function, *args, **kwargs):
@@ -31,6 +32,17 @@ class WorkThread(QtCore.QThread):
             print("error in thread:", str(e))
             traceback.print_exc()
 
+    def stop(self, timeout=2):
+        """
+        Convenience method to gracefully stop thread before terminating forcefully after a timeout
+        """
+        t0 = time()
+        self.quit()
+        while time() < t0+timeout:
+            if self.isFinished():
+                return
+            sleep(0.001)
+        self.terminate()
 
 if __name__ == '__main__':
     from time import sleep
