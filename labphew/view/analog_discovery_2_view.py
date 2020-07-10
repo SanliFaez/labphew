@@ -44,16 +44,10 @@ class MonitorWindow(QMainWindow):
         # p = os.path.dirname(__file__)
         # uic.loadUi(os.path.join(p, 'design/UI/main_window.ui'), self)
 
-
         self.monitor_timer = QTimer()
         self.monitor_timer.timeout.connect(self.update_monitor)
 
         self.monitor_thread = WorkThread(self.operator._monitor_loop)
-
-        # self.running_monitor = False
-        #
-        # self.button_start.clicked.connect(self.start_monitor)
-        # self.button_stop.clicked.connect(self.stop_monitor)
 
         self.show()
 
@@ -143,13 +137,7 @@ class MonitorWindow(QMainWindow):
 
         self.setCentralWidget(central_widget)
 
-        # self.ai_combo = QComboBox(items=['together', 'Ch1', 'Ch2', 'both'])
-
-        #
-        # self.layout.addWidget(self.button_start)
-        # self.layout.addWidget(self.button_stop)
         self.apply_properties(self.operator.properties)
-
 
     def apply_properties(self, props):
         self.ao1_label.setText(props['ao'][1]['name'])
@@ -177,13 +165,12 @@ class MonitorWindow(QMainWindow):
         self.operator._set_monitor_plot_points(self.plot_points_spinbox.value())
         self.plot_points_spinbox.setValue(self.operator.properties['monitor']['plot_points'])
 
-
-
     def start_monitor(self):
         if self.monitor_thread.isRunning():
             self.logger.debug("Monitor is already running")
             return
         else:
+            self.logger.debug('Starting monitor')
             self.operator._stop_monitor = False  # enable operator monitor loop to run
             self.monitor_thread.start()  # start the operator monitor
             self.monitor_timer.start(self.operator.properties['monitor']['gui_refresh_time'])  # start the update timer
@@ -196,6 +183,7 @@ class MonitorWindow(QMainWindow):
             return
         else:
             # set flag to to tell the operator to stop:
+            self.logger.debug('Stopping monitor')
             self.operator._stop_monitor = True
             self.monitor_thread.stop(self.operator.properties['monitor']['stop_timeout'])
 
@@ -210,19 +198,6 @@ class MonitorWindow(QMainWindow):
             self.curve1.setData(self.operator.analog_monitor_time, self.operator.analog_monitor_1)
             self.curve2.setData(self.operator.analog_monitor_time, self.operator.analog_monitor_2)
 
-
-
-    # def update_monitor(self):
-    #     """
-    #     This method is called through a timer. It updates the data displayed in the main plot.
-    #     """
-    #     if self.operator.new_data:
-    #         self.plot.setData(xdata, ydata)
-    #     msg = self.operator.main_loop()
-    #     self.message.setText(msg)
-    #     # self.plot.setData(xdata, ydata)
-
-
     def closeEvent(self, event):
         # # Use this bit to display an "Are you sure"-dialogbox
         # quit_msg = "Are you sure you want to exit labphew monitor?"
@@ -231,8 +206,10 @@ class MonitorWindow(QMainWindow):
         #     event.ignore()
         #     return
         self.stop_monitor()  # stop monitor if it was running
+        self.monitor_timer.stop()  # stop monitor timer, just to be nice
         # perhaps also disconnect devices
         event.accept()
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)  # Change root logging level
@@ -248,25 +225,9 @@ if __name__ == "__main__":
     from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
 
 
-
-
     instrument = DfwController()
     opr = Operator(instrument)
     opr.load_config()
-
-    ### Example of putting in parameters for the operator
-    # session = {'port_monitor': 1,
-    #            'time_resolution': Q_('1ms'),
-    #            'refresh_time': Q_('100ms'),
-    #            'total_time': Q_('15s'),
-    #            'scan_port_out': 1,
-    #            'scan_start': Q_('0.1V'),
-    #            'scan_stop': Q_('0.7V'),
-    #            'scan_step': Q_('0.1V'),
-    #            'scan_port_in': 2,
-    #            'scan_delay': Q_('10ms'),
-    #            }
-    # e.properties = session
 
     app = QApplication(sys.argv)
     gui = MonitorWindow(opr)
