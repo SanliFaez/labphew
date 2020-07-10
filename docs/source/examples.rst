@@ -1,5 +1,4 @@
-Welcome to labphew documentation!
-=================================
-
-
+***************
+Simple examples
+***************
 

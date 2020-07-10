@@ -1,15 +1,14 @@
-$labphew documentation
-======================
+**********************
+Essential as in readme
+**********************
 
+labphew helps you to practice computer-controlled measurements using Python
+by providing a functioning code and a folder structure.
 
-$project will solve your problem of where to start with documentation,
-by providing a basic explanation of how to do it easily.
+To test your installation run
 
-Look how easy it is to use:
+>>> labphew blink
 
-    import project
-    # Get your stuff done
-    project.do_stuff()
 
 Features
 --------

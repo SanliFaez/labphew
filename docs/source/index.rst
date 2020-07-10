@@ -1,34 +1,61 @@
-Welcome to labphew documentation!
-=================================
-Python for the Lab (PFTL) is a simple program to acquire data from a DAQ device. It is designed following the MVC design pattern, splitting the code into Controllers for defining drivers, Models for specifying the logic on how to use devices and perform an experiment. The View is where all the GUI is developed.
+***********************
+Welcome to labphew docs
+***********************
 
-PFTL was developed by `Uetke <https://www.uetke.com>`_ to explain to researchers, through simple examples, what can be achieved quickly with little programming knowledge. The ultimate goal of this project is to serve as a reference place for people interested in instrumentation written in Python.
-
-You can find the code of this package at `Github <https://github.com/PFTL/SimpleDaq/>`_, the documentation is hosted at `Read The Docs <https://readthedocs.org/projects/python-for-the-lab/>`_. If you are interested in learning more about Python For The Lab, you can check `Uetke's courses <https://uetke.com/courses/>`_.
-
-The GUI
--------
-.. image:: _static/GUI_Python_For_The_Lab.png
+.. image:: _static/labphew_logo.png
    :scale: 50 %
-   :alt: Screenshot of the GUI
+   :alt: labphew logo
 
-If you follow the Python for the Lab course, the GUI is going to be the last step. You perform an analog output scan while acquiring the voltage on a different port. This will allow the users to acquire an I-V scan or any other voltage-dependent measurement.
+*labphew* (lowercase) is a minimalist functioning code module and folder structure. While trying to be a standalone and
+accessible module, labphew is built to teach and practice computer-controlled measurements using Python.
 
-The Device
-----------
-.. image:: _static/PFTL_Real_Device_r.JPG
-   :scale: 50 %
-   :alt: Controlling an LED to measure the IV curve
+labphew is meant to be:
+-----------------------
 
-The objective of PFTL is to control a device to measure the IV curve of an LED. The device is built on an Arduino DUE which has two Digital-to-Analog channels. The program monitors the voltage across a resistance while increasing the voltage applied to an LED. We can change all the parameters of the scan, including the input and output channels, the range, time delay, etc.
+* out-of-the-box package, capable of communicating with specified electronic devices.
+* instructive code that allows users to learn how it works and how to customize it.
+* a low entry-level template for building new user-interfaces for a measurement.
+* a good example of structuring lab-automation code and how to document it
+* fun to play with, edit, and contribute to the code.
+
+labphew is NOT meant to:
+------------------------
+* grow into a comprehensive package for controlling all sorts of devices.
+* be the fastest in performing a task or push its performance to the physical limits.
+* stay backward-compatible.
+
+You can find the code of this package at `Github <https://github.com/sanlifaez/labphew>`_.
+The documentation is hosted at `Read The Docs <https://readthedocs.org/projects/labphew>`_.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: Further in the docs:
 
-   PythonForTheLab
-   PythonForTheLab.Controller
-   PythonForTheLab.Model
-   PythonForTheLab.View
+   introduction
+   installation
+   howtolabphew
+   walkthrough
+   labphew.model
+   labphew.view
+   labphew.controller
+   labphew.core
+   labphew.logging
+   examples
+   devices
+   customize
+   contribute
 
 
+Acknowledgement
+===============
+This project is heavily inspired by the instruction exercise written by Dr. Aquiles Carattino,
+the mastermind behind Python for the Lab (PFTL).
+PFTL is developed by `Uetke <https://www.uetke.com>`_.
+If you want to learn more (very serious!) coding for lab automation with Python,
+check the excellent `PTFL website <https://www.pythonforthelab.com/>`_ or register for a course at `Uetke <https://www.uetke.com>`_.
+
+An earlier and more sophisticated derivation of this software, PyNTA, which uses the multiprocessing library of Python
+and the distributed messaging library pyZMQ, has been explained in
+`this preprint <https://www.preprints.org/manuscript/201906.0251/v1>`_ - doi: 10.20944/preprints201906.0251.v1.
+`PyNTA <https://github.com/nanoepics/pynta>`_ is capable of real-time particle tracking on Megapixel
+images at a 50 Hz rate.
