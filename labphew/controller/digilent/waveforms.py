@@ -218,7 +218,7 @@ class SimulatedDfwController:
         pass
 
     def read_analog(self):
-        return [func(v) for func, v in zip(self._analog_simulation_functions, self._analog_out_values)]
+        return tuple(func(v) for func, v in zip(self._analog_simulation_functions, self._analog_out_values))
 
     def write_analog(self, volt, channel=-1):
         if channel == 0 or channel == -1:
