@@ -43,12 +43,10 @@ class MonitorWindow(QMainWindow):
 
         self.set_UI()
 
-        # create thread and timer objects
+        # create thread and timer objects for monitor
         self.monitor_timer = QTimer()
         self.monitor_timer.timeout.connect(self.update_monitor)
         self.monitor_thread = WorkThread(self.operator._monitor_loop)
-
-        self.show()  # display the GUI
 
         # TODO: uncomment for testing the child windows
         # self.config_window = ConfigWindow(operator, parent=self)
@@ -68,9 +66,13 @@ class MonitorWindow(QMainWindow):
         self.graph_win.resize(1000, 600)
 
         self.plot1 = self.graph_win.addPlot()
+        self.plot1.setLabel('bottom', 'time', units='s')
+        self.plot1.setLabel('left', 'voltage', units='V')
         self.curve1 = self.plot1.plot(pen='y')
         self.graph_win.nextRow()
         self.plot2 = self.graph_win.addPlot()
+        self.plot2.setLabel('bottom', 'time', units='s')
+        self.plot2.setLabel('left', 'voltage', units='V')
         self.curve2 = self.plot2.plot(pen='c')
         # self.plot2.hide()
 
@@ -151,6 +153,7 @@ class MonitorWindow(QMainWindow):
         self.plot1.setTitle(props['monitor'][1]['name'])
         self.plot2.setTitle(props['monitor'][2]['name'])
 
+
     def ao1_value(self):
         """
         Called when AO Channel 2 spinbox is modified.
@@ -188,12 +191,12 @@ class MonitorWindow(QMainWindow):
         Called when start button is pressed.
         Starts the monitor (thread and timer) and disables some gui elements
         """
-        if self.monitor_thread.isRunning():
-            self.logger.debug("Monitor is already running")
+        if self.operator._busy:
+            self.logger.debug("Operator is busy")
             return
         else:
             self.logger.debug('Starting monitor')
-            self.operator._stop_monitor = False  # enable operator monitor loop to run
+            self.operator._stop = False  # enable operator monitor loop to run
             self.monitor_thread.start()  # start the operator monitor
             self.monitor_timer.start(self.operator.properties['monitor']['gui_refresh_time'])  # start the update timer
             self.plot_points_spinbox.setEnabled(False)
@@ -212,8 +215,9 @@ class MonitorWindow(QMainWindow):
         else:
             # set flag to to tell the operator to stop:
             self.logger.debug('Stopping monitor')
-            self.operator._stop_monitor = True
+            self.operator._stop = True
             self.monitor_thread.stop(self.operator.properties['monitor']['stop_timeout'])
+            self.operator._busy = False  # Rest in case the monitor was not stopped gracefully, but forcefully stopped
 
     def update_monitor(self):
         """
@@ -221,7 +225,7 @@ class MonitorWindow(QMainWindow):
         Checks if thread is still running and if not: stops timer and reset gui elements
         """
         if self.monitor_thread.isFinished():
-            self.logger.debug('monitor_thread is finished')
+            self.logger.debug('Monitor thread is finished')
             self.monitor_timer.stop()
             self.plot_points_spinbox.setEnabled(True)
             self.start_button.setEnabled(True)
@@ -253,10 +257,10 @@ if __name__ == "__main__":
     from labphew.model.analog_discovery_2_model import Operator
 
     # To use with real device
-    # from labphew.controller.digilent.waveforms import DfwController
+    from labphew.controller.digilent.waveforms import DfwController
 
     # To test with simulated device
-    from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
+    # from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
 
 
     instrument = DfwController()
@@ -265,4 +269,5 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     gui = MonitorWindow(opr)
+    gui.show()  # display the GUI
     app.exit(app.exec_())

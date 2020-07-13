@@ -1,17 +1,38 @@
+# parameters for the scan go here
+scan:
+  start:            0   # (V)
+  stop:             5   # (V)
+  step:             0.1 # (V)
+  integrationtime:  0.1 # (s)
+  ao_channel:       2
+  ai_channel:       1
+  x:
+    ao_channel:       2
+    name:             applied voltage (V)
+  y:
+    ai_channel:       1
+    name:             measured voltage (V)
+  stop_timeout:       3   # (s) How much time to give scan loop to stop before forcefully terminating it
+  gui_refresh_time:   .01     # (s) How often gui checks if here's new data (usually quicker than time_step)
+
+# set limits for the analog out channels and optionally give them custom display names
 ao:
   1:
-    name:         Channel 1
-    upper_limit:  5.4       # (Volt)
-    lower_limit:  -5.4      # (Volt)
+    name:           Channel 1
+    upper_limit:    5.4       # (Volt)
+    lower_limit:    -5.4      # (Volt)
   2:
-    name:         Channel 2
-    upper_limit:  5.4       # (Volt)
-    lower_limit:  -5.4      # (Volt)
+    name:           Channel 2
+    upper_limit:    5.4       # (Volt)
+    lower_limit:    -5.4      # (Volt)
+
+# set parameters for the monitor here
 monitor:
   time_step:        0.050   # (s) Note that the basic analog approach doesn't really go faster than 0.010 seconds
   plot_points:      110
   1:
     name:           Channel 1
+    xlabel:         'time'
   2:
     name:           Channel 2
   gui_refresh_time: .01     # (s) How often gui checks if here's new data (usually quicker than time_step)

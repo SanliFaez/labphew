@@ -17,9 +17,7 @@ import logging
 
 class Operator:
     """
-    A primitive class generating a synthetic time series.
-    the main purpose of this class it to provide the minimal functions required for running a view
-    and can serve as the basis for a customized model
+    Example Operator class for Digilent Analog Discovery 2.
     """
 
     def __init__(self, instrument, properties = {}):
@@ -27,9 +25,13 @@ class Operator:
         self.properties = properties
         self.instrument = instrument
 
-        self._stop_monitor = True  # used externally to control monitor
+        self._busy = False  # flag to indicate the operator is busy (e.g. with scan or monitor)
+        self._stop = True  # used externally to signal a loop to stop
+        self._pause = False  # used externally to signal a loop to pause
+
         self._new_monitor_data = False  # used to flag gui that new data is available
         self._monitor_start_time = 0
+
 
         self.monitoring = False  # flag controlled by operator to indicate if busy
         self.stop = True  # flag controlled externally (e.g. by View) to control monitor loop
@@ -37,6 +39,8 @@ class Operator:
 
 
         self.monitor_plot_points = 100
+
+        self.analog_in = self.instrument.read_analog  # create direct alias for this method of the instrument
 
         # self.properties = {}  # TODO: read properties from yml config file
         # self.indicator = 0  # instrument-specific value shared with another display during the scan
@@ -125,14 +129,18 @@ class Operator:
             self.logger.warning(f"setting plot_points to {plot_points}s (are you sure?)")
         self.properties['monitor']['plot_points'] = plot_points
 
+    def temp(self):
+        return 4, 8
+
     def _monitor_loop(self):
         """
         Calles by GUI Monitor to start the monirot loop.
         Not intended to be called from Operator. (Which should be blocked)
         """
-        if self._stop_monitor:
-            self.logger.warning('Monitor should only be run from GUI')
+        if self._stop or self._busy:
+            self.logger.warning('Monitor should only be run from GUI and not while Operator is busy')
             return
+        self._busy = True
         # Preparations before running the monitor
         self.analog_monitor_1 = np.zeros(self.properties['monitor']['plot_points'])
         self.analog_monitor_2 = np.zeros(self.properties['monitor']['plot_points'])
@@ -141,7 +149,10 @@ class Operator:
 
         self._monitor_start_time = time()
         next_time = 0
-        while not self._stop_monitor:
+        while not self._stop:
+            while self._pause:
+                sleep(0.05)
+                if self._stop: break
             timestamp = time() - self._monitor_start_time
             analog_in = self.instrument.read_analog()  # read the two analog in channels
             # To keep the length constant, roll/shift the buffers and add the new datapoints
@@ -156,6 +167,7 @@ class Operator:
             next_time += self.properties['monitor']['time_step']
             while time()-self._monitor_start_time<next_time:
                 pass
+        self._busy = False  # indicate the oprator is not busy anymore
 
 
     # def main_loop(self):
@@ -191,42 +203,66 @@ class Operator:
     #     """
     #     print("bye bye!")
 
-    # def do_scan(self, param=None):
-    #     """
-    #     primitive function for calling by the ScanWindow
-    #     this functions counts down inverses down to 1/10
-    #     """
-    #     if self.blinking:
-    #         raise Warning('Trying to start simultaneous operations')
-    #     self.done = False
-    #     if param == None:
-    #         start, stop, step = 1, 100, 1
-    #     else:
-    #         pass
-    #         # example of filling in variables from loaded class properties
-    #         #start = self.properties['Scan']['start']
-    #         #stop = self.properties['Scan']['stop']
-    #         #step = self.properties['Scan']['step']
-    #
-    #     num_points = np.int((stop-start+1)/step)
-    #     scan = np.linspace(start, stop, num_points)
-    #     output = 0 * scan
-    #     self.blinking = True
-    #
-    #     ### here comes the main actions of the scan
-    #     for i in range(np.size(scan)):
-    #         if not self.paused:
-    #             self.indicator = scan[i]
-    #             output[i] = 1/scan[i]
-    #
-    #     self.blinking = False
-    #     if not self.paused:
-    #         self.scan_finished()
-    #
-    #     self.scan = scan
-    #     self.output = output
-    #
-    #     return scan, output
+
+    def do_scan(self, param=None):
+        """
+        primitive function for calling by the ScanWindow
+        this functions counts down inverses down to 1/10
+        """
+        if self._busy:
+            self.logger.warning('Scan should not be started while Operator is busy.')
+            return
+
+        if 'scan' not in self.properties:
+            self.logger.error("The config file or properties dict should contain 'scan' section.")
+            return
+
+        required_keys = ['start', 'stop', 'step', 'ao_channel', 'ai_channel']
+        if not all(key in self.properties['scan'] for key in required_keys):
+            self.logger.error("'scan' should contain: "+', '.join(required_keys))
+            return
+
+        try:
+            start = self.properties['scan']['start']
+            stop = self.properties['scan']['stop']
+            step = self.properties['scan']['step']
+            ch_ao = int(self.properties['scan']['ao_channel'])
+            ch_ai = int(self.properties['scan']['ai_channel'])
+        except:
+            self.logger.warning("Error occured while reading scan config values")
+            return
+
+        if ch_ai not in [1,2] or ch_ao not in [1,2]:
+            self.logger.warning("AI and AO channel need to be 1 or 2")
+            return
+
+        if 'stabilize_time' in self.properties['scan']:
+            stabilize = self.properties['scan']['stabilize_time']
+        else:
+            self.logger.info("stabilize_time not found in config, using 0s")
+            stabilize = 0
+
+        num_points = np.int(round((stop-start+1)/step))  # use round to catch the occasional rounding error
+        self.scan_voltages = np.linspace(start, stop, num_points)
+
+        self.measured_voltages = 0 * self.scan_voltages
+
+        for i, voltage in enumerate(self.scan_voltages):
+            if self._pause:
+                while self._pause:
+                    sleep(0.05)
+                    if self._stop: break
+            self.analog_out(ch_ao, voltage)
+            sleep(stabilize)
+            self.measured_voltages[i] = self.analog_in()[ch_ai-1]
+            self._new_scan_data = True
+            if self._stop:
+                break
+
+        self._busy = False
+
+        return self.scan_voltages, self.measured_voltages
+
 
     # def scan_finished(self):
     #     """
