@@ -23,12 +23,24 @@ import dwf
 import time
 import numpy as np
 
-logging.getLogger('matplotlib').setLevel(logging.WARNING)  # put this line before matplotlib import to prevent it from showing debug messages
-import matplotlib.pyplot as plt
-
 
 class DfwController(dwf.Dwf):
     def __init__(self, device_number=0, config=0):
+        """
+        Connect to device with optional configuration.
+
+        It connects to device with device_number as listed by the enumerate_devices() function of this module.
+        Note that the default value of 0 will simply connect to the first device found.
+        The possible configurations are also returned by enumerate_devices(). Note that enumerate devices is run at time
+        of module import and stored in the variable devices. Note that the information returned by enumerate_devices()
+        (or stored in the variable devices) can be diplayed in more readable form with the function print_device_list()
+        of this module.
+
+        :param device_number: the device number (default: 0)
+        :type device_number: int
+        :param config: configuration number (default: 0)
+        :type config: int
+        """
         self.logger = logging.getLogger(__name__)
         super().__init__(device_number, config)
 
@@ -47,7 +59,7 @@ class DfwController(dwf.Dwf):
         self.di = self.DigitalIn
         self.do = self.DigitalOut
 
-        self._basic_analog_return_std = False  # will be overwritten by preset_basic_analog()
+        self.basic_analog_return_std = False  # will be overwritten by preset_basic_analog()
         self._read_timeout = 1  # will be overwritten by preset_basic_analog()
         self._last_ao0 = 0  # will be overwritten by write_analog()
         self._last_ao1 = 0  # will be overwritten by write_analog()
@@ -80,6 +92,7 @@ class DfwController(dwf.Dwf):
         self.ai.configure(1, 0)  # apply config to AI, but not start
         # self._read_timeout = 1.9 + self.ai.bufferSizeGet() / self.ai.frequencyGet()
         self.ao.configure(-1, 1)
+        self.basic_analog_return_std = False
 
     def stop_analog_out(self, channel=-1):
         """
@@ -130,17 +143,18 @@ class DfwController(dwf.Dwf):
         Basic method to read voltage of analog in channels.
         See preset_basic_analog() to setup specifics for reading.
         Returns both channels.
+        (Also returns standard deviations if self.basic_analog_return_std is True)
 
-        :return:
+        :return: the analog values of both AI channels (and possibly the standard deviations)
         :rtype: float, float [,float, float] (or None's in case of read timeout)
         """
         self.ai.configure(0, 1)  # start acquisition
         if self.wait_for_ai_acquisition():
-            return tuple([None, None])*(1+self._basic_analog_return_std)  # return the right amount of None's
+            return tuple([None, None])*(1 + self.basic_analog_return_std)  # return the right amount of None's
         buf = self.ai.bufferSizeGet()
         c0 = np.array(self.ai.statusData(0, buf))
         c1 = np.array(self.ai.statusData(1, buf))
-        if self._basic_analog_return_std:
+        if self.basic_analog_return_std:
             return c0.mean(), c1.mean(), c0.std(), c1.std()
         else:
             return c0.mean(), c1.mean()
@@ -149,10 +163,10 @@ class DfwController(dwf.Dwf):
         """
         Waits while ai status is busy. Uses the AI frequency and buffersize in combination with start_timestamp to
         calculate a read timeout. If no start_timestamp is supplied it uses time at moment of calling the method.
-        It returns True if timeout occured and None if acquisition finished regularly.
+        It returns True if timeout occurred and None if acquisition finished regularly.
 
-        :param start_timestamp:
-        :type start_timestamp:
+        :param start_timestamp: the timestamp (as returned by time.time()) from which to calculate how long to wait
+        :type start_timestamp: float or None
         :return: True for timeout, None when nothing happened
         :rtype: True or None
         """
@@ -173,12 +187,14 @@ class SimulatedDfwController:
     """
     def __init__(self, *args, **kwargs):
         self.logger = logging.getLogger(__name__)
-        self._analog_out_values = [0.0, 0.0]  # empty dictionary to hold simulated analog values
+        self._analog_in_values = [0.0, 0.0]  # empty dictionary to hold simulated analog values
         # self._analog_simulation_functions = [lambda v: np.exp(v-0.7)/20, lambda v: np.random.normal(1,.5)]
         self._analog_simulation_functions = [lambda v: np.random.normal(1, .5), lambda v: np.exp(v - 0.7) / 20]
+        self.basic_analog_return_std = False
         from collections import defaultdict
 
         class Dummy:
+            """A dummy class that allows "Setting" and "Getting" arbitrary values and doesn't crash for unknown values."""
             def __init__(s2, *args, **kwargs):
                 s2.__dict__.update(kwargs)
                 s2.getset = defaultdict(lambda: 0)
@@ -218,22 +234,61 @@ class SimulatedDfwController:
         pass
 
     def read_analog(self):
-        return tuple(func(v) for func, v in zip(self._analog_simulation_functions, self._analog_out_values))
+        """
+        Simulated version of read_analog().
+        Applies functions specified in self._analog_simulation_functions (optionally to the values set by write_analog() ).
+        """
+        results = [func(v) for func, v in zip(self._analog_simulation_functions, self._analog_in_values)]
+        if self.basic_analog_return_std:
+            return tuple([*results, results[0]/10, results[1]/10])
+        else:
+            return tuple(results)
 
     def write_analog(self, volt, channel=-1):
+        """
+        Simulated version of write_analog().
+
+        :param volt:
+        :type volt:
+        :param channel:
+        :type channel:
+        :return:
+        :rtype:
+        """
         if channel == 0 or channel == -1:
-            self._analog_out_values[0] = volt
+            self._analog_in_values[0] = volt
         if channel == 1 or channel == -1:
-            self._analog_out_values[1] = volt
+            self._analog_in_values[1] = volt
 
     def wait_for_ai_acquisition(self, start_timestamp=None):
+        """
+        Simulated version of wait_for_ai_acquisition().
+
+        :param start_timestamp: is ignored in simulated version
+        :type start_timestamp: float or None
+        """
         time.sleep(0.1)
 
     def wait_for_stabilization(self):
+        """Simulated version of wait_for_stabilization(). Waits for 0.1s."""
         time.sleep(0.1)
 
-    def preset_basic_analog(self):
-        pass
+    def preset_basic_analog(self, n=80, freq=10000, range=50.0, return_std=False):
+        """
+        Simulated version of preset_basic_analog. Basically does nothing.
+
+        :param n:     number of datapoints to collect and average (default 85)
+        :type n:      int
+        :param freq:  analog in frequency (default 10000)
+        :type freq:   int or float or None
+        :param range: the voltage range for the ADC (5.0 or 50.0) (default 50.0)
+        :type range:  int or float or None
+        :param return_std: also returns the standard deviations (default False)
+        :type return_std:  bool
+        """
+        self.ai.frequencySet(freq)
+        self.ai.channelRangeSet(-1, int(range))
+        self.basic_analog_return_std = return_std
 
     def close(self):
         pass
@@ -339,6 +394,11 @@ def print_device_list(devices_list=None):
 
 
 if __name__ == '__main__':
+
+    # Import matplotlib to display some data
+    logging.getLogger('matplotlib').setLevel(logging.WARNING)  # put this line before matplotlib import to prevent it from showing debug messages
+    import matplotlib.pyplot as plt
+
     # Display a list of devices and their possible configurations
     devs = enumerate_devices()
     print_device_list(devs)
@@ -346,7 +406,7 @@ if __name__ == '__main__':
     # Create object for device number 0, with config number 0
     daq = DfwController(0, 0)
 
-    # Use the following line instead of the previous line for testing the simulated device
+    # # Use the following line instead of the previous line for testing the simulated device
     # daq = SimulatedDfwController(0, 0)
 
     print("\nTo be able to read signals we're about to generate: connect W1 to 1+, W2 to 2+, and 1- and 2- to ground (down arrow)")
