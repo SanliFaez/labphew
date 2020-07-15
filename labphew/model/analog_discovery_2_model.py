@@ -160,7 +160,6 @@ class Operator:
 
         self._monitor_start_time = time()
         next_time = 0
-        print('stop flag is ', self._stop)
         while not self._stop:
             while self._pause:
                 sleep(0.05)
@@ -318,19 +317,16 @@ class Operator:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)  # Change root logging level
-
-    # Import matplotlib to display some data
-    logging.getLogger('matplotlib').setLevel(logging.WARNING)  # put this line before matplotlib import to prevent it from showing debug messages
+    import labphew  # import this to use labphew style logging (by importing it before matplotlib it also prevents matplotlib from printing many debugs)
     import matplotlib.pyplot as plt
 
     # from labphew.controller.digilent.waveforms import DfwController
 
     # To import the actual device:
-    from labphew.controller.digilent.waveforms import DfwController
+    # from labphew.controller.digilent.waveforms import DfwController
 
     # To import a simulated device:
-    # from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
+    from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
 
     instrument = DfwController()
 

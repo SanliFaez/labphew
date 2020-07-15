@@ -66,6 +66,8 @@ class DfwController(dwf.Dwf):
         self._time_stabilized = time.time()  # will be overwritten by write_analog()
         self.preset_basic_analog()
 
+        self.logger.debug('DfwController object created')
+
     def preset_basic_analog(self, n=80, freq=10000, range=50.0, return_std=False):
         """
         Apply settings for read_analog() and write_analog()
@@ -309,7 +311,9 @@ def enumerate_devices():
     """
     devices = []
     try:
-        logging.getLogger(__name__).warning(dwf.FDwfGetLastErrorMsg())
+        last_err_msg = dwf.FDwfGetLastErrorMsg()
+        if last_err_msg:
+            logging.getLogger(__name__).warning(last_err_msg)
         # enumerate devices
         devs = dwf.DwfEnumeration()
         ch = lambda n=0, b=0: {'ch': n, 'buf': b}
@@ -395,8 +399,7 @@ def print_device_list(devices_list=None):
 
 if __name__ == '__main__':
 
-    # Import matplotlib to display some data
-    logging.getLogger('matplotlib').setLevel(logging.WARNING)  # put this line before matplotlib import to prevent it from showing debug messages
+    import labphew  # import this to use labphew style logging (by importing it before matplotlib it also prevents matplotlib from printing many debugs)
     import matplotlib.pyplot as plt
 
     # Display a list of devices and their possible configurations

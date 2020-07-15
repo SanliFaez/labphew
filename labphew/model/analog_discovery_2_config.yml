@@ -5,13 +5,9 @@ scan:
   step:             0.1 # (V)
   integrationtime:  0.1 # (s)
   ao_channel:       2
-  ai_channel:       1
-  x:
-    ao_channel:       2
-    name:             applied voltage (V)
-  y:
-    ai_channel:       1
-    name:             measured voltage (V)
+  x_label:          ('applied voltage', 'V')
+  ai_channel:       2
+  y_label:          ('measured voltage', 'V')
   stop_timeout:       3   # (s) How much time to give scan loop to stop before forcefully terminating it
   gui_refresh_time:   .01     # (s) How often gui checks if here's new data (usually quicker than time_step)
 

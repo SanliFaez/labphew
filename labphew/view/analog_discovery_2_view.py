@@ -251,17 +251,17 @@ class MonitorWindow(QMainWindow):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)  # Change root logging level
+    import labphew  # import this to use labphew style logging
 
     import sys
     from PyQt5.QtWidgets import QApplication
     from labphew.model.analog_discovery_2_model import Operator
 
     # To use with real device
-    from labphew.controller.digilent.waveforms import DfwController
+    # from labphew.controller.digilent.waveforms import DfwController
 
     # To test with simulated device
-    # from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
+    from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
 
 
     instrument = DfwController()
