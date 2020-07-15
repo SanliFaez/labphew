@@ -196,7 +196,7 @@ class MonitorWindow(QMainWindow):
             return
         else:
             self.logger.debug('Starting monitor')
-            self.operator._stop = False  # enable operator monitor loop to run
+            self.operator._allow_monitor = True  # enable operator monitor loop to run
             self.monitor_thread.start()  # start the operator monitor
             self.monitor_timer.start(self.operator.properties['monitor']['gui_refresh_time'])  # start the update timer
             self.plot_points_spinbox.setEnabled(False)
@@ -217,7 +217,8 @@ class MonitorWindow(QMainWindow):
             self.logger.debug('Stopping monitor')
             self.operator._stop = True
             self.monitor_thread.stop(self.operator.properties['monitor']['stop_timeout'])
-            self.operator._busy = False  # Rest in case the monitor was not stopped gracefully, but forcefully stopped
+            self.operator._allow_monitor = False  # disable monitor again
+            self.operator._busy = False  # Reset in case the monitor was not stopped gracefully, but forcefully stopped
 
     def update_monitor(self):
         """

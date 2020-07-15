@@ -25,17 +25,21 @@ class Operator:
         self.properties = properties
         self.instrument = instrument
 
-        self._busy = False  # flag to indicate the operator is busy (e.g. with scan or monitor)
-        self._stop = True  # used externally to signal a loop to stop
-        self._pause = False  # used externally to signal a loop to pause
-
+        # Flag controlled by operator:
+        self._busy = False  # indicates the operator is busy (e.g. with scan or monitor)
+        self._new_scan_data = False  # signal there's new data that could be displayed (a gui would reset this to False after retrieving the data)
         self._new_monitor_data = False  # used to flag gui that new data is available
+
+
+        # Flags controlled by external gui to control flow of loops (e.g. scan or monitor)
+        self._stop = False  # signal a loop to stop (whenever operator is not busy it should be False)
+        self._pause = False  # signal a loop to pause (whenever operator is not busy it should be False)
+        self._allow_monitor = False  # monitor should not be run from command line, a gui can set this to True
+
+
         self._monitor_start_time = 0
 
 
-        self.monitoring = False  # flag controlled by operator to indicate if busy
-        self.stop = True  # flag controlled externally (e.g. by View) to control monitor loop
-        self.new_data = False  # flag controlled by operator to signal there's new data that could be displayed
 
 
         self.monitor_plot_points = 100
@@ -134,21 +138,29 @@ class Operator:
 
     def _monitor_loop(self):
         """
-        Calles by GUI Monitor to start the monirot loop.
+        Called by GUI Monitor to start the monirot loop.
         Not intended to be called from Operator. (Which should be blocked)
         """
-        if self._stop or self._busy:
+        # First check if monitor is allowed to start
+        if self._busy or not self._allow_monitor:
             self.logger.warning('Monitor should only be run from GUI and not while Operator is busy')
             return
-        self._busy = True
-        # Preparations before running the monitor
-        self.analog_monitor_1 = np.zeros(self.properties['monitor']['plot_points'])
-        self.analog_monitor_2 = np.zeros(self.properties['monitor']['plot_points'])
-        # self.analog_monitor_time = np.zeros(self.properties['monitor']['plot_points'])
-        self.analog_monitor_time = np.arange(1-self.properties['monitor']['plot_points'], 1)*self.properties['monitor']['time_step']
+
+        try:
+            # Preparations before running the monitor
+            self.analog_monitor_1 = np.zeros(self.properties['monitor']['plot_points'])
+            self.analog_monitor_2 = np.zeros(self.properties['monitor']['plot_points'])
+            # self.analog_monitor_time = np.zeros(self.properties['monitor']['plot_points'])
+            self.analog_monitor_time = np.arange(1-self.properties['monitor']['plot_points'], 1)*self.properties['monitor']['time_step']
+        except:
+            self.logger.error("'plot_points' or 'time_step' missing or invalid in config")
+            return
+
+        self._busy = True  # set flag to indicate operator is busy
 
         self._monitor_start_time = time()
         next_time = 0
+        print('stop flag is ', self._stop)
         while not self._stop:
             while self._pause:
                 sleep(0.05)
@@ -167,7 +179,8 @@ class Operator:
             next_time += self.properties['monitor']['time_step']
             while time()-self._monitor_start_time<next_time:
                 pass
-        self._busy = False  # indicate the oprator is not busy anymore
+        self._stop = False  # reset stop flag to false
+        self._busy = False  # indicate the operator is not busy anymore
 
 
     # def main_loop(self):
@@ -209,19 +222,17 @@ class Operator:
         primitive function for calling by the ScanWindow
         this functions counts down inverses down to 1/10
         """
+        # Start with various checks and warn+return if somthing is wrong
         if self._busy:
             self.logger.warning('Scan should not be started while Operator is busy.')
             return
-
         if 'scan' not in self.properties:
             self.logger.error("The config file or properties dict should contain 'scan' section.")
             return
-
         required_keys = ['start', 'stop', 'step', 'ao_channel', 'ai_channel']
         if not all(key in self.properties['scan'] for key in required_keys):
             self.logger.error("'scan' should contain: "+', '.join(required_keys))
             return
-
         try:
             start = self.properties['scan']['start']
             stop = self.properties['scan']['stop']
@@ -231,11 +242,9 @@ class Operator:
         except:
             self.logger.warning("Error occured while reading scan config values")
             return
-
         if ch_ai not in [1,2] or ch_ao not in [1,2]:
             self.logger.warning("AI and AO channel need to be 1 or 2")
             return
-
         if 'stabilize_time' in self.properties['scan']:
             stabilize = self.properties['scan']['stabilize_time']
         else:
@@ -247,6 +256,8 @@ class Operator:
 
         self.measured_voltages = 0 * self.scan_voltages
 
+        self._busy = True  # indicate that operator is busy
+
         for i, voltage in enumerate(self.scan_voltages):
             if self._pause:
                 while self._pause:
@@ -254,12 +265,14 @@ class Operator:
                     if self._stop: break
             self.analog_out(ch_ao, voltage)
             sleep(stabilize)
-            self.measured_voltages[i] = self.analog_in()[ch_ai-1]
+            measured = self.analog_in()[ch_ai - 1]
+            self.measured_voltages[i] = measured
             self._new_scan_data = True
             if self._stop:
                 break
 
-        self._busy = False
+        self._stop = False  # reset stop flag to false
+        self._busy = False  # indicate operator is not busy anymore
 
         return self.scan_voltages, self.measured_voltages
 
@@ -307,13 +320,17 @@ class Operator:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)  # Change root logging level
 
+    # Import matplotlib to display some data
+    logging.getLogger('matplotlib').setLevel(logging.WARNING)  # put this line before matplotlib import to prevent it from showing debug messages
+    import matplotlib.pyplot as plt
+
     # from labphew.controller.digilent.waveforms import DfwController
 
     # To import the actual device:
-    # from labphew.controller.digilent.waveforms import DfwController
+    from labphew.controller.digilent.waveforms import DfwController
 
     # To import a simulated device:
-    from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
+    # from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
 
     instrument = DfwController()
 
@@ -321,6 +338,7 @@ if __name__ == "__main__":
     opr.load_config()
 
     #e.load_instrument()
-    # x, data = e.do_scan()
+    x, y = opr.do_scan()
     #d = e.main_loop()
     # print(data)
+    plt.plot(x,y)
