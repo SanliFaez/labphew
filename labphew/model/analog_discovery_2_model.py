@@ -76,16 +76,20 @@ class Operator:
 
 
 
-    def analog_out(self, channel, value=None):
+    def analog_out(self, channel, value=None, verify_only=False):
         """
         Set analog_out.
         Forces value to be in allowed range.
+        Applies the value to the output channel.
         Returns the (corrected) value.
+        Note: if verify_only is set True it does not apply the value, but only return the corrected value
 
         :param channel: channel 1 or 2
         :type channel: int
         :param value: voltage to set (in Volt)
         :type value: float
+        :param verify_only: if True it does not apply the value to the channel (default: False)
+        :type verify_only: bool
         :return: the value set to the channel
         :rtype: float
         """
@@ -100,7 +104,8 @@ class Operator:
         elif value < lwr:
             self.logger.info(f'{value} exceeds ch{channel} limit, clipping to {lwr}')
             value = lwr
-        self.instrument.write_analog(value, channel-1)
+        if not verify_only:
+            self.instrument.write_analog(value, channel-1)
         return value
 
     def _set_monitor_time_step(self, time_step):
@@ -133,8 +138,73 @@ class Operator:
             self.logger.warning(f"setting plot_points to {plot_points}s (are you sure?)")
         self.properties['monitor']['plot_points'] = plot_points
 
-    def temp(self):
-        return 4, 8
+    def _verify_scan_channels(self):
+        """
+        Checks if channels in properties are valid and returns analog out and analog in channel.
+        Note that None is returned if an error is found
+
+        :return:  analog out and analog in channel of scan
+        :rtype: (int, int)
+        """
+        if 'scan' not in self.properties:
+            self.logger.error("'scan' not found in properties")
+            return
+        if 'ao_channel' not in self.properties['scan'] or self.properties['scan']['ao_channel'] not in [1,2]:
+            self.logger.error("'ao_channel' not found in properties or invalid value (should be 1 or 2)")
+            return
+        if 'ai_channel' not in self.properties['scan'] or self.properties['scan']['ai_channel'] not in [1,2]:
+            self.logger.error("'ai_channel' not found in properties or invalid value (should be 1 or 2)")
+            return
+        return self.properties['scan']['ao_channel'], self.properties['scan']['ai_channel']
+
+    def _set_scan_start(self, value):
+        """
+        Set scan start value.
+        Forces value to be in valid range and updates properties dictionary.
+        Also corrects the sign of step if required.
+
+        :param value: start value of scan (V)
+        :type value: float
+        """
+        ao_ch, _ = self._verify_scan_channels()
+        if ao_ch is None:  # if _verify_scan_channels() returns nothing that means channel is invalid or not found
+            return
+        value = self.analog_out(ao_ch, value, verify_only=True)
+        self.properties['scan']['start'] = value
+        self._set_scan_step()
+
+    def _set_scan_stop(self, value):
+        """
+        Set scan stop value.
+        Forces value to be in valid range and updates properties dictionary.
+
+        :param value: stop value of scan (V)
+        :type value: float
+        """
+        ao_ch, _ = self._verify_scan_channels()
+        if ao_ch is None:  # if _verify_scan_channels() returns nothing that means channel is invalid or not found
+            return
+        value = self.analog_out(ao_ch, value, verify_only=True)
+        self.properties['scan']['stop'] = value
+        self._set_scan_step()
+
+    def _set_scan_step(self, step=None):
+        """
+        Set scan step value.
+        If no step value is supplied it only corrects the sign of step.
+
+        :param step:
+        :type step:
+        :return:
+        :rtype:
+        """
+        if step == 0:
+            self.logger.warning('stepsize of 0 is not possible')
+            return
+        if step is not None:
+            self.properties['scan']['step'] = step
+        if np.sign(self.properties['scan']['step']) != np.sign(self.properties['scan']['stop'] - self.properties['scan']['start']):
+            self.properties['scan']['step'] *= -1
 
     def _monitor_loop(self):
         """
@@ -294,6 +364,8 @@ class Operator:
             self.properties.update(yaml.safe_load(f))
 
         self.properties['config_file'] = filename
+
+
 
 
     # def load_instrument(self, inst=None):
