@@ -240,6 +240,7 @@ class SimulatedDfwController:
         Simulated version of read_analog().
         Applies functions specified in self._analog_simulation_functions (optionally to the values set by write_analog() ).
         """
+        time.sleep(0.01)
         results = [func(v) for func, v in zip(self._analog_simulation_functions, self._analog_in_values)]
         if self.basic_analog_return_std:
             return tuple([*results, results[0]/10, results[1]/10])

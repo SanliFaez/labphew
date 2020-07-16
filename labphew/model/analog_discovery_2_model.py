@@ -231,9 +231,6 @@ class Operator:
         self._monitor_start_time = time()
         next_time = 0
         while not self._stop:
-            while self._pause:
-                sleep(0.05)
-                if self._stop: break
             timestamp = time() - self._monitor_start_time
             analog_in = self.instrument.read_analog()  # read the two analog in channels
             # To keep the length constant, roll/shift the buffers and add the new datapoints
@@ -244,10 +241,16 @@ class Operator:
             self.analog_monitor_2[-1] = analog_in[1]
             self.analog_monitor_time[-1] = timestamp
             self._new_monitor_data = True
-            # in stead of sleep,
+            # in stead of sleep, calculate when the next datapoint should be acquired and wait untill that time arrives
+            # this allows to keep the timing correct
             next_time += self.properties['monitor']['time_step']
             while time()-self._monitor_start_time<next_time:
                 pass
+            # # in case pause was pressed, halt here:           # removed this: NO pause in monitor
+            # while self._pause:
+            #     sleep(0.05)
+            #     if self._stop: break
+            if self._stop: break
         self._stop = False  # reset stop flag to false
         self._busy = False  # indicate the operator is not busy anymore
 
@@ -328,21 +331,23 @@ class Operator:
         self._busy = True  # indicate that operator is busy
 
         for i, voltage in enumerate(self.scan_voltages):
-            if self._pause:
-                while self._pause:
-                    sleep(0.05)
-                    if self._stop: break
             self.logger.debug('applying {} to ch {}'.format(voltage, ch_ao))
             self.analog_out(ch_ao, voltage)
             sleep(stabilize)
             measured = self.analog_in()[ch_ai - 1]
             self.measured_voltages[i] = measured
             self._new_scan_data = True
+            # before the end of the loop: halt if pause is True
+            while self._pause:
+                sleep(0.05)
+                if self._stop: break
+            # if (soft) stop was requested, break out of loop
             if self._stop:
                 break
 
         self._stop = False  # reset stop flag to false
         self._busy = False  # indicate operator is not busy anymore
+        self._pause = False  # is this necessary?
 
         return self.scan_voltages, self.measured_voltages
 

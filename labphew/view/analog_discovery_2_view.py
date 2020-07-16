@@ -62,21 +62,11 @@ class MonitorWindow(QMainWindow):
         Code-based generation of the user-interface based on PyQT
         """
 
-        ### Graphs:
-        self.graph_win = pg.GraphicsWindow()
-        self.graph_win.resize(1000, 600)
+        ### General layout
+        central_widget = QWidget()
+        central_layout = QHBoxLayout(central_widget)
 
-        self.plot1 = self.graph_win.addPlot()
-        self.plot1.setLabel('bottom', 'time', units='s')
-        self.plot1.setLabel('left', 'voltage', units='V')
-        self.curve1 = self.plot1.plot(pen='y')
-        self.graph_win.nextRow()
-        self.plot2 = self.graph_win.addPlot()
-        self.plot2.setLabel('bottom', 'time', units='s')
-        self.plot2.setLabel('left', 'voltage', units='V')
-        self.curve2 = self.plot2.plot(pen='c')
-        # self.plot2.hide()
-
+        # Layout for left hand controls
         control_layout = QVBoxLayout()
 
         ### Analog Out
@@ -106,37 +96,60 @@ class MonitorWindow(QMainWindow):
 
         ### Monitor
         box_monitor = QGroupBox('Monitor')
-        layout_monitor = QFormLayout()
+        layout_monitor = QVBoxLayout()
         box_monitor.setLayout(layout_monitor)
         control_layout.addWidget(box_monitor)
+
+        layout_monitor_form  = QFormLayout()
+        layout_monitor.addLayout(layout_monitor_form)
+        layout_monitor_buttons = QHBoxLayout()
+        layout_monitor.addLayout(layout_monitor_buttons)
+
 
         self.time_step_spinbox = QDoubleSpinBox()
         self.time_step_spinbox.setSuffix('s')
         self.time_step_spinbox.setMinimum(.01)
         self.time_step_spinbox.valueChanged.connect(self.time_step)
         self.time_step_spinbox.setSingleStep(0.01)
-        layout_monitor.addRow(QLabel('Time step'), self.time_step_spinbox)
+        layout_monitor_form.addRow(QLabel('Time step'), self.time_step_spinbox)
 
         self.plot_points_spinbox = QSpinBox()
         self.plot_points_spinbox.setMinimum(2)
         self.plot_points_spinbox.setMaximum(1000)
         self.plot_points_spinbox.valueChanged.connect(self.plot_points)
         self.plot_points_spinbox.setSingleStep(10)
-        layout_monitor.addRow(QLabel('Plot points'), self.plot_points_spinbox)
+        layout_monitor_form.addRow(QLabel('Plot points'), self.plot_points_spinbox)
 
         self.start_button = QPushButton('Start')
         self.start_button.clicked.connect(self.start_monitor)
         self.stop_button = QPushButton('Stop')
         self.stop_button.clicked.connect(self.stop_monitor)
-        layout_monitor.addRow(self.start_button, self.stop_button)
 
-        ### General layout
-        central_widget = QWidget()
-        central_layout = QHBoxLayout(central_widget)
+        layout_monitor_buttons.addWidget(self.start_button)
+        layout_monitor_buttons.addWidget(self.stop_button)
 
+        ### Graphs:
+        self.graph_win = pg.GraphicsWindow()
+        self.graph_win.resize(1000, 600)
+
+        self.plot1 = self.graph_win.addPlot()
+        self.plot1.setLabel('bottom', 'time', units='s')
+        self.plot1.setLabel('left', 'voltage', units='V')
+        self.curve1 = self.plot1.plot(pen='y')
+        self.graph_win.nextRow()
+        self.plot2 = self.graph_win.addPlot()
+        self.plot2.setLabel('bottom', 'time', units='s')
+        self.plot2.setLabel('left', 'voltage', units='V')
+        self.curve2 = self.plot2.plot(pen='c')
+        # self.plot2.hide()
+
+        # Add an empty widget at the bottom of the control layout to make layout nicer
+        dummy = QWidget()
+        dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        control_layout.addWidget(dummy)
+        # Add control layout and graph window to central layout and apply central layout to window
         central_layout.addLayout(control_layout)
         central_layout.addWidget(self.graph_win)
-
         self.setCentralWidget(central_widget)
 
         self.apply_properties(self.operator.properties)

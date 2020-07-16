@@ -41,7 +41,7 @@ class WorkThread(QtCore.QThread):
         while time() < t0+timeout:
             if self.isFinished():
                 return
-            sleep(0.001)
+            sleep(0.005)
         self.terminate()
 
 if __name__ == '__main__':

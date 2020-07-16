@@ -3,7 +3,7 @@ scan:
   start:            0   # (V)
   stop:             5   # (V)
   step:             0.1 # (V)
-  integrationtime:  0.1 # (s)
+  integration_time: 0.1 # (s)    # This is not implemented
   stabilize_time:   0.001 # (s)
   ao_channel:       2
   ai_channel:       2
