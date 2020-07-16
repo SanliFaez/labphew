@@ -9,7 +9,7 @@ import logging
 # (To use this, do 'import labphew' in your module)
 logging.basicConfig(
     level=logging.DEBUG,
-    format="[%(asctime)s] %(levelname)-8s: %(message)-40s  [%(lineno)d %(name)s]",
+    format="[%(asctime)s] %(levelname)-8s: %(message)-50s  [%(lineno)d %(name)s]",
     datefmt='%H:%M:%S')
 
 # Matplotlib uses the default logger and by setting the level to DEBUG in basicConfig, matplotlib will print a lot of

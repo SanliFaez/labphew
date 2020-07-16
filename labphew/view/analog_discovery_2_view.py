@@ -20,6 +20,7 @@ import pyqtgraph as pg   # used for additional plotting features
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import * # QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QMessageBox
 from PyQt5.QtGui import QFont, QIcon
+from labphew.core.tools.gui_tools import set_spinbox_stepsize
 
 from labphew.core.base.general_worker import WorkThread
 
@@ -88,13 +89,15 @@ class MonitorWindow(QMainWindow):
         self.ao1_spinbox.setSuffix('V')
         self.ao1_spinbox.setMinimum(-100)  # limits are checked by the Operator
         self.ao1_spinbox.valueChanged.connect(self.ao1_value)
-        self.ao1_spinbox.setSingleStep(0.1)
+        self.ao1_spinbox.setDecimals(3)
+        self.ao1_spinbox.setSingleStep(0.001)
 
         self.ao2_spinbox = QDoubleSpinBox()
         self.ao2_spinbox.setSuffix('V')
         self.ao2_spinbox.setMinimum(-100)  # limits are checked by the Operator
         self.ao2_spinbox.valueChanged.connect(self.ao2_value)
-        self.ao2_spinbox.setSingleStep(0.1)
+        self.ao2_spinbox.setDecimals(3)
+        self.ao2_spinbox.setSingleStep(0.001)
 
         self.ao1_label = QLabel()
         self.ao2_label = QLabel()
@@ -161,6 +164,7 @@ class MonitorWindow(QMainWindow):
         """
         value = self.operator.analog_out(1, self.ao1_spinbox.value())
         self.ao1_spinbox.setValue(value)
+        set_spinbox_stepsize(self.ao1_spinbox)
 
     def ao2_value(self):
         """
@@ -169,6 +173,7 @@ class MonitorWindow(QMainWindow):
         """
         value = self.operator.analog_out(2, self.ao2_spinbox.value())
         self.ao2_spinbox.setValue(value)
+        set_spinbox_stepsize(self.ao2_spinbox)
 
     def time_step(self):
         """
@@ -177,6 +182,7 @@ class MonitorWindow(QMainWindow):
         """
         self.operator._set_monitor_time_step(self.time_step_spinbox.value())
         self.time_step_spinbox.setValue(self.operator.properties['monitor']['time_step'])
+        set_spinbox_stepsize(self.time_step_spinbox)
 
     def plot_points(self):
         """
@@ -185,6 +191,7 @@ class MonitorWindow(QMainWindow):
         """
         self.operator._set_monitor_plot_points(self.plot_points_spinbox.value())
         self.plot_points_spinbox.setValue(self.operator.properties['monitor']['plot_points'])
+        set_spinbox_stepsize(self.plot_points_spinbox)
 
     def start_monitor(self):
         """
@@ -225,15 +232,15 @@ class MonitorWindow(QMainWindow):
         Checks if new data is available and updates the graph.
         Checks if thread is still running and if not: stops timer and reset gui elements
         """
+        if self.operator._new_monitor_data:
+            self.operator._new_monitor_data = False
+            self.curve1.setData(self.operator.analog_monitor_time, self.operator.analog_monitor_1)
+            self.curve2.setData(self.operator.analog_monitor_time, self.operator.analog_monitor_2)
         if self.monitor_thread.isFinished():
             self.logger.debug('Monitor thread is finished')
             self.monitor_timer.stop()
             self.plot_points_spinbox.setEnabled(True)
             self.start_button.setEnabled(True)
-        elif self.operator._new_monitor_data:
-            self.operator._new_monitor_data = False
-            self.curve1.setData(self.operator.analog_monitor_time, self.operator.analog_monitor_1)
-            self.curve2.setData(self.operator.analog_monitor_time, self.operator.analog_monitor_2)
 
     def closeEvent(self, event):
         """ Gets called when the window is closed. Could be used to do some cleanup before closing. """

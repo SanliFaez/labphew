@@ -332,6 +332,7 @@ class Operator:
                 while self._pause:
                     sleep(0.05)
                     if self._stop: break
+            self.logger.debug('applying {} to ch {}'.format(voltage, ch_ao))
             self.analog_out(ch_ao, voltage)
             sleep(stabilize)
             measured = self.analog_in()[ch_ai - 1]
@@ -395,10 +396,10 @@ if __name__ == "__main__":
     # from labphew.controller.digilent.waveforms import DfwController
 
     # To import the actual device:
-    # from labphew.controller.digilent.waveforms import DfwController
+    from labphew.controller.digilent.waveforms import DfwController
 
     # To import a simulated device:
-    from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
+    # from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
 
     instrument = DfwController()
 

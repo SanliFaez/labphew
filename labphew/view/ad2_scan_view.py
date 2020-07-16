@@ -48,7 +48,7 @@ class ScanWindow(QMainWindow):
         # create thread and timer objects for scan
         self.scan_timer = QTimer()
         self.scan_timer.timeout.connect(self.update_scan)
-        self.scan_thread = WorkThread(self.operator.do_scan())
+        self.scan_thread = WorkThread(self.operator.do_scan)
 
 
         self.show()  # display the GUI
@@ -160,7 +160,6 @@ class ScanWindow(QMainWindow):
         # self.plot_points_spinbox.setValue(props['monitor']['plot_points'])
         #
 
-
     def scan_start_value(self):
         """
         Called when Scan Start spinbox is modified.
@@ -222,12 +221,12 @@ class ScanWindow(QMainWindow):
 
 
     def update_scan(self):
+        if self.operator._new_scan_data:
+            self.operator._new_scan_data = False
+            self.curve1.setData(self.operator.scan_voltages, self.operator.measured_voltages)
         if self.scan_thread.isFinished():
             self.logger.debug('Scan thread is finished')
             self.scan_timer.stop()
-        elif self.operator._new_scan_data:
-            pass
-
 
     def closeEvent(self, event):
         """ Gets called when the window is closed. Could be used to do some cleanup before closing. """
@@ -252,10 +251,10 @@ if __name__ == "__main__":
     from labphew.model.analog_discovery_2_model import Operator
 
     # To use with real device
-    from labphew.controller.digilent.waveforms import DfwController
+    # from labphew.controller.digilent.waveforms import DfwController
 
     # To test with simulated device
-    # from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
+    from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
 
     from labphew.view.analog_discovery_2_view import MonitorWindow
 
