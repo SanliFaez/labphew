@@ -36,6 +36,8 @@ setup(
         'numpy',
         'PyYAML',
         'pyserial',
-        'dwf'       # for Digilent WaveForms devices
+        'dwf',          # for Digilent WaveForms devices
+        'xarray',       # (to save in netcdf4 format, xarray requires scipy or netcdf4)
+        'scipy'
     ],
 )
