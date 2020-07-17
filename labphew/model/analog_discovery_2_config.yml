@@ -1,15 +1,20 @@
 # parameters for the scan go here
 scan:
+  filename:         'C:\Temp\Example scan.nc'
+  title:            Example scan
   start:            0   # (V)
   stop:             5   # (V)
   step:             0.1 # (V)
+  test:             False
+  test2:            True
+  x_label:          'scan voltage'
+  x_units:          'V'
+  y_label:          'measured voltage'
+  y_units:          'V'
   integration_time: 0.1 # (s)    # This is not implemented
   stabilize_time:   0.001 # (s)
   ao_channel:       2
   ai_channel:       2
-  name:             Example scan
-  x_label:          ['applied voltage', 'V']
-  y_label:          ['measured voltage', 'V']
   stop_timeout:       3   # (s) How much time to give scan loop to stop before forcefully terminating it
   gui_refresh_time:   .01     # (s) How often gui checks if here's new data (usually quicker than time_step)
 

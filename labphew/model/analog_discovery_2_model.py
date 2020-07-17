@@ -14,6 +14,8 @@ import numpy as np
 import yaml
 from time import time, sleep, localtime, strftime
 import logging
+import xarray as xr
+from datetime import datetime
 
 class Operator:
     """
@@ -38,8 +40,6 @@ class Operator:
 
 
         self._monitor_start_time = 0
-
-
 
 
         self.monitor_plot_points = 100
@@ -324,18 +324,21 @@ class Operator:
             stabilize = 0
 
         num_points = np.int(round((stop-start+1)/step))  # use round to catch the occasional rounding error
-        self.scan_voltages = np.linspace(start, stop, num_points)
 
-        self.measured_voltages = 0 * self.scan_voltages
+        self.voltages_to_scan = np.linspace(start, stop, num_points)
+
+        self.scan_voltages = []
+        self.measured_voltages = []
 
         self._busy = True  # indicate that operator is busy
 
-        for i, voltage in enumerate(self.scan_voltages):
+        for i, voltage in enumerate(self.voltages_to_scan):
             self.logger.debug('applying {} to ch {}'.format(voltage, ch_ao))
             self.analog_out(ch_ao, voltage)
             sleep(stabilize)
             measured = self.analog_in()[ch_ai - 1]
-            self.measured_voltages[i] = measured
+            self.measured_voltages.append(measured)
+            self.scan_voltages.append(voltage)
             self._new_scan_data = True
             # before the end of the loop: halt if pause is True
             while self._pause:
@@ -350,6 +353,56 @@ class Operator:
         self._pause = False  # is this necessary?
 
         return self.scan_voltages, self.measured_voltages
+
+    def save_scan(self, filename, metadata=None):
+        """
+        Store data in xarray Dataset and save to netCDF4 file.
+        Optional metadata can be passed as a dict. Note that the keys should be strings and the values should be numbers oir strings.
+        To load data:
+        import xarray as xr
+        xr.load_dataset(filename)
+
+        :param filename: full path and filename
+        :type filename: str
+        :param metadata: optional additional data to store (default: None)
+        :type metadata: dict
+        """
+
+        # First test if the required data arrays have been generated (i.e. if the scan has run)
+        if not hasattr(self, "scan_voltages") or not hasattr(self, "measured_voltages"):
+            self.logger.warning('no data to save yet')
+            return
+
+        if os.path.exists(filename):
+            self.logger.warning('overwriting existing file: {}'.format(filename))
+
+        data = xr.Dataset(
+            coords={
+                "scan_voltage": (["scan_voltage"], self.scan_voltages, {"units": 'V'})
+            },
+            data_vars={
+                "measured_voltage": (["scan_voltage"], self.measured_voltages, {"units":'V'})
+            },
+            attrs={
+                "time": datetime.now().strftime('%d-%m-%YT%H:%M:%S'),
+            }
+        )
+
+        for key in ['user', 'config_file']:
+            if key in self.properties:
+                data.attrs[key] = self.properties[key]
+
+        # Add all numeric and string keys
+        for key, value in self.properties['scan'].items():
+            if isinstance(value, (int, float, bool, str)):
+                data.attrs[key] = value
+
+        if type(metadata) is dict:
+            data.attrs.update(metadata)  # add the optional metadata to the Dataset attributes
+
+        self.data = data
+        data.to_netcdf(filename)
+
 
 
     # def scan_finished(self):

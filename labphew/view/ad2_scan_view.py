@@ -20,7 +20,8 @@ import pyqtgraph as pg   # used for additional plotting features
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import * # QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QMessageBox
 from PyQt5.QtGui import QFont, QIcon
-from labphew.core.tools.gui_tools import set_spinbox_stepsize
+from labphew.core.tools.gui_tools import set_spinbox_stepsize, SaverWidget
+import os.path
 
 from labphew.core.base.general_worker import WorkThread
 
@@ -127,6 +128,9 @@ class ScanWindow(QMainWindow):
         layout_scan_buttons.addWidget(self.stop_button)
         layout_scan_buttons.addWidget(self.kill_button)
 
+        self.saver = SaverWidget(self.save)
+        layout_scan.addWidget(self.saver)
+
         ### Graphs:
         self.graph_win = pg.GraphicsWindow()
         self.graph_win.resize(1000, 600)
@@ -161,14 +165,16 @@ class ScanWindow(QMainWindow):
         self.operator._set_scan_start(self.operator.properties['scan']['step'])  # this optional line checks validity
         self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
 
-        if 'name' in self.operator.properties['scan']:
-            self.box_scan.setTitle(self.operator.properties['scan']['name'])
-            self.plot1.setTitle(props['scan']['name'])
+        if 'title' in self.operator.properties['scan']:
+            self.box_scan.setTitle(self.operator.properties['scan']['title'])
+            self.plot1.setTitle(props['scan']['title'])
 
-        xlabel = self.operator.properties['scan']['x_label']
-        ylabel = self.operator.properties['scan']['y_label']
-        self.plot1.setLabel('bottom', xlabel[0], units=xlabel[1])
-        self.plot1.setLabel('left', ylabel[0], units=ylabel[1])
+        self.plot1.setLabel('bottom', self.operator.properties['scan']['x_label'], units=self.operator.properties['scan']['x_units'])
+        self.plot1.setLabel('left', self.operator.properties['scan']['y_label'], units=self.operator.properties['scan']['y_units'])
+        self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
+
+        if 'filename' in self.operator.properties['scan']:
+            self.saver.filename.setText(self.operator.properties['scan']['filename'])
 
         # self.ao1_label.setText(props['ao'][1]['name'])
         # self.ao2_label.setText(props['ao'][2]['name'])
@@ -176,6 +182,9 @@ class ScanWindow(QMainWindow):
         # self.time_step_spinbox.setValue(props['monitor']['time_step'])
         # self.plot_points_spinbox.setValue(props['monitor']['plot_points'])
         #
+
+    def save(self, filename):
+        self.operator.save_scan(filename)
 
     def scan_start_value(self):
         """
@@ -187,6 +196,7 @@ class ScanWindow(QMainWindow):
         self.scan_start_spinbox.setValue(self.operator.properties['scan']['start'])
         self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
         set_spinbox_stepsize(self.scan_start_spinbox)
+        self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
 
     def scan_stop_value(self):
         """
@@ -198,6 +208,7 @@ class ScanWindow(QMainWindow):
         self.scan_stop_spinbox.setValue(self.operator.properties['scan']['stop'])
         self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
         set_spinbox_stepsize(self.scan_stop_spinbox)
+        self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
 
     def scan_step_value(self):
         """
