@@ -48,8 +48,7 @@ class ScanWindow(QMainWindow):
 
 
         # create thread and timer objects for scan
-        self.scan_timer = QTimer()
-        self.scan_timer.timeout.connect(self.update_scan)
+        self.scan_timer = QTimer(timeout=self.update_scan)
         self.scan_thread = WorkThread(self.operator.do_scan)
 
 
@@ -67,18 +66,12 @@ class ScanWindow(QMainWindow):
         """
         Code-based generation of the user-interface based on PyQT
         """
+        # display statusbar
 
+        self.statusBar()
         ### The menu bar:
-
-        mod_config_action = QAction("&Config", self)
-        mod_config_action.setShortcut("Ctrl+C")
-        mod_config_action.setStatusTip('Modify the scan config')
-        mod_config_action.triggered.connect(self.mod_scan_config)
-
-        quit_action = QAction("&Quit", self)
-        quit_action.setShortcut("Ctrl+Q")
-        quit_action.setStatusTip('Close the scan window')
-        quit_action.triggered.connect(self.close)
+        mod_config_action = QAction("&Config", self, triggered=self.mod_scan_config, shortcut="Ctrl+Shift+C", statusTip='Modify the scan config')
+        quit_action = QAction("&Quit", self, triggered=self.close, shortcut="Ctrl+Q", statusTip='Close the scan window')
 
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu('&File')
@@ -103,24 +96,12 @@ class ScanWindow(QMainWindow):
         layout_scan_buttons = QHBoxLayout()
         layout_scan.addLayout(layout_scan_buttons)
 
-        self.scan_start_spinbox = QDoubleSpinBox()
-        self.scan_start_spinbox.setSuffix('V')
-        self.scan_start_spinbox.setMinimum(-100)  # limits are checked by the Operator
-        self.scan_start_spinbox.valueChanged.connect(self.scan_start_value)
-        self.scan_start_spinbox.setSingleStep(0.1)
+        self.scan_start_spinbox = QDoubleSpinBox(suffix='V', minimum=-100, singleStep=0.001, valueChanged=self.scan_start_value)
+        # self.scan_start_spinbox.valueChanged.connect(self.scan_start_value)
 
-        self.scan_stop_spinbox = QDoubleSpinBox()
-        self.scan_stop_spinbox.setSuffix('V')
-        self.scan_stop_spinbox.setMinimum(-100)  # limits are checked by the Operator
-        self.scan_stop_spinbox.valueChanged.connect(self.scan_stop_value)
-        self.scan_stop_spinbox.setSingleStep(0.1)
+        self.scan_stop_spinbox = QDoubleSpinBox(suffix='V', minimum=-100, singleStep=0.001, valueChanged=self.scan_stop_value)
 
-        self.scan_step_spinbox = QDoubleSpinBox()
-        self.scan_step_spinbox.setSuffix('V')
-        self.scan_step_spinbox.setMinimum(-100)  # limits are checked by the Operator
-        self.scan_step_spinbox.valueChanged.connect(self.scan_step_value)
-        self.scan_step_spinbox.setSingleStep(0.1)
-
+        self.scan_step_spinbox = QDoubleSpinBox(suffix='V', minimum=-100, singleStep=0.001, valueChanged=self.scan_step_value)
 
         self.scan_start_label = QLabel('start')
         self.scan_stop_label = QLabel('stop')
@@ -129,14 +110,10 @@ class ScanWindow(QMainWindow):
         layout_scan_form.addRow(self.scan_stop_label, self.scan_stop_spinbox)
         layout_scan_form.addRow(self.scan_step_label, self.scan_step_spinbox)
 
-        self.start_button = QPushButton('Start')
-        self.start_button.clicked.connect(self.start_scan)
-        self.pause_button = QPushButton('Pause')
-        self.pause_button.clicked.connect(self.pause)
-        self.stop_button = QPushButton('Stop')
-        self.stop_button.clicked.connect(self.stop)
-        self.kill_button = QPushButton('Kill')
-        self.kill_button.clicked.connect(self.kill_scan)
+        self.start_button = QPushButton('Start', clicked=self.start_scan)
+        self.pause_button = QPushButton('Pause', clicked=self.pause)
+        self.stop_button = QPushButton('Stop', clicked=self.stop)
+        self.kill_button = QPushButton('Kill', clicked=self.kill_scan)
         # Haven't decided what names are best. Suggestions:
         # start, pause, interrupt, stop, abort, quit, kill
 
