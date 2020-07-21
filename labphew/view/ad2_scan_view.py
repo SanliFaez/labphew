@@ -20,7 +20,7 @@ import pyqtgraph as pg   # used for additional plotting features
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import * # QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QMessageBox
 from PyQt5.QtGui import QFont, QIcon
-from labphew.core.tools.gui_tools import set_spinbox_stepsize, SaverWidget
+from labphew.core.tools.gui_tools import set_spinbox_stepsize, SaverWidget, ModifyConfig
 import os.path
 
 from labphew.core.base.general_worker import WorkThread
@@ -67,6 +67,23 @@ class ScanWindow(QMainWindow):
         """
         Code-based generation of the user-interface based on PyQT
         """
+
+        ### The menu bar:
+
+        mod_config_action = QAction("&Config", self)
+        mod_config_action.setShortcut("Ctrl+C")
+        mod_config_action.setStatusTip('Modify the scan config')
+        mod_config_action.triggered.connect(self.mod_scan_config)
+
+        quit_action = QAction("&Quit", self)
+        quit_action.setShortcut("Ctrl+Q")
+        quit_action.setStatusTip('Close the scan window')
+        quit_action.triggered.connect(self.close)
+
+        mainMenu = self.menuBar()
+        fileMenu = mainMenu.addMenu('&File')
+        fileMenu.addAction(mod_config_action)
+        fileMenu.addAction(quit_action)
 
         ### General layout
         central_widget = QWidget()
@@ -146,16 +163,19 @@ class ScanWindow(QMainWindow):
         central_layout.addWidget(self.graph_win)
         self.setCentralWidget(central_widget)
 
-        self.apply_properties(self.operator.properties)
+        self.apply_properties()
         self.reset_fields()
 
-    def apply_properties(self, props):
-        """
-        Apply properties dictionary to gui elements
-        :param props: properties
-        :type props: dict
-        """
+    def mod_scan_config(self):
+        conf_win = ModifyConfig(self.operator.properties['scan'], parent=self)
+        conf_win.show()
 
+    def apply_properties(self):
+        """
+        Apply properties dictionary to gui elements.
+        """
+        print('uuuuuu 2')
+        self.logger.debug('Applying config properties to gui elements')
         self.operator._set_scan_start(self.operator.properties['scan']['start'])  # this optional line checks validity
         self.scan_start_spinbox.setValue(self.operator.properties['scan']['start'])
 
@@ -167,7 +187,7 @@ class ScanWindow(QMainWindow):
 
         if 'title' in self.operator.properties['scan']:
             self.box_scan.setTitle(self.operator.properties['scan']['title'])
-            self.plot1.setTitle(props['scan']['title'])
+            self.plot1.setTitle(self.operator.properties['scan']['title'])
 
         self.plot1.setLabel('bottom', self.operator.properties['scan']['x_label'], units=self.operator.properties['scan']['x_units'])
         self.plot1.setLabel('left', self.operator.properties['scan']['y_label'], units=self.operator.properties['scan']['y_units'])
@@ -175,13 +195,6 @@ class ScanWindow(QMainWindow):
 
         if 'filename' in self.operator.properties['scan']:
             self.saver.filename.setText(self.operator.properties['scan']['filename'])
-
-        # self.ao1_label.setText(props['ao'][1]['name'])
-        # self.ao2_label.setText(props['ao'][2]['name'])
-        #
-        # self.time_step_spinbox.setValue(props['monitor']['time_step'])
-        # self.plot_points_spinbox.setValue(props['monitor']['plot_points'])
-        #
 
     def save(self, filename):
         self.operator.save_scan(filename)

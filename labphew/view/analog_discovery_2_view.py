@@ -152,22 +152,20 @@ class MonitorWindow(QMainWindow):
         central_layout.addWidget(self.graph_win)
         self.setCentralWidget(central_widget)
 
-        self.apply_properties(self.operator.properties)
+        self.apply_properties()
 
-    def apply_properties(self, props):
+    def apply_properties(self):
         """
-        Apply properties dictionary to gui elements
-        :param props: properties
-        :type props: dict
+        Apply properties dictionary to gui elements.
         """
-        self.ao1_label.setText(props['ao'][1]['name'])
-        self.ao2_label.setText(props['ao'][2]['name'])
+        self.ao1_label.setText(self.operator.properties['ao'][1]['name'])
+        self.ao2_label.setText(self.operator.properties['ao'][2]['name'])
 
-        self.time_step_spinbox.setValue(props['monitor']['time_step'])
-        self.plot_points_spinbox.setValue(props['monitor']['plot_points'])
+        self.time_step_spinbox.setValue(self.operator.properties['monitor']['time_step'])
+        self.plot_points_spinbox.setValue(self.operator.properties['monitor']['plot_points'])
 
-        self.plot1.setTitle(props['monitor'][1]['name'])
-        self.plot2.setTitle(props['monitor'][2]['name'])
+        self.plot1.setTitle(self.operator.properties['monitor'][1]['name'])
+        self.plot2.setTitle(self.operator.properties['monitor'][2]['name'])
 
 
     def ao1_value(self):
