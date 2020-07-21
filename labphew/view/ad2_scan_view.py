@@ -167,14 +167,13 @@ class ScanWindow(QMainWindow):
         self.reset_fields()
 
     def mod_scan_config(self):
-        conf_win = ModifyConfig(self.operator.properties['scan'], parent=self)
+        conf_win = ModifyConfig(self.operator.properties['scan'], apply_callback=self.apply_properties, parent=self)
         conf_win.show()
 
     def apply_properties(self):
         """
         Apply properties dictionary to gui elements.
         """
-        print('uuuuuu 2')
         self.logger.debug('Applying config properties to gui elements')
         self.operator._set_scan_start(self.operator.properties['scan']['start'])  # this optional line checks validity
         self.scan_start_spinbox.setValue(self.operator.properties['scan']['start'])
@@ -182,7 +181,7 @@ class ScanWindow(QMainWindow):
         self.operator._set_scan_stop(self.operator.properties['scan']['stop'])  # this optional line checks validity
         self.scan_stop_spinbox.setValue(self.operator.properties['scan']['stop'])
 
-        self.operator._set_scan_start(self.operator.properties['scan']['step'])  # this optional line checks validity
+        self.operator._set_scan_step(self.operator.properties['scan']['step'])  # this optional line checks validity
         self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
 
         if 'title' in self.operator.properties['scan']:
@@ -346,37 +345,37 @@ if __name__ == "__main__":
     app.exit(app.exec_())
     app.closeAllWindows()  # close any child window that might have been open
 
-
-
-    # An example to read and display the data:
-    import xarray as xr
-
-    # manually enter the path to the file here, or grab it from the scan properties
-    filename = opr.properties['scan']['filename']
-
-    dat = xr.load_dataset(filename)
-
-    # To get a feeling for what's possible with xarray dataset, try the following things in an interactive python console:
-    # (Note that if you only execute one line you don't need the print statement to see the output)
-
-    print(dat)
-    print(dat.measured_voltage)
-    print(dat.measured_voltage.dims)
-    print(dat.measured_voltage.coords)
-    print(dat.measured_voltage.units)
-    print(dat.measured_voltage.values)
-    print(dat.scan_voltage)
-    print(dat.scan_voltage.units)
-    print(dat.scan_voltage.values)
-
-    dat.measured_voltage[10:20]
-
-    print(dat.measured_voltage.isel(scan_voltage=1))
-    print(dat.measured_voltage[dict(scan_voltage=1)])  # alternative
-
-    # print(dat.measured_voltage.sel(scan_voltage=1))
-    # print(dat.measured_voltage.loc[dict(scan_voltage=1)])
-
-
-    # dat.measured_voltage.plot()
-
+    #
+    #
+    # # An example to read and display the data:
+    # import xarray as xr
+    #
+    # # manually enter the path to the file here, or grab it from the scan properties
+    # filename = opr.properties['scan']['filename']
+    #
+    # dat = xr.load_dataset(filename)
+    #
+    # # To get a feeling for what's possible with xarray dataset, try the following things in an interactive python console:
+    # # (Note that if you only execute one line you don't need the print statement to see the output)
+    #
+    # print(dat)
+    # print(dat.measured_voltage)
+    # print(dat.measured_voltage.dims)
+    # print(dat.measured_voltage.coords)
+    # print(dat.measured_voltage.units)
+    # print(dat.measured_voltage.values)
+    # print(dat.scan_voltage)
+    # print(dat.scan_voltage.units)
+    # print(dat.scan_voltage.values)
+    #
+    # dat.measured_voltage[10:20]
+    #
+    # print(dat.measured_voltage.isel(scan_voltage=1))
+    # print(dat.measured_voltage[dict(scan_voltage=1)])  # alternative
+    #
+    # # print(dat.measured_voltage.sel(scan_voltage=1))
+    # # print(dat.measured_voltage.loc[dict(scan_voltage=1)])
+    #
+    #
+    # # dat.measured_voltage.plot()
+    #

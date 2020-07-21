@@ -69,19 +69,20 @@ class ModifyConfig(QDialog):
     """
     Window to modify any dictionary as if it were yaml text.
     Note that for a gui it is useful to update the gui elements affected by the changes. For that purpose the parent gui
-    is passed and after applying
+    can pass an update method to this window through apply_callback.
     """
 
-    def __init__(self, properties_dict, parent, apply=True):
+    def __init__(self, properties_dict, apply_callback=None, parent=None):
         """
         Create the Modify Config window.
 
         :param properties_dict: dictionary to be modified
         :type properties_dict: dict
+        :param apply_callback: optional method to be called by apply button after updating the dictionary
+        :type apply_callback: method (or None)
         :param parent: The parent window
         :type parent: QtWidget
-        :param apply: try to call apply_properties method of parent (default: True)
-        :type apply: bool
+
 
         """
         self.logger = logging.getLogger(__name__)
@@ -89,7 +90,8 @@ class ModifyConfig(QDialog):
         super().__init__(parent=parent)
         self.resize(1000, 790)
         self._parent = parent
-        self.apply_props = apply
+        self.apply_callback = apply_callback
+        # self.apply_props = apply
         self.font = QFont("Courier New", 11)
         self.properties_dict = properties_dict
         self.initUI()
@@ -159,10 +161,8 @@ class ModifyConfig(QDialog):
     def apply(self):
         """
         Called by apply button.
-        Converts the text window to dictionary (using yaml) and updates the
-        Stores the modification in the dictionary.
-
-
+        Converts the text window to dictionary (using yaml) and updates the original dictionary.
+        If a apply_callback was supplied it will attempt to execute it.
         """
         if self.valid_yaml(False):
             try:
@@ -174,14 +174,12 @@ class ModifyConfig(QDialog):
                 self.logger.error('Converting text to dictionary failed')
                 QMessageBox.warning(self, 'Reading YAML failed', 'Error while converting yaml to dictionary', QMessageBox.Ok)
                 return
-            try:
-                self.properties_dict.update(dic)
-                if self.apply_props:
-                    if not hasattr(self._parent, 'apply_properties'):
-                        self.logger.warning("Parent GUI not specified or doesn't have apply_properties method")
-                    self._parent.apply_properties()
-            except:
-                self.logger.error('Call apply_properties from parent GUI was unsuccessful')
-                QMessageBox.warning(self, 'Error', 'To update properties the parent GUI should have a method apply_properties', QMessageBox.Ok)
-                return
+            self.properties_dict.update(dic)
+            if self.apply_callback is not None:
+                try:
+                    self.apply_callback()
+                except:
+                    self.logger.error('Apply callback caused unexpected exception')
+                    QMessageBox.warning(self, 'Error', 'Apply callback caused unexpected exception', QMessageBox.Ok)
+                    return
             self.close()
