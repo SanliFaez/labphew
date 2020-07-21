@@ -344,3 +344,39 @@ if __name__ == "__main__":
     monitor_gui = MonitorWindow(opr)
     gui = ScanWindow(opr, monitor_gui)
     app.exit(app.exec_())
+    app.closeAllWindows()  # close any child window that might have been open
+
+
+
+    # An example to read and display the data:
+    import xarray as xr
+
+    # manually enter the path to the file here, or grab it from the scan properties
+    filename = opr.properties['scan']['filename']
+
+    dat = xr.load_dataset(filename)
+
+    # To get a feeling for what's possible with xarray dataset, try the following things in an interactive python console:
+    # (Note that if you only execute one line you don't need the print statement to see the output)
+
+    print(dat)
+    print(dat.measured_voltage)
+    print(dat.measured_voltage.dims)
+    print(dat.measured_voltage.coords)
+    print(dat.measured_voltage.units)
+    print(dat.measured_voltage.values)
+    print(dat.scan_voltage)
+    print(dat.scan_voltage.units)
+    print(dat.scan_voltage.values)
+
+    dat.measured_voltage[10:20]
+
+    print(dat.measured_voltage.isel(scan_voltage=1))
+    print(dat.measured_voltage[dict(scan_voltage=1)])  # alternative
+
+    # print(dat.measured_voltage.sel(scan_voltage=1))
+    # print(dat.measured_voltage.loc[dict(scan_voltage=1)])
+
+
+    # dat.measured_voltage.plot()
+
