@@ -1,11 +1,12 @@
 """
-labphew.view.monitor_view.py
-==============
-The MonitorWindow class displays a plot or other data that updates over time at a given rate. (TODO: or view images)
-All the processes that are not relating to user interaction are handled by the Operator class in the model folder
+Analog Discovery 2 Scan Example
+===============================
 
-To change parameters the user needs to open the configuration window.
-To execute a special routine, one should run an instance of scan_view.
+ScanWindow class to configure and display a scan from Analog Discovery 2 Operator.
+All the processes that are not relating to user interaction are handled by the Operator class in the model folder.
+
+To change parameters the user needs to open the configuration window.  ??????
+
 For inspiration: the initiation of scan_view routines can be implemented as buttons on the monitor_view
 TODO:
     - build the UI without a design file necessary
@@ -13,19 +14,14 @@ TODO:
 
 """
 
-import os
-import numpy as np
 import pyqtgraph as pg   # used for additional plotting features
-
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import * # QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QMessageBox
 from PyQt5.QtGui import QFont, QIcon
-from labphew.core.tools.gui_tools import set_spinbox_stepsize, SaverWidget, ModifyConfig
-import os.path
-
-from labphew.core.base.general_worker import WorkThread
-
 import logging
+
+from labphew.core.tools.gui_tools import set_spinbox_stepsize, SaverWidget, ModifyConfig
+from labphew.core.base.general_worker import WorkThread
 
 # TODO: the following imports are necessary for child windows, they have to be adjusted and tested
 #from .config_view import ConfigWindow  # to adjust experiment parameters
@@ -46,11 +42,9 @@ class ScanWindow(QMainWindow):
 
         self.set_UI()
 
-
         # create thread and timer objects for scan
         self.scan_timer = QTimer(timeout=self.update_scan)
         self.scan_thread = WorkThread(self.operator.do_scan)
-
 
         self.show()  # display the GUI
 
@@ -66,8 +60,8 @@ class ScanWindow(QMainWindow):
         """
         Code-based generation of the user-interface based on PyQT
         """
-        # display statusbar
 
+        # display statusbar
         self.statusBar()
         ### The menu bar:
         mod_config_action = QAction("&Config", self, triggered=self.mod_scan_config, shortcut="Ctrl+Shift+C", statusTip='Modify the scan config')
@@ -144,6 +138,9 @@ class ScanWindow(QMainWindow):
         self.reset_fields()
 
     def mod_scan_config(self):
+        """
+        Open the Modify Config window for the scan properties
+        """
         conf_win = ModifyConfig(self.operator.properties['scan'], apply_callback=self.apply_properties, parent=self)
         conf_win.show()
 
@@ -209,6 +206,9 @@ class ScanWindow(QMainWindow):
         set_spinbox_stepsize(self.scan_step_spinbox)
 
     def reset_fields(self):
+        """
+        Resets gui elements after a scan is finished, stopped or terminated.
+        """
         self.start_button.setEnabled(True)
         self.pause_button.setText('Pause')
         self.pause_button.setEnabled(False)
@@ -242,6 +242,10 @@ class ScanWindow(QMainWindow):
             self.scan_step_spinbox.setEnabled(False)
 
     def pause(self):
+        """
+        Called when pause button is clicked.
+        Signals the operator scan to pause. Updates buttons accordingly
+        """
         if not self.operator._pause:
             self.operator._pause = True
             self.pause_button.setText('Continue')
@@ -273,6 +277,11 @@ class ScanWindow(QMainWindow):
         self.reset_fields()
 
     def update_scan(self):
+        """
+        Checks if new data is available and updates the graph.
+        Checks if thread is still running and if not: stops timer and reset gui elements
+        (called by timer)
+        """
         if self.operator._new_scan_data:
             self.operator._new_scan_data = False
             self.curve1.setData(self.operator.scan_voltages, self.operator.measured_voltages)
@@ -315,13 +324,11 @@ if __name__ == "__main__":
     opr = Operator(instrument)
     opr.load_config()
 
-
     app = QApplication(sys.argv)
     monitor_gui = MonitorWindow(opr)
     gui = ScanWindow(opr, monitor_gui)
     app.exit(app.exec_())
     app.closeAllWindows()  # close any child window that might have been open
-
 
 
     # An example to read and display the data:
@@ -330,7 +337,6 @@ if __name__ == "__main__":
     # manually enter the path to the file here, or grab it from the scan properties
     # filename = r'C:\Temp\Example scan.nc'
     filename = opr.properties['scan']['filename']
-
 
     dat = xr.load_dataset(filename)
 
@@ -364,6 +370,4 @@ if __name__ == "__main__":
     # import matplotlib.pyplot as plt
     # dat.measured_voltage.plot()
     # plt.show()
-
-
 

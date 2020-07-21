@@ -1,11 +1,11 @@
 """
-labphew.view.monitor_view.py
-==============
-The MonitorWindow class displays a plot or other data that updates over time at a given rate. (TODO: or view images)
+Analog Discovery 2 View
+=======================
+
+MonitorWindow class to display live data from the Digilent Analog Discovery 2
 All the processes that are not relating to user interaction are handled by the Operator class in the model folder
 
-To change parameters the user needs to open the configuration window.
-To execute a special routine, one should run an instance of scan_view.
+To change parameters the user needs to open the configuration window. ?????
 For inspiration: the initiation of scan_view routines can be implemented as buttons on the monitor_view
 TODO:
     - build the UI without a design file necessary
@@ -13,18 +13,15 @@ TODO:
 
 """
 
-import os
-import numpy as np
 import pyqtgraph as pg   # used for additional plotting features
-
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import * # QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QMessageBox
 from PyQt5.QtGui import QFont, QIcon
-from labphew.core.tools.gui_tools import set_spinbox_stepsize
+import logging
 
+from labphew.core.tools.gui_tools import set_spinbox_stepsize
 from labphew.core.base.general_worker import WorkThread
 
-import logging
 
 # TODO: the following imports are necessary for child windows, they have to be adjusted and tested
 #from .config_view import ConfigWindow  # to adjust experiment parameters
@@ -167,7 +164,6 @@ class MonitorWindow(QMainWindow):
         self.plot1.setTitle(self.operator.properties['monitor'][1]['name'])
         self.plot2.setTitle(self.operator.properties['monitor'][2]['name'])
 
-
     def ao1_value(self):
         """
         Called when AO Channel 2 spinbox is modified.
@@ -242,6 +238,7 @@ class MonitorWindow(QMainWindow):
         """
         Checks if new data is available and updates the graph.
         Checks if thread is still running and if not: stops timer and reset gui elements
+        (called by timer)
         """
         if self.operator._new_monitor_data:
             self.operator._new_monitor_data = False
@@ -281,7 +278,6 @@ if __name__ == "__main__":
     # To test with simulated device
     from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
 
-
     instrument = DfwController()
     opr = Operator(instrument)
     opr.load_config()
@@ -290,3 +286,4 @@ if __name__ == "__main__":
     gui = MonitorWindow(opr)
     gui.show()  # display the GUI
     app.exit(app.exec_())
+    app.closeAllWindows()  # close any child window that might have been open
