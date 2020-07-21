@@ -323,7 +323,7 @@ class Operator:
             self.logger.info("stabilize_time not found in config, using 0s")
             stabilize = 0
 
-        num_points = np.int(round((stop-start+1)/step))  # use round to catch the occasional rounding error
+        num_points = np.int(round( (stop-start)/step+1 ))  # use round to catch the occasional rounding error
 
         self.voltages_to_scan = np.linspace(start, stop, num_points)
 
