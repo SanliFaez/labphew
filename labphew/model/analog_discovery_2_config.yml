@@ -2,9 +2,9 @@
 scan:
   filename:         'C:\Temp\Example scan.nc'
   title:            Example scan
-  start:            0   # (V)
-  stop:             5   # (V)
-  step:             0.1 # (V)
+  start:            0     # (V)
+  stop:             5     # (V)
+  step:             0.04  # (V)
   test:             False
   test2:            True
   x_label:          'scan voltage'
