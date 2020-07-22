@@ -8,6 +8,7 @@ All the processes that are not relating to user interaction are handled by the O
 To change parameters the user needs to open the configuration window. ?????
 For inspiration: the initiation of scan_view routines can be implemented as buttons on the monitor_view
 TODO:
+    - display current value for AI
     - build the UI without a design file necessary
     - connect the UI parameters to config file
 
@@ -29,11 +30,13 @@ from labphew.core.base.general_worker import WorkThread
 
 
 class MonitorWindow(QMainWindow):
-    def __init__(self, operator, parent=None):
+    def __init__(self, operator, scan_windows = {}, parent=None):
         self.logger = logging.getLogger(__name__)
         super().__init__(parent)
         self.setWindowTitle('Analog Discovery 2')
         self.operator = operator
+        self.scan_windows = scan_windows
+
 
         # # For loading a .ui file (created with QtDesigner):
         # p = os.path.dirname(__file__)
@@ -58,6 +61,21 @@ class MonitorWindow(QMainWindow):
         """
         Code-based generation of the user-interface based on PyQT
         """
+
+        # display statusbar
+        self.statusBar()
+        ### The menu bar:
+        quit_action = QAction("&Quit", self, triggered=self.close, shortcut="Ctrl+Q", statusTip='Close the scan window')
+        mainMenu = self.menuBar()
+        fileMenu = mainMenu.addMenu('&File')
+        fileMenu.addAction(quit_action)
+
+        if self.scan_windows:
+            scanMenu = mainMenu.addMenu('&Scans')
+            scanactions = []
+            for name, scanwindow in self.scan_windows.items():
+                scanactions.append(QAction(name, self, triggered=self.open_scan_window, statusTip='Open scan window'))
+                scanMenu.addAction(scanactions[-1])
 
         ### General layout
         central_widget = QWidget()
@@ -164,6 +182,12 @@ class MonitorWindow(QMainWindow):
         self.plot1.setTitle(self.operator.properties['monitor'][1]['name'])
         self.plot2.setTitle(self.operator.properties['monitor'][2]['name'])
 
+    def open_scan_window(self):
+        self.stop_monitor()
+        name = self.sender().text()  # get the name of the QAction (which is also the key of the scanwindow dictionary)
+        self.logger.debug('Opening scan window {}'.format(name))
+        self.scan_windows[name].show()
+
     def ao1_value(self):
         """
         Called when AO Channel 2 spinbox is modified.
@@ -261,6 +285,9 @@ class MonitorWindow(QMainWindow):
         #     return
         self.stop_monitor()  # stop monitor if it was running
         self.monitor_timer.stop()  # stop monitor timer, just to be nice
+        # Close all child scan windows
+        for scan_win in self.scan_windows.values():
+            scan_win.close()
         # perhaps also disconnect devices
         event.accept()
 
@@ -282,8 +309,14 @@ if __name__ == "__main__":
     opr = Operator(instrument)
     opr.load_config()
 
+    # To add a scanwindow:
+    from labphew.view.ad2_scan_view import ScanWindow
+
     app = QApplication(sys.argv)
-    gui = MonitorWindow(opr)
+
+    scans = {"Scan 1": ScanWindow(opr)}
+
+    gui = MonitorWindow(opr, scans)
     gui.show()  # display the GUI
     app.exit(app.exec_())
     app.closeAllWindows()  # close any child window that might have been open

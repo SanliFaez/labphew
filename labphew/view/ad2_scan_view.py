@@ -46,7 +46,7 @@ class ScanWindow(QMainWindow):
         self.scan_timer = QTimer(timeout=self.update_scan)
         self.scan_thread = WorkThread(self.operator.do_scan)
 
-        self.show()  # display the GUI
+        # self.show()  # display the GUI
 
         # TODO: uncomment for testing the child windows
         # self.config_window = ConfigWindow(operator, parent=self)
@@ -312,6 +312,7 @@ if __name__ == "__main__":
     from PyQt5.QtWidgets import QApplication
     from labphew.model.analog_discovery_2_model import Operator
 
+
     # To use with real device
     # from labphew.controller.digilent.waveforms import DfwController
 
@@ -327,6 +328,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     monitor_gui = MonitorWindow(opr)
     gui = ScanWindow(opr, monitor_gui)
+    gui.show()
     app.exit(app.exec_())
     app.closeAllWindows()  # close any child window that might have been open
 
