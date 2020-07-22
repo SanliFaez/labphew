@@ -30,7 +30,7 @@ from labphew.core.base.general_worker import WorkThread
 
 
 class MonitorWindow(QMainWindow):
-    def __init__(self, operator, scan_windows = {}, parent=None):
+    def __init__(self, operator, parent=None):
         """
         Creates the monitor window.
 
@@ -51,7 +51,7 @@ class MonitorWindow(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle('Analog Discovery 2')
         self.operator = operator
-        self.scan_windows = scan_windows
+        self.scan_windows = {}
 
         # # For loading a .ui file (created with QtDesigner):
         # p = os.path.dirname(__file__)
@@ -81,18 +81,9 @@ class MonitorWindow(QMainWindow):
         self.statusBar()
         ### The menu bar:
         quit_action = QAction("E&xit", self, triggered=self.close, shortcut="Alt+F4", statusTip='Close the scan window')
-        mainMenu = self.menuBar()
-        fileMenu = mainMenu.addMenu('&File')
+        self.mainMenu = self.menuBar()
+        fileMenu = self.mainMenu.addMenu('&File')
         fileMenu.addAction(quit_action)
-
-        if self.scan_windows:
-            scanMenu = mainMenu.addMenu('&Scans')
-            for name, scan_lst in self.scan_windows.items():
-                if type(scan_lst) is not list:
-                    scan_lst = list(scan_lst)
-                if len(scan_lst) < 2:
-                    scan_lst.append({})
-                scanMenu.addAction(QAction(name, self, triggered=self.open_scan_window, **scan_lst[1]))
 
         ### General layout
         central_widget = QWidget()
@@ -198,6 +189,18 @@ class MonitorWindow(QMainWindow):
 
         self.plot1.setTitle(self.operator.properties['monitor'][1]['name'])
         self.plot2.setTitle(self.operator.properties['monitor'][2]['name'])
+
+    def load_scan_guis(self, scan_windows):
+        self.scan_windows = scan_windows
+        if self.scan_windows:
+            scanMenu = self.mainMenu.addMenu('&Scans')
+            for name, scan_lst in self.scan_windows.items():
+                if type(scan_lst) is not list:
+                    scan_lst = list(scan_lst)
+                if len(scan_lst) < 2:
+                    scan_lst.append({})
+                scanMenu.addAction(QAction(name, self, triggered=self.open_scan_window, **scan_lst[1]))
+
 
     def open_scan_window(self):
         self.stop_monitor()
@@ -329,13 +332,15 @@ if __name__ == "__main__":
     # Create a PyQt application
     app = QApplication(sys.argv)
 
+    gui = MonitorWindow(opr)
+
     # To add scan windows, import them, instantiate them, and add them as a dictionary yo the monitor:
     from labphew.view.ad2_scan_view import ScanWindow as scan_1
     scans = {
-        'Sweep &voltage': [scan_1(opr), {'shortcut':"Ctrl+Shift+V", 'statusTip':'Voltage sweep scan'}]
+        'Sweep &voltage': [scan_1(opr, parent=gui), {'shortcut':"Ctrl+Shift+V", 'statusTip':'Voltage sweep scan'}]
              }
 
-    gui = MonitorWindow(opr, scans)
+    gui.load_scan_guis(scans)
     gui.show()  # display the GUI
     app.exit(app.exec_())
     app.closeAllWindows()  # close any child window that might have been open
