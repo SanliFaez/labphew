@@ -64,8 +64,8 @@ class ScanWindow(QMainWindow):
         # display statusbar
         self.statusBar()
         ### The menu bar:
-        mod_config_action = QAction("&Config", self, triggered=self.mod_scan_config, shortcut="Ctrl+Shift+C", statusTip='Modify the scan config')
-        quit_action = QAction("&Quit", self, triggered=self.close, shortcut="Ctrl+Q", statusTip='Close the scan window')
+        mod_config_action = QAction("Con&fig", self, triggered=self.mod_scan_config, shortcut="Ctrl+Shift+C", statusTip='Modify the scan config')
+        quit_action = QAction("&Close", self, triggered=self.close, shortcut="Ctrl+W", statusTip='Close the scan window')
 
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu('&File')
@@ -300,7 +300,7 @@ class ScanWindow(QMainWindow):
         #     event.ignore()
         #     return
         self.stop()  # stop scan
-        self.scan_timer.stop()  # stop monitor timer, just to be nice
+        self.scan_timer.stop()  # stop scan timer, just to be sure
         # perhaps also disconnect devices
         event.accept()
 
