@@ -12,6 +12,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import os.path
 import yaml
+import pyqtgraph as pg
+from time import time
 
 def set_spinbox_stepsize(spinbox):
     """ Helper function that sets the stepsize of a spinbox to one order of magnitude below current value. """
@@ -183,3 +185,70 @@ class ModifyConfig(QDialog):
                     QMessageBox.warning(self, 'Error', 'Apply callback caused unexpected exception', QMessageBox.Ok)
                     return
             self.close()
+
+
+class ValueLabelItem(pg.LabelItem):
+    """
+    Convenience class that combines functionality of pyqtgraph.ValueLabel() into a pyqtgraph.LabelItem().
+    It inherits from LabelItem and thus may be used in the same manner. But it adds the a setValue() method of
+    ValueLabel and it also accepts the keyword arguments of ValueLabel.
+    Additionally, the precision may be modified (with siPrecision) when using siPrefix mode.
+    Additionally, the rate at which the text is updated may be controlled through textUpdateTime.
+    Additionally, any method unknown to LabelItem will be passed to the internal ValueLabel object.
+    """
+    def __init__(self, text='', parent=None, suffix='', siPrefix=False, averageTime=0, formatStr=None, siPrecision=3, textUpdateTime=None, **kwargs):
+        """
+        Convenience class that combines pyqtgraph.ValueLabel into a pyqtgraph.LabelItem.
+        It inherits from LabelItem so see that documentation for usage and arguments.
+        It adds the setValue method of ValueLabel. All other unknown methods are passed on to the internal ValueLabel
+        object.
+        The ValueLabel arguments are passed on to the internal ValueLabel object.
+        It has two additional arguments. siPrecision allows to modify the number of significant digits while the
+        ValueLabel has siPrefix=True. textUpdateTime allows to reduce the frequency of updating the gui by not updating
+        the text every call to setValue (default value of None, does update every time)
+        Note that the arguments of LabelItem are not included in this docstring (except for text), please refer to
+        LabelItem documentation.
+
+        :param text: initial text to display (see pyqtgraph.LabelItem)
+        :type text: str
+        :param suffix: the (SI) unit
+        :type suffix: str
+        :param siPrefix: when True it converts things like 0.024 V to 24 mV
+        :type siPrefix: bool
+        :param averageTime: optional, see pyqtgraph.ValueLabel
+        :type averageTime: float
+        :param formatStr: optional, see pyqtgraph.ValueLabel
+        :type formatStr: str
+        :param siPrecision: optional, allows to deviate from the default of 3 significant digits
+        :type siPrecision: int
+        :param textUpdateTime: optional, time between updates of text (default is None which updates every time)
+        :type textUpdateTime: float
+        """
+        value_kwargs = {'parent':parent}
+        if suffix is not None:
+            value_kwargs['suffix'] = suffix
+        if siPrefix is not None:
+            value_kwargs['siPrefix'] = siPrefix
+        if averageTime is not None:
+            value_kwargs['averageTime'] = averageTime
+        if formatStr is not None:
+            value_kwargs['formatStr'] = formatStr
+        print('kwargs', kwargs)
+        super().__init__(text=text, parent=parent, **kwargs)
+        self._ValueLabel = pg.ValueLabel(**value_kwargs)
+        self.__siPrecision = siPrecision
+        self.__textUpdateTime = textUpdateTime
+        self.__last_update_text = time()
+
+    def setValue(self, value):
+        self._ValueLabel.setValue(value)
+        if self.__textUpdateTime is None or time() > self.__last_update_text + self.__textUpdateTime:
+            self.__last_update_text = time()
+            if self._ValueLabel.siPrefix:
+                self.setText(pg.functions.siFormat(self._ValueLabel.averageValue(), self.__siPrecision, suffix=self._ValueLabel.suffix))
+            else:
+                self.setText(self._ValueLabel.generateText())
+
+    def __getattr__(self, item):
+        return getattr(self._ValueLabel, item)
+
