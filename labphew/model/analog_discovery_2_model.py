@@ -5,12 +5,12 @@ Analog Discovery 2
 
 This module contains an example class of an Operator for the Digilent Analog discovery 2
 
-This model contains:
+This Operator contains:
 - basic methods to get analog in values, set analog out values
 - a monitor, to provide continuous data for a Monitor gui
 - an example of a scan that could be run from command line or from s Scan gui
 
-
+Example usage can be found at the bottom of the file under if __name__=='__main___'
 """
 import os.path
 import numpy as np
@@ -26,60 +26,34 @@ class Operator:
     """
     Example Operator class for Digilent Analog Discovery 2.
     """
+    def __init__(self, instrument, properties={}):
+        """
+        Create the Operator object for the Digilent Analog Discovery 2.
+        The DigilentWaveForms controller object for the instrument needs to be created before and passed as an argument.
 
-    def __init__(self, instrument, properties = {}):
+        :param instrument: The instrument used by this Operator
+        :type instrument: DigilentWaveForms controller object
+        :param properties: optional properties dictionary, note that this can be loaded from file with load_config()
+        :type properties: dict
+        """
         self.logger = logging.getLogger(__name__)
         self.properties = properties
         self.instrument = instrument
 
-        # Flag controlled by operator:
+        # Flags controlled by operator:
         self._busy = False  # indicates the operator is busy (e.g. with scan or monitor)
         self._new_scan_data = False  # signal there's new data that could be displayed (a gui would reset this to False after retrieving the data)
         self._new_monitor_data = False  # used to flag gui that new data is available
-
 
         # Flags controlled by external gui to control flow of loops (e.g. scan or monitor)
         self._stop = False  # signal a loop to stop (whenever operator is not busy it should be False)
         self._pause = False  # signal a loop to pause (whenever operator is not busy it should be False)
         self._allow_monitor = False  # monitor should not be run from command line, a gui can set this to True
 
-
         self._monitor_start_time = 0
-
-
         self.monitor_plot_points = 100
-
-        self.analog_in = self.instrument.read_analog  # create direct alias for this method of the instrument
-
-        # self.properties = {}  # TODO: read properties from yml config file
-        # self.indicator = 0  # instrument-specific value shared with another display during the scan
-        # self.blinking = False  # signalling scan in progress or instrument is engaged
-        # self.paused = False  # signalling scan in progress or instrument is engaged
-        # self.done = False  # signal for the end of a complete scan
-        # self.t0 = time()
-        # self.tloop = time()
-        # self.scan=[]
-        # self.output=[]
-        #
-        # self.monitor_running = False
-
-    # def empty_data_buffers(self):
-    #     self.text_buffers = []
-    #     self.plot_buffers = []
-    #     self.image_buffers = []
-    #     self.text_buffers_updated = False
-    #     self.plot_buffers_updated = False
-    #     self.image_buffers_updated = False
-    #
-    # def initialize_monitor(self):
-    #     self.empty_data_buffers()
-    #     self.plot_buffers = [{np.zeros(self.monitor_plot_points), np.zeros(self.monitor_plot_points)]
-    #     self.plotting_active = True
-    #
-    # def update_monitor(self):
-    #     for plot_buffer in self.plot_buffers:
-
-
+        # Create direct alias for this method of the instrument:
+        self.analog_in = self.instrument.read_analog
 
     def analog_out(self, channel, value=None, verify_only=False):
         """
@@ -195,13 +169,11 @@ class Operator:
 
     def _set_scan_step(self, step=None):
         """
-        Set scan step value.
+        Set scan step value. Note that it will correct the sign automatically accroding to start and stop values.
         If no step value is supplied it only corrects the sign of step.
 
-        :param step:
-        :type step:
-        :return:
-        :rtype:
+        :param step: the stepsize for the scan (V)
+        :type step: float or None
         """
         if step == 0:
             self.logger.warning('stepsize of 0 is not possible')
@@ -213,14 +185,13 @@ class Operator:
 
     def _monitor_loop(self):
         """
-        Called by GUI Monitor to start the monirot loop.
+        Called by GUI Monitor to start the monitor loop.
         Not intended to be called from Operator. (Which should be blocked)
         """
         # First check if monitor is allowed to start
         if self._busy or not self._allow_monitor:
             self.logger.warning('Monitor should only be run from GUI and not while Operator is busy')
             return
-
         try:
             # Preparations before running the monitor
             self.analog_monitor_1 = np.zeros(self.properties['monitor']['plot_points'])
@@ -230,9 +201,7 @@ class Operator:
         except:
             self.logger.error("'plot_points' or 'time_step' missing or invalid in config")
             return
-
         self._busy = True  # set flag to indicate operator is busy
-
         self._monitor_start_time = time()
         next_time = 0
         while not self._stop:
@@ -251,10 +220,6 @@ class Operator:
             next_time += self.properties['monitor']['time_step']
             while time()-self._monitor_start_time<next_time:
                 pass
-            # # in case pause was pressed, halt here:           # removed this: NO pause in monitor
-            # while self._pause:
-            #     sleep(0.05)
-            #     if self._stop: break
             if self._stop: break
         self._stop = False  # reset stop flag to false
         self._busy = False  # indicate the operator is not busy anymore
@@ -337,15 +302,12 @@ class Operator:
         :param metadata: optional additional data to store (default: None)
         :type metadata: dict
         """
-
         # First test if the required data arrays have been generated (i.e. if the scan has run)
         if not hasattr(self, "scan_voltages") or not hasattr(self, "measured_voltages"):
             self.logger.warning('no data to save yet')
             return
-
         if os.path.exists(filename):
             self.logger.warning('overwriting existing file: {}'.format(filename))
-
         data = xr.Dataset(
             coords={
                 "scan_voltage": (["scan_voltage"], self.scan_voltages, {"units": 'V'})
@@ -357,34 +319,29 @@ class Operator:
                 "time": datetime.now().strftime('%d-%m-%YT%H:%M:%S'),
             }
         )
-
         for key in ['user', 'config_file']:
             if key in self.properties:
                 data.attrs[key] = self.properties[key]
-
         # Add all numeric and string keys
         for key, value in self.properties['scan'].items():
             if isinstance(value, (int, float, bool, str)):
                 data.attrs[key] = value
-
         if type(metadata) is dict:
             data.attrs.update(metadata)  # add the optional metadata to the Dataset attributes
-
         self.data = data
         data.to_netcdf(filename)
-
 
     def load_config(self, filename=None):
         """
         If specified, this function loads the configuration file to generate the properties of the Scan.
 
-        :param str filename: Path to the filename. Defaults to analog_discovery_2_config.yml in labphew.core.defaults
+        :param filename: Path to the filename. Defaults to analog_discovery_2_config.yml in labphew.core.defaults
+        :type filename: str
         """
         if filename is None:
             filename = os.path.join(labphew.package_path, 'core', 'defaults', 'analog_discovery_2_config.yml')
         with open(filename, 'r') as f:
             self.properties.update(yaml.safe_load(f))
-
         self.properties['config_file'] = filename
 
 
@@ -405,8 +362,5 @@ if __name__ == "__main__":
     opr = Operator(instrument)
     opr.load_config()
 
-    #e.load_instrument()
     x, y = opr.do_scan()
-    #d = e.main_loop()
-    # print(data)
     plt.plot(x,y)
