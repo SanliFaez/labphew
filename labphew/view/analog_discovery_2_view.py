@@ -19,8 +19,9 @@ from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import * # QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QMessageBox
 from PyQt5.QtGui import QFont, QIcon
 import logging
+from time import time
 
-from labphew.core.tools.gui_tools import set_spinbox_stepsize
+from labphew.core.tools.gui_tools import set_spinbox_stepsize, ValueLabelItem
 from labphew.core.base.general_worker import WorkThread
 
 
@@ -159,12 +160,18 @@ class MonitorWindow(QMainWindow):
         self.plot1.setLabel('bottom', 'time', units='s')
         self.plot1.setLabel('left', 'voltage', units='V')
         self.curve1 = self.plot1.plot(pen='y')
+        text_update_time = self.operator.properties['monitor']['text_update_time']
+        self.label_1 = ValueLabelItem('--', color='y', siPrefix=True, suffix='V', siPrecision=4, averageTime=text_update_time, textUpdateTime=text_update_time)
+        self.graph_win.addItem(self.label_1)
+
         self.graph_win.nextRow()
         self.plot2 = self.graph_win.addPlot()
         self.plot2.setLabel('bottom', 'time', units='s')
         self.plot2.setLabel('left', 'voltage', units='V')
         self.curve2 = self.plot2.plot(pen='c')
-        # self.plot2.hide()
+        self.label_2 = ValueLabelItem('--', color='c', siPrefix=True, suffix='V', siPrecision=4, averageTime=text_update_time, textUpdateTime=text_update_time)
+        self.graph_win.addItem(self.label_2)
+        self._last_values_update_time = time()
 
         # Add an empty widget at the bottom of the control layout to make layout nicer
         dummy = QWidget()
@@ -176,6 +183,14 @@ class MonitorWindow(QMainWindow):
         self.setCentralWidget(central_widget)
 
         self.apply_properties()
+
+        # To make it look a bit nicer at the beginning (this is not strictly necessary):
+        left = -self.operator.properties['monitor']['plot_points'] * self.operator.properties['monitor']['time_step']
+        self.plot1.setXRange(left, 0)
+        self.plot2.setXRange(left, 0)
+        self.plot1.enableAutoRange()
+        self.plot2.enableAutoRange()
+
 
     def apply_properties(self):
         """
@@ -200,7 +215,6 @@ class MonitorWindow(QMainWindow):
                 if len(scan_lst) < 2:
                     scan_lst.append({})
                 scanMenu.addAction(QAction(name, self, triggered=self.open_scan_window, **scan_lst[1]))
-
 
     def open_scan_window(self):
         self.stop_monitor()
@@ -288,6 +302,9 @@ class MonitorWindow(QMainWindow):
             self.operator._new_monitor_data = False
             self.curve1.setData(self.operator.analog_monitor_time, self.operator.analog_monitor_1)
             self.curve2.setData(self.operator.analog_monitor_time, self.operator.analog_monitor_2)
+            self.label_1.setValue(self.operator.analog_monitor_1[-1])
+            self.label_2.setValue(self.operator.analog_monitor_2[-1])
+
         if self.monitor_thread.isFinished():
             self.logger.debug('Monitor thread is finished')
             self.monitor_timer.stop()
@@ -341,6 +358,6 @@ if __name__ == "__main__":
              }
 
     gui.load_scan_guis(scans)
-    gui.show()  # display the GUI
-    app.exit(app.exec_())
+    gui.show()  # make sure the GUI will be displayed
+    app.exit(app.exec_())  # run the application
     app.closeAllWindows()  # close any child window that might have been open
