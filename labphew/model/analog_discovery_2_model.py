@@ -3,9 +3,12 @@
 Analog Discovery 2
 ==================
 
-minimal:    It should have getting and setting voltages
+This module contains an example class of an Operator for the Digilent Analog discovery 2
 
-optional:   setting output as function generator
+This model contains:
+- basic methods to get analog in values, set analog out values
+- a monitor, to provide continuous data for a Monitor gui
+- an example of a scan that could be run from command line or from s Scan gui
 
 
 """
@@ -16,6 +19,8 @@ from time import time, sleep, localtime, strftime
 import logging
 import xarray as xr
 from datetime import datetime
+import labphew
+
 
 class Operator:
     """
@@ -254,44 +259,9 @@ class Operator:
         self._stop = False  # reset stop flag to false
         self._busy = False  # indicate the operator is not busy anymore
 
-
-    # def main_loop(self):
-    #     """
-    #     primitive function that is called in the MonitorWindow in blank_model,
-    #     this function just tells the time
-    #     """
-    #     if not self.paused:
-    #         self.blinking = True
-    #         t = time()
-    #         self.tloop = t
-    #         output = strftime("%H:%M:%S", localtime(t))
-    #         sleep(0.03)
-    #
-    #     return output
-
-    # def pause(self):
-    #     """
-    #     primitive function to pause the main loop or readout
-    #     """
-    #     self.paused = True
-    #     self.blinking = False
-
-    # def resume(self):
-    #     """
-    #     primitive function to pause the main loop or readout
-    #     """
-    #     self.paused = False
-
-    # def shut_down(self):
-    #     """
-    #     primitive function that is called in the MonitorWindow to safely close the application
-    #     """
-    #     print("bye bye!")
-
-
     def do_scan(self, param=None):
         """
-        primitive function for calling by the ScanWindow
+        Primitive function for calling by the ScanWindow
         this functions counts down inverses down to 1/10
         """
         # Start with various checks and warn+return if somthing is wrong
@@ -404,60 +374,31 @@ class Operator:
         data.to_netcdf(filename)
 
 
-
-    # def scan_finished(self):
-    #     """
-    #     Here, you can put any signal that has to be returned to the parent program that has called the scan
-    #     """
-    #     self.done = True
-
     def load_config(self, filename=None):
         """
         If specified, this function loads the configuration file to generate the properties of the Scan.
 
-        :param str filename: Path to the filename. Defaults to Model/default/blink.yml if not specified.
+        :param str filename: Path to the filename. Defaults to analog_discovery_2_config.yml in labphew.core.defaults
         """
         if filename is None:
-            filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'analog_discovery_2_config.yml')
+            filename = os.path.join(labphew.package_path, 'core', 'defaults', 'analog_discovery_2_config.yml')
         with open(filename, 'r') as f:
             self.properties.update(yaml.safe_load(f))
 
         self.properties['config_file'] = filename
 
 
-
-
-    # def load_instrument(self, inst=None):
-    #     """
-    #     Loads an instrument that is necessary for performing the scan.
-    #     :param inst: it can be a model already initailized. If not provided, loads the default instrument.
-    #     """
-    #     if inst is None:
-    #         pass #TODO: put here commands for initializing a primitive controller like blink_controller
-    #     else:
-    #         self.instrument = inst
-
-    # def save_scan_data(self, fname):
-    #     """
-    #     TODO: make proper save function
-    #     :param fname:
-    #     :return:
-    #     """
-    #     pass
-
-
-
 if __name__ == "__main__":
-    import labphew  # import this to use labphew style logging (by importing it before matplotlib it also prevents matplotlib from printing many debugs)
+    import labphew   # import this to use labphew style logging (by importing it before matplotlib it also prevents matplotlib from printing many debugs)
     import matplotlib.pyplot as plt
 
     # from labphew.controller.digilent.waveforms import DfwController
 
     # To import the actual device:
-    from labphew.controller.digilent.waveforms import DfwController
+    # from labphew.controller.digilent.waveforms import DfwController
 
     # To import a simulated device:
-    # from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
+    from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
 
     instrument = DfwController()
 
