@@ -233,7 +233,6 @@ class ValueLabelItem(pg.LabelItem):
             value_kwargs['averageTime'] = averageTime
         if formatStr is not None:
             value_kwargs['formatStr'] = formatStr
-        print('kwargs', kwargs)
         super().__init__(text=text, parent=parent, **kwargs)
         self._ValueLabel = pg.ValueLabel(**value_kwargs)
         self.__siPrecision = siPrecision
@@ -252,3 +251,23 @@ class ValueLabelItem(pg.LabelItem):
     def __getattr__(self, item):
         return getattr(self._ValueLabel, item)
 
+def fit_on_screen(self):
+    """Function to move and resize a QMainWindow (or maybe any QWidget) to fit on the available space of the current desktop screen."""
+    frameGm = self.frameGeometry()
+    screen = QApplication.desktop().screenNumber(QApplication.desktop().cursor().pos())
+    availGm = QApplication.desktop().availableGeometry(screen)
+    # reduce size if larger than available desktop area
+    if frameGm.height() > availGm.height():
+        frameGm.setHeight(availGm.height())
+    if frameGm.width() > availGm.width():
+        frameGm.setWidth(availGm.width())
+    # move if any side is outside available desktop area
+    if frameGm.top() < availGm.top():
+        frameGm.moveTop(availGm.top())
+    if frameGm.bottom() > availGm.bottom():
+        frameGm.moveBottom(availGm.bottom())
+    if frameGm.left() < availGm.left():
+        frameGm.moveLeft(availGm.left())
+    if frameGm.right() > availGm.right():
+        frameGm.moveRight(availGm.right())
+    self.setGeometry(frameGm)
