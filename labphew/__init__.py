@@ -1,5 +1,10 @@
 __version__ = '0.1.1'
 
+import os
+package_path = os.path.dirname(os.path.abspath(__file__))
+repository_path = os.path.abspath(os.path.join(package_path, os.pardir))
+parent_path = os.path.abspath(os.path.join(repository_path, os.pardir))
+
 from pint import UnitRegistry
 ureg = UnitRegistry()
 Q_ = ureg.Quantity
