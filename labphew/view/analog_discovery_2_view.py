@@ -160,7 +160,8 @@ class MonitorWindow(QMainWindow):
         self.plot1.setLabel('left', 'voltage', units='V')
         self.curve1 = self.plot1.plot(pen='y')
         text_update_time = self.operator.properties['monitor']['text_update_time']
-        self.label_1 = ValueLabelItem('--', color='y', siPrefix=True, suffix='V', siPrecision=4, averageTime=text_update_time, textUpdateTime=text_update_time)
+        self.label_1 = ValueLabelItem('--', color='y', siPrefix=True, suffix='V', siPrecision=4,
+                                      averageTime=text_update_time, textUpdateTime=text_update_time)
         self.graph_win.addItem(self.label_1)
 
         self.graph_win.nextRow()
@@ -168,7 +169,8 @@ class MonitorWindow(QMainWindow):
         self.plot2.setLabel('bottom', 'time', units='s')
         self.plot2.setLabel('left', 'voltage', units='V')
         self.curve2 = self.plot2.plot(pen='c')
-        self.label_2 = ValueLabelItem('--', color='c', siPrefix=True, suffix='V', siPrecision=4, averageTime=text_update_time, textUpdateTime=text_update_time)
+        self.label_2 = ValueLabelItem('--', color='c', siPrefix=True, suffix='V', siPrecision=4,
+                                      averageTime=text_update_time, textUpdateTime=text_update_time)
         self.graph_win.addItem(self.label_2)
         self._last_values_update_time = time()
 

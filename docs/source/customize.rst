@@ -11,7 +11,7 @@ in the current code that helps you not to start from a blank page.
 If you are still in the learning phase, or would like to stay compatible with the existing modules of labphew
 these recommendations might help you in getting your desired features rather quickly:
 
-1.
+:todo: formulate recommendations for altering the code
 
 
 

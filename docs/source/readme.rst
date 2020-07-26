@@ -13,14 +13,13 @@ To test your installation run
 Features
 --------
 
--
 
 Installation
 ------------
 
 Install $labphew by running:
 
-> pip install labphew
+    pip install labphew
 
 Contribute
 ----------

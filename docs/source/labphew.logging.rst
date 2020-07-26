@@ -39,7 +39,7 @@ using the getLogger() function of the logging module.
    logger.error("Oh no!")
 
 
-It is common use to use the module name (i.e. __name__) as the name for the logger.
+It is a common practice to use the module name (i.e. __name__) as the name for the logger.
 This helps in finding where the logging statement originated from.
 The level of the logger can be modified using setLevel(). The level is a numeric value, but the logging
 module has some handy shorthands like logging.INFO.
