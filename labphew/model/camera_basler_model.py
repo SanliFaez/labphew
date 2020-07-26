@@ -7,12 +7,11 @@
 
     Some assumptions
     ----------------
-    The program forces software trigger during :meth:`~pynta.model.cameras.basler.Camera.initialize`.
+    The program forces software trigger during :meth:`~labphew.model.camera_basler_model.initialize`.
 """
 import logging
 import warnings
 from typing import Tuple
-
 from pypylon import pylon
 
 from experimentor import Q_

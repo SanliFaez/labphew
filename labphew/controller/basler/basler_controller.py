@@ -1,12 +1,10 @@
 import time
 #from threading import Event
 
-from pypylon import pylon #, _genicam
+from pypylon import pylon
 import logging
 
-#from labphew import Q_
 from labphew.core.base.camera_base import BaseCamera
-#from experimentor.models.devices.cameras.exceptions import CameraNotFound
 
 class BaslerCamera(BaseCamera):
     _acquisition_mode = BaseCamera.MODE_SINGLE_SHOT
@@ -19,6 +17,7 @@ class BaslerCamera(BaseCamera):
         self.free_run_running = False
         #self._stop_free_run = Event()
         self.fps = 0
+
 
     def initialize(self):
         """ Initializes the communication with the camera. Get's the maximum and minimum width. It also forces
@@ -56,12 +55,16 @@ class BaslerCamera(BaseCamera):
 
         #self.config.fetch_all()
 
+    def __str__(self):
+        if self.friendly_name:
+            return f"Camera {self.friendly_name}"
+        return super().__str__()
+
     def get_exposure(self):
         """ The exposure of the camera defined in microseconds """
         exposure = float(self._driver.ExposureTime)
 
         return exposure
-
 
     def set_exposure(self, exposure):
         """ The exposure of the camera is defined in microseconds """
@@ -76,7 +79,6 @@ class BaslerCamera(BaseCamera):
     def set_gain(self, gain: float):
         self.logger.info(f'Setting gain to {gain}')
         self._driver.Gain.SetValue(gain)
-
 
     def get_acquisition_mode(self):
         return self._acquisition_mode
@@ -119,6 +121,8 @@ class BaslerCamera(BaseCamera):
         return self._driver.PixelFormat.GetValue()
 
     def set_pixel_format(self, mode):
+        """ Pixel format must be one of Mono8, Mono12, Mono12p"""
+
         self.logger.info(f'Setting pixel format to {mode}')
         self._driver.PixelFormat.SetValue(mode)
 
@@ -159,11 +163,6 @@ class BaslerCamera(BaseCamera):
 
     def get_ccd_width(self):
         return self._driver.Width.Max
-
-    def __str__(self):
-        if self.friendly_name:
-            return f"Camera {self.friendly_name}"
-        return super().__str__()
 
     def trigger_camera(self):
         if self._driver.IsGrabbing():
