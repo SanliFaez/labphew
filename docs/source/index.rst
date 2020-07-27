@@ -29,7 +29,7 @@ You can find the code of this package on `Github <https://github.com/sanlifaez/l
 The documentation is hosted on `Read The Docs <https://readthedocs.org/projects/labphew>`_.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 4
    :caption: Further in the docs:
 
    introduction
@@ -45,6 +45,7 @@ The documentation is hosted on `Read The Docs <https://readthedocs.org/projects/
    devices
    customize
    contribute
+   api
 
 
 Acknowledgement

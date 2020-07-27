@@ -25,6 +25,9 @@ import numpy as np
 
 
 class DfwController(dwf.Dwf):
+    """
+    Controller for Digilent devices controlled through WaveForms software
+    """
     def __init__(self, device_number=0, config=0):
         """
         Connect to device with optional configuration.
