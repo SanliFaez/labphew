@@ -18,6 +18,7 @@ class BlinkController:
     """
     def __init__(self, properties = {}):
         """
+        Create Blink controller object which simulates a fake device.
 
         :param properties: optional properties dictionary
         :type properties: dict
@@ -28,6 +29,7 @@ class BlinkController:
         self.__simulated_device_blink_period= 1  #
         self.__simulated_device_start_time = time.time()
         self.__simulated_device_status = False
+        self.__simulated_device_enabled = True
 
         # Set user parameters. Optionally get them from properties. Otherwise use hardcoded values:
         if 'max_blink_period' in properties:
@@ -46,11 +48,8 @@ class BlinkController:
         """
         Method that mimics setting a device parameter.
 
-
         :param period_s:
         :type period_s:
-        :return:
-        :rtype:
         """
         # You could do some checks first. For example to see if the value is in an allowed range:
         if period_s > self.max_blink_period:
@@ -66,6 +65,18 @@ class BlinkController:
         self.__simulated_device_start_time = time.time()
         self.__simulated_device_status = not self.__simulated_device_status
 
+    def enable(self, enable):
+        """
+        Method that mimics setting a device parameter.
+
+        :param enable: Enable device output
+        :type enable: bool
+        """
+        # Your code to communicate with the device goes here.
+        # For the purpose of demonstration, this method simulates setting a parameter on a device:
+        self.__simulated_device_enabled = bool(enable)
+        self.logger.debug('Device is "{}"'.format(self.__simulated_device_enabled))
+
     def get_status(self):
         """
         Method that mimics communicating with a device and retrieving a status.
@@ -76,7 +87,11 @@ class BlinkController:
         # Your code to communicate with the device goes here.
         # For the purpose of demonstration, this method returns a simulated status:
         self.logger.debug('"Retrieving" status from device')
-        return bool(int((time.time()-self.__simulated_device_start_time)/self.__simulated_device_blink_period/.5) % 2)
+        if self.__simulated_device_enabled:
+            return bool(int((time.time()-self.__simulated_device_start_time)/self.__simulated_device_blink_period/.5) % 2)
+        else:
+            self.logger.warning('Device is disabled')
+            return False
 
 if __name__ == "__main__":
     import labphew
