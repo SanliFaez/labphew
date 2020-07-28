@@ -115,10 +115,10 @@ class Operator:
         """
         If specified, this function loads the configuration file to generate the properties of the Scan.
 
-        :param str filename: Path to the filename. Defaults to Model/default/blink.yml if not specified.
+        :param str filename: Path to the filename. Defaults to Model/default/blink_config.yml if not specified.
         """
         if filename is None:
-            filename = '../core/defaults/blink.yml'
+            filename = '../core/defaults/blink_config.yml'
 
         with open(filename, 'r') as f:
             params = yaml.safe_load(f)

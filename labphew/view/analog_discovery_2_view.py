@@ -207,23 +207,34 @@ class MonitorWindow(QMainWindow):
         self.plot2.setTitle(self.operator.properties['monitor'][2]['name'])
 
     def load_scan_guis(self, scan_windows):
-        self.scan_windows = scan_windows
-        if self.scan_windows:
-            scanMenu = self.mainMenu.addMenu('&Scans')
-            for name, scan_lst in self.scan_windows.items():
-                if type(scan_lst) is not list:
-                    scan_lst = list(scan_lst)
-                if len(scan_lst) < 2:
-                    scan_lst.append({})
-                scanMenu.addAction(QAction(name, self, triggered=self.open_scan_window, **scan_lst[1]))
+        """
+        Load scan windows and add them to a menu in this monitor window.
+        Note that the scan windows should be instantiated before adding them.
+        The keys of the dictionary should be strings that will act as the names in the Scan menu.
+        The values of the dictionary could be the ScanWindowObjects or a list that also contains some PyQt gui settings
+        in a dictionary: [ScanWindowObject, {'shortcut':"Ctrl+Shift+V", 'statusTip':'Voltage sweep scan'}]
+
+        :param scan_windows: scan windows dict
+        :type scan_windows: dict
+        """
+        scanMenu = self.mainMenu.addMenu('&Scans')
+        for name, scan_lst in scan_windows.items():
+            if type(scan_lst) is not list:
+                scan_lst = [scan_lst]
+            if len(scan_lst) < 2:
+                scan_lst.append({})
+            self.scan_windows[name] = scan_lst
+            scanMenu.addAction(QAction(name, self, triggered=self.open_scan_window, **scan_lst[1]))
 
     def open_scan_window(self):
+        """
+        This metohd is called by the menu and opens Scan Windows that were "attached" to this Monitor gui with load_scan_guis().
+        """
         self.stop_monitor()
         name = self.sender().text()  # get the name of the QAction (which is also the key of the scanwindow dictionary)
         self.logger.debug('Opening scan window {}'.format(name))
         self.scan_windows[name][0].show()
         fit_on_screen(self.scan_windows[name][0])
-
 
     def ao1_value(self):
         """
@@ -626,6 +637,7 @@ if __name__ == "__main__":
     opr.load_config()
 
     create_scan_window_only = False  ##### Toggle this to showcase the scanwindow or the monitor
+
     if create_scan_window_only:
         app = QApplication(sys.argv)
         gui = ScanWindow(opr)

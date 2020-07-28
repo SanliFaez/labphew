@@ -43,6 +43,6 @@ def start_cli(operator, config, output = None):
 if __name__ == '__main__':
     from labphew.model import blink_model
     op = blink_model.Operator
-    pa = './Model/default/blink.yml'
+    pa = './Model/default/blink_config.yml'
     f = '../tempfile.txt'
     start_cli(op, pa, output=f)
