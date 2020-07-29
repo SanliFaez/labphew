@@ -225,12 +225,21 @@ class Operator:
 
     def do_scan(self, param=None):
         """
-        Primitive function for calling by the ScanWindow
-        this functions counts down inverses down to 1/10
+        An example of a method that performs a scan (based on parameters in the config file).
+        This method can be run from a GUI, from command line or other script
+        This scan sweeps the voltage on one of the AO channels and reads one of the AI channels.
+
+        :param param: optional dictionary of parameters that will used to update the scan parameters
+        :type param: dict
+        :return: the AO voltage, and the measured AI voltages
+        :rtype: list, list
         """
-        # Start with various checks and warn+return if somthing is wrong
+        if type(param) is dict:
+            self.logger.info('Updating scan properties with supplied parameters dictionary.')
+            self.properties['scan'].update(param)
+        # Start with various checks and warn+return if something is wrong
         if self._busy:
-            self.logger.warning('Scan should not be started while Operator is busy.')
+            self.logger.error('Scan should not be started while Operator is busy.')
             return
         if 'scan' not in self.properties:
             self.logger.error("The config file or properties dict should contain 'scan' section.")
@@ -246,18 +255,20 @@ class Operator:
             ch_ao = int(self.properties['scan']['ao_channel'])
             ch_ai = int(self.properties['scan']['ai_channel'])
         except:
-            self.logger.warning("Error occured while reading scan config values")
+            self.logger.error("Error occured while reading scan config values")
             return
         if ch_ai not in [1,2] or ch_ao not in [1,2]:
-            self.logger.warning("AI and AO channel need to be 1 or 2")
+            self.logger.error("AI and AO channel need to be 1 or 2")
             return
         if 'stabilize_time' in self.properties['scan']:
             stabilize = self.properties['scan']['stabilize_time']
         else:
             self.logger.info("stabilize_time not found in config, using 0s")
             stabilize = 0
-
         num_points = np.int(round( (stop-start)/step+1 ))  # use round to catch the occasional rounding error
+        if num_points <= 0:
+            self.logger.error("Start, stop and step result in 0 or fewer points to sweep")
+            return
 
         self.voltages_to_scan = np.linspace(start, stop, num_points)
 
