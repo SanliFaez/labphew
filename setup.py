@@ -3,6 +3,8 @@ from setuptools import setup, find_packages
 with open("README.md") as f:
     long_description = f.read()
 
+DESCRIPTION = "Fun with computer-controlled experiments for beginners"  # test to see if this description is picked up by conda environment manager
+
 setup(
 
     name="labphew",
