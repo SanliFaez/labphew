@@ -360,16 +360,6 @@ class ScanWindow(QMainWindow):
         self.scan_timer = QTimer(timeout=self.update_scan)
         self.scan_thread = WorkThread(self.operator.do_scan)
 
-        # self.show()  # display the GUI
-
-        # TODO: uncomment for testing the child windows
-        # self.config_window = ConfigWindow(operator, parent=self)
-        # self.config_window.propertiesChanged.connect(self.update_properties)
-        # self.actionConfig.triggered.connect(self.config_window.show)
-        #
-        # self.scan_window = ScanWindow(operator)
-        # self.actionScan.triggered.connect(self.scan_window.show)
-
     def set_UI(self):
         """
         Code-based generation of the user-interface based on PyQT
