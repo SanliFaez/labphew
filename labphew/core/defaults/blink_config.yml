@@ -18,11 +18,9 @@ monitor:
 #  stop_timeout:     1      # (s) How much time to give monitor to stop before forcefully terminating it
 
 # Set parameters for the scan here
+# This scan measure the state of the device a number of times with a specified interval time
 scan:
-  start: 0
-  stop: 20
-  step: 0.1
-  channel_out: 0
-  channel_in: 0
-  delay: 100ms
+  blink_period:         0.4 # (s) blink rate to set the device to
+  time_between_points:  0.1 # (s) time between each datapoint
+  number_of_points:     40  #     number_of_points * read_period determines the total duration of this scan
 

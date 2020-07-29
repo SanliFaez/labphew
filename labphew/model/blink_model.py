@@ -159,70 +159,73 @@ class BlinkOperator:
         self._stop = False  # reset stop flag to false
         self._busy = False  # indicate the operator is not busy anymore
 
-    # def do_scan(self, param=None):
-    #     """
-    #     Primitive function for calling by the ScanWindow
-    #     this functions counts down inverses down to 1/10
-    #     """
-    #     # Start with various checks and warn+return if somthing is wrong
-    #     if self._busy:
-    #         self.logger.warning('Scan should not be started while Operator is busy.')
-    #         return
-    #     if 'scan' not in self.properties:
-    #         self.logger.error("The config file or properties dict should contain 'scan' section.")
-    #         return
-    #     required_keys = ['start', 'stop', 'step', 'ao_channel', 'ai_channel']
-    #     if not all(key in self.properties['scan'] for key in required_keys):
-    #         self.logger.error("'scan' should contain: "+', '.join(required_keys))
-    #         return
-    #     try:
-    #         start = self.properties['scan']['start']
-    #         stop = self.properties['scan']['stop']
-    #         step = self.properties['scan']['step']
-    #         ch_ao = int(self.properties['scan']['ao_channel'])
-    #         ch_ai = int(self.properties['scan']['ai_channel'])
-    #     except:
-    #         self.logger.warning("Error occured while reading scan config values")
-    #         return
-    #     if ch_ai not in [1,2] or ch_ao not in [1,2]:
-    #         self.logger.warning("AI and AO channel need to be 1 or 2")
-    #         return
-    #     if 'stabilize_time' in self.properties['scan']:
-    #         stabilize = self.properties['scan']['stabilize_time']
-    #     else:
-    #         self.logger.info("stabilize_time not found in config, using 0s")
-    #         stabilize = 0
-    #
-    #     num_points = np.int(round( (stop-start)/step+1 ))  # use round to catch the occasional rounding error
-    #
-    #     self.voltages_to_scan = np.linspace(start, stop, num_points)
-    #
-    #     self.scan_voltages = []
-    #     self.measured_voltages = []
-    #
-    #     self._busy = True  # indicate that operator is busy
-    #
-    #     for i, voltage in enumerate(self.voltages_to_scan):
-    #         self.logger.debug('applying {} to ch {}'.format(voltage, ch_ao))
-    #         self.analog_out(ch_ao, voltage)
-    #         sleep(stabilize)
-    #         measured = self.analog_in()[ch_ai - 1]
-    #         self.measured_voltages.append(measured)
-    #         self.scan_voltages.append(voltage)
-    #         self._new_scan_data = True
-    #         # before the end of the loop: halt if pause is True
-    #         while self._pause:
-    #             sleep(0.05)
-    #             if self._stop: break
-    #         # if (soft) stop was requested, break out of loop
-    #         if self._stop:
-    #             break
-    #
-    #     self._stop = False  # reset stop flag to false
-    #     self._busy = False  # indicate operator is not busy anymore
-    #     self._pause = False  # is this necessary?
-    #
-    #     return self.scan_voltages, self.measured_voltages
+    def do_scan(self, param=None):
+        """
+        An example of a method that performs a scan (based on parameters in the config file).
+        This method can be run from a GUI, from command line or other script
+        This scan sweeps the blink rate of the fake device and records its status.
+
+        :param param: optional dictionary of parameters that will used to update the scan parameters
+        :type param: dict
+        :return: the AO voltage, and the measured AI voltages
+        :rtype: list, list
+        """
+        if type(param) is dict:
+            self.logger.info('Updating scan properties with supplied parameters dictionary.')
+            self.properties['scan'].update(param)
+        # Start with various checks and warn+return if something is wrong
+        if self._busy:
+            self.logger.warning('Scan should not be started while Operator is busy.')
+            return
+        if 'scan' not in self.properties:
+            self.logger.error("The config file or properties dict should contain 'scan' section.")
+            return
+        required_keys = ['blink_period', 'time_between_points', 'number_of_points']
+        if not all(key in self.properties['scan'] for key in required_keys):
+            self.logger.error("'scan' should contain: "+', '.join(required_keys))
+            return
+        try:
+            blink_period = self.properties['scan']['blink_period']
+            print(blink_period)
+            number_of_points = int(self.properties['scan']['number_of_points'])
+            print(number_of_points)
+            time_between_points = self.properties['scan']['time_between_points']
+            print(time_between_points)
+        except:
+            self.logger.error("Error occured while reading scan config values")
+            return
+
+        # Apply blink_period
+        self.instrument.set_blink_period(blink_period)
+
+        self.scan_time = []
+        self.measured_state = []
+
+        self._busy = True  # indicate that operator is busy
+
+        self.logger.info("Starting scan ...")
+        start_time = time()
+        for i in range(number_of_points):
+            self.scan_time.append(time()-start_time)
+            state = int(self.instrument.get_status())  # get the state and convert True/False to 1/0
+            self.measured_state.append(state)
+            sleep(time_between_points)
+
+            # The remainder of the loop adds functionality to pause and stop the scan when it's run from a gui:
+            self._new_scan_data = True
+            # before the end of the loop: halt if pause is True
+            while self._pause:
+                sleep(0.05)
+                if self._stop: break
+            # if (soft) stop was requested, break out of loop
+            if self._stop:
+                break
+
+        self._stop = False  # reset stop flag to false
+        self._busy = False  # indicate operator is not busy anymore
+        self._pause = False  # is this necessary?
+
+        return self.scan_time, self.measured_state
 
     # def save_scan(self, filename, metadata=None):
     #     """
