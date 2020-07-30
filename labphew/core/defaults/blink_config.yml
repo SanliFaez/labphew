@@ -20,7 +20,7 @@ monitor:
 # Set parameters for the scan here
 # This scan measure the state of the device a number of times with a specified interval time
 scan:
-  blink_period:         0.4 # (s) blink rate to set the device to
+  blink_period:         0.6 # (s) blink rate to set the device to
   time_between_points:  0.1 # (s) time between each datapoint
   number_of_points:     40  #     number_of_points * read_period determines the total duration of this scan
 

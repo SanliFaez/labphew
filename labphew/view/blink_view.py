@@ -7,7 +7,10 @@ module and its dependencies.
 This code can be used as a basis for building more complex user interfaces.
 """
 
+
 import logging
+import labphew
+import os
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import *  # QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QAction
 from PyQt5.QtGui import QFont, QIcon
@@ -201,7 +204,10 @@ class ScanWindow(QMainWindow):
         self.statusBar()
         ### The menu bar:
         mod_config_action = QAction("Con&fig", self, triggered=self.mod_scan_config, shortcut="Ctrl+Shift+C", statusTip='Modify the scan config')
+        save_action = QAction("&Save", self, triggered=self.save, shortcut="Ctrl+S", statusTip='Save the scan data')
         quit_action = QAction("&Close", self, triggered=self.close, shortcut="Ctrl+W", statusTip='Close the scan window')
+
+
 
         self.start_action = QAction("&Start", self, triggered=self.start_scan, shortcut="F5", statusTip='Start the Scan')
         self.pause_action = QAction("&Pause", self, triggered=self.pause, shortcut="Ctrl+P", statusTip='Pause the scan', enabled=False)
@@ -212,6 +218,7 @@ class ScanWindow(QMainWindow):
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu('&File')
         fileMenu.addAction(mod_config_action)
+        fileMenu.addAction(save_action)
         fileMenu.addAction(quit_action)
         runMenu = mainMenu.addMenu('&Run Scan')
         runMenu.addAction(self.start_action)
@@ -324,8 +331,14 @@ class ScanWindow(QMainWindow):
     #     if 'filename' in self.operator.properties['scan']:
     #         self.saver.filename.setText(self.operator.properties['scan']['filename'])
 
-    def save(self, filename):
-        self.operator.save_scan(filename)
+    def save(self):
+        try:
+            fname = QFileDialog.getSaveFileName(self, 'Save data as', self.operator.properties['scan']['filename'],
+                                                filter="netCDF4 (*.nc);;All Files (*.*)")
+        except:
+            fname = QFileDialog.getSaveFileName(self, 'Save data as', labphew.parent_path,
+                                                filter="netCDF4 (*.nc);;All Files (*.*)")
+        self.operator.save_scan(fname[0])
 
     # def scan_start_value(self):
     #     """

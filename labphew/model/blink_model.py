@@ -13,9 +13,9 @@ import os.path
 import numpy as np
 import yaml
 from time import time, sleep, localtime, strftime
+from datetime import datetime
 import logging
 import xarray as xr
-import datetime
 import labphew
 
 
@@ -226,47 +226,47 @@ class BlinkOperator:
 
         return self.point_number, self.measured_state
 
-    # def save_scan(self, filename, metadata=None):
-    #     """
-    #     Store data in xarray Dataset and save to netCDF4 file.
-    #     Optional metadata can be passed as a dict. Note that the keys should be strings and the values should be numbers oir strings.
-    #     To load data:
-    #     import xarray as xr
-    #     xr.load_dataset(filename)
-    #
-    #     :param filename: full path and filename
-    #     :type filename: str
-    #     :param metadata: optional additional data to store (default: None)
-    #     :type metadata: dict
-    #     """
-    #     # First test if the required data arrays have been generated (i.e. if the scan has run)
-    #     if not hasattr(self, "scan_voltages") or not hasattr(self, "measured_voltages"):
-    #         self.logger.warning('no data to save yet')
-    #         return
-    #     if os.path.exists(filename):
-    #         self.logger.warning('overwriting existing file: {}'.format(filename))
-    #     data = xr.Dataset(
-    #         coords={
-    #             "scan_voltage": (["scan_voltage"], self.scan_voltages, {"units": 'V'})
-    #         },
-    #         data_vars={
-    #             "measured_voltage": (["scan_voltage"], self.measured_voltages, {"units":'V'})
-    #         },
-    #         attrs={
-    #             "time": datetime.now().strftime('%d-%m-%YT%H:%M:%S'),
-    #         }
-    #     )
-    #     for key in ['user', 'config_file']:
-    #         if key in self.properties:
-    #             data.attrs[key] = self.properties[key]
-    #     # Add all numeric and string keys
-    #     for key, value in self.properties['scan'].items():
-    #         if isinstance(value, (int, float, bool, str)):
-    #             data.attrs[key] = value
-    #     if type(metadata) is dict:
-    #         data.attrs.update(metadata)  # add the optional metadata to the Dataset attributes
-    #     self.data = data
-    #     data.to_netcdf(filename)
+    def save_scan(self, filename, metadata=None):
+        """
+        Store data in xarray Dataset and save to netCDF4 file.
+        Optional metadata can be passed as a dict. Note that the keys should be strings and the values should be numbers or strings.
+        To load data:
+        import xarray as xr
+        xr.load_dataset(filename)
+
+        :param filename: full path and filename
+        :type filename: str
+        :param metadata: optional additional data to store (default: None)
+        :type metadata: dict
+        """
+        # First test if the required data arrays have been generated (i.e. if the scan has run)
+        if not hasattr(self, "point_number") or not hasattr(self, "measured_state"):
+            self.logger.warning('no data to save yet')
+            return
+        if os.path.exists(filename):
+            self.logger.warning('overwriting existing file: {}'.format(filename))
+        data = xr.Dataset(
+            coords={
+                "point_number": (["point_number"], self.point_number)  # for a "coordinate" use the same name between []
+            },
+            data_vars={
+                "measured_state": (["point_number"], self.measured_state)
+            },
+            attrs={
+                "time": datetime.now().strftime('%d-%m-%YT%H:%M:%S'),
+            }
+        )
+        for key in ['user', 'config_file']:
+            if key in self.properties:
+                data.attrs[key] = self.properties[key]
+        # Add all numeric and string keys in scan
+        for key, value in self.properties['scan'].items():
+            if isinstance(value, (int, float, bool, str)):
+                data.attrs[key] = value
+        if type(metadata) is dict:
+            data.attrs.update(metadata)  # add the optional metadata to the Dataset attributes
+        self.data = data
+        data.to_netcdf(filename)
 
     def load_config(self, filename=None):
         """
@@ -317,6 +317,15 @@ if __name__ == "__main__":
     plt.plot(t, state, '.-')
     plt.xlabel('scan time [s]')
     plt.ylabel('binary device state')
+
+    # # Example of saving scan data
+    # opr.save_scan(r'C:\Temp\blink7.nc')
+
+    # # Example of reading data from file and plotting
+    # import xarray as xr
+    # dat = xr.load_dataset(r'C:\Temp\blink7.nc')
+    # print(dat)
+    # dat.measured_state.plot()
 
 
 #
