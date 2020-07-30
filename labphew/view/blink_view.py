@@ -9,10 +9,11 @@ This code can be used as a basis for building more complex user interfaces.
 
 import logging
 from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QAction
+from PyQt5.QtWidgets import *  # QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QAction
 from PyQt5.QtGui import QFont, QIcon
+import pyqtgraph as pg
 from labphew.core.base.general_worker import WorkThread
-from labphew.core.tools.gui_tools import fit_on_screen
+from labphew.core.tools.gui_tools import fit_on_screen, ModifyConfig
 
 class MonitorWindow(QMainWindow):
     def __init__(self, operator, parent=None):
@@ -31,6 +32,15 @@ class MonitorWindow(QMainWindow):
     def set_UI(self):
 
         self.setWindowTitle('labphew blinks at you')
+
+        self.statusBar()  # Statusbar at the bottom of the screen
+        ### The menu bar:
+        self.mainMenu = self.menuBar()
+        fileMenu = self.mainMenu.addMenu('&File')
+        quit_action = QAction("E&xit", self, triggered=self.close, shortcut="Alt+F4", statusTip='Close the scan window')
+        fileMenu.addAction(quit_action)
+
+
         self.central_widget = QWidget()
         self.button_start = QPushButton('Start Blink Monitor', self.central_widget)
         self.button_stop = QPushButton('Stop', self.central_widget)
@@ -193,159 +203,187 @@ class ScanWindow(QMainWindow):
         mod_config_action = QAction("Con&fig", self, triggered=self.mod_scan_config, shortcut="Ctrl+Shift+C", statusTip='Modify the scan config')
         quit_action = QAction("&Close", self, triggered=self.close, shortcut="Ctrl+W", statusTip='Close the scan window')
 
+        self.start_action = QAction("&Start", self, triggered=self.start_scan, shortcut="F5", statusTip='Start the Scan')
+        self.pause_action = QAction("&Pause", self, triggered=self.pause, shortcut="Ctrl+P", statusTip='Pause the scan', enabled=False)
+        self.stop_action = QAction("S&top", self, triggered=self.stop, shortcut="Ctrl+A", statusTip='Stop the scan after current iteration', enabled=False)
+        self.kill_action = QAction("&Kill", self, triggered=self.kill_scan, shortcut="Ctrl+K", statusTip='Immediately kill the scan')
+
+
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu('&File')
         fileMenu.addAction(mod_config_action)
         fileMenu.addAction(quit_action)
+        runMenu = mainMenu.addMenu('&Run Scan')
+        runMenu.addAction(self.start_action)
+        runMenu.addAction(self.pause_action)
+        runMenu.addAction(self.stop_action)
+        runMenu.addAction(self.kill_action)
 
-        ### General layout
-        central_widget = QWidget()
-        central_layout = QHBoxLayout(central_widget)
-
-        # Layout for left hand controls
-        control_layout = QVBoxLayout()
-
-        ### Scan box
-        self.box_scan = QGroupBox('Scan')
-        layout_scan = QVBoxLayout()
-        self.box_scan.setLayout(layout_scan)
-        control_layout.addWidget(self.box_scan)
-
-        layout_scan_form = QFormLayout()
-        layout_scan.addLayout(layout_scan_form)
-        layout_scan_buttons = QHBoxLayout()
-        layout_scan.addLayout(layout_scan_buttons)
-
-        self.scan_start_spinbox = QDoubleSpinBox(suffix='V', minimum=-100, singleStep=0.001, valueChanged=self.scan_start_value)
-        # self.scan_start_spinbox.valueChanged.connect(self.scan_start_value)
-
-        self.scan_stop_spinbox = QDoubleSpinBox(suffix='V', minimum=-100, singleStep=0.001, valueChanged=self.scan_stop_value)
-
-        self.scan_step_spinbox = QDoubleSpinBox(suffix='V', minimum=-100, singleStep=0.001, valueChanged=self.scan_step_value)
-
-        self.scan_start_label = QLabel('start')
-        self.scan_stop_label = QLabel('stop')
-        self.scan_step_label = QLabel('step')
-        layout_scan_form.addRow(self.scan_start_label, self.scan_start_spinbox)
-        layout_scan_form.addRow(self.scan_stop_label, self.scan_stop_spinbox)
-        layout_scan_form.addRow(self.scan_step_label, self.scan_step_spinbox)
-
-        self.start_button = QPushButton('Start', clicked=self.start_scan)
-        self.pause_button = QPushButton('Pause', clicked=self.pause)
-        self.stop_button = QPushButton('Stop', clicked=self.stop)
-        self.kill_button = QPushButton('Kill', clicked=self.kill_scan)
-        # Haven't decided what names are best. Suggestions:
-        # start, pause, interrupt, stop, abort, quit, kill
-
-        layout_scan_buttons.addWidget(self.start_button)
-        layout_scan_buttons.addWidget(self.pause_button)
-        layout_scan_buttons.addWidget(self.stop_button)
-        layout_scan_buttons.addWidget(self.kill_button)
-
-        self.saver = SaverWidget(self.save)
-        layout_scan.addWidget(self.saver)
-
-        ### Graphs:
         self.graph_win = pg.GraphicsWindow()
-        self.graph_win.resize(1000, 600)
+        self.graph_win.resize(800, 500)
         self.plot1 = self.graph_win.addPlot()
-        self.curve1 = self.plot1.plot(pen='y')
+        self.curve1 = self.plot1.plot(pen='w')
+        self.plot1.setLabel('bottom', 'data points')
+        self.plot1.setLabel('left', 'state')
 
-        # Add an empty widget at the bottom of the control layout to make layout nicer
-        dummy = QWidget()
-        dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
-        control_layout.addWidget(dummy)
-        # Add control layout and graph window to central layout and apply central layout to window
-        central_layout.addLayout(control_layout)
-        central_layout.addWidget(self.graph_win)
-        self.setCentralWidget(central_widget)
+        self.setCentralWidget(self.graph_win)
 
-        self.apply_properties()
-        self.reset_fields()
+        #
+        #
+        # ### General layout
+        # central_widget = QWidget()
+        # central_layout = QHBoxLayout(central_widget)
+        #
+        # # Layout for left hand controls
+        # control_layout = QVBoxLayout()
+        #
+        # ### Scan box
+        # self.box_scan = QGroupBox('Scan')
+        # layout_scan = QVBoxLayout()
+        # self.box_scan.setLayout(layout_scan)
+        # control_layout.addWidget(self.box_scan)
+        #
+        # layout_scan_form = QFormLayout()
+        # layout_scan.addLayout(layout_scan_form)
+        # layout_scan_buttons = QHBoxLayout()
+        # layout_scan.addLayout(layout_scan_buttons)
+        #
+        # self.scan_start_spinbox = QDoubleSpinBox(suffix='V', minimum=-100, singleStep=0.001, valueChanged=self.scan_start_value)
+        # # self.scan_start_spinbox.valueChanged.connect(self.scan_start_value)
+        #
+        # self.scan_stop_spinbox = QDoubleSpinBox(suffix='V', minimum=-100, singleStep=0.001, valueChanged=self.scan_stop_value)
+        #
+        # self.scan_step_spinbox = QDoubleSpinBox(suffix='V', minimum=-100, singleStep=0.001, valueChanged=self.scan_step_value)
+        #
+        # self.scan_start_label = QLabel('start')
+        # self.scan_stop_label = QLabel('stop')
+        # self.scan_step_label = QLabel('step')
+        # layout_scan_form.addRow(self.scan_start_label, self.scan_start_spinbox)
+        # layout_scan_form.addRow(self.scan_stop_label, self.scan_stop_spinbox)
+        # layout_scan_form.addRow(self.scan_step_label, self.scan_step_spinbox)
+        #
+        # self.start_button = QPushButton('Start', clicked=self.start_scan)
+        # self.pause_button = QPushButton('Pause', clicked=self.pause)
+        # self.stop_button = QPushButton('Stop', clicked=self.stop)
+        # self.kill_button = QPushButton('Kill', clicked=self.kill_scan)
+        # # Haven't decided what names are best. Suggestions:
+        # # start, pause, interrupt, stop, abort, quit, kill
+        #
+        # layout_scan_buttons.addWidget(self.start_button)
+        # layout_scan_buttons.addWidget(self.pause_button)
+        # layout_scan_buttons.addWidget(self.stop_button)
+        # layout_scan_buttons.addWidget(self.kill_button)
+        #
+        # ### Graphs:
+        # self.graph_win = pg.GraphicsWindow()
+        # self.graph_win.resize(1000, 600)
+        # self.plot1 = self.graph_win.addPlot()
+        # self.curve1 = self.plot1.plot(pen='y')
+        #
+        # # Add an empty widget at the bottom of the control layout to make layout nicer
+        # dummy = QWidget()
+        # dummy.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        # control_layout.addWidget(dummy)
+        # # Add control layout and graph window to central layout and apply central layout to window
+        # central_layout.addLayout(control_layout)
+        # central_layout.addWidget(self.graph_win)
+        # self.setCentralWidget(central_widget)
+        #
+        # self.apply_properties()
+        # self.reset_fields()
 
     def mod_scan_config(self):
         """
         Open the Modify Config window for the scan properties
         """
-        conf_win = ModifyConfig(self.operator.properties['scan'], apply_callback=self.apply_properties, parent=self)
+        conf_win = ModifyConfig(self.operator.properties['scan'], apply_callback=None, parent=self)
         conf_win.show()
 
-    def apply_properties(self):
-        """
-        Apply properties dictionary to gui elements.
-        """
-        self.logger.debug('Applying config properties to gui elements')
-        self.operator._set_scan_start(self.operator.properties['scan']['start'])  # this optional line checks validity
-        self.scan_start_spinbox.setValue(self.operator.properties['scan']['start'])
-
-        self.operator._set_scan_stop(self.operator.properties['scan']['stop'])  # this optional line checks validity
-        self.scan_stop_spinbox.setValue(self.operator.properties['scan']['stop'])
-
-        self.operator._set_scan_step(self.operator.properties['scan']['step'])  # this optional line checks validity
-        self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
-
-        if 'title' in self.operator.properties['scan']:
-            self.box_scan.setTitle(self.operator.properties['scan']['title'])
-            self.plot1.setTitle(self.operator.properties['scan']['title'])
-
-        self.plot1.setLabel('bottom', self.operator.properties['scan']['x_label'], units=self.operator.properties['scan']['x_units'])
-        self.plot1.setLabel('left', self.operator.properties['scan']['y_label'], units=self.operator.properties['scan']['y_units'])
-        self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
-
-        if 'filename' in self.operator.properties['scan']:
-            self.saver.filename.setText(self.operator.properties['scan']['filename'])
+    # def apply_properties(self):
+    #     """
+    #     Apply properties dictionary to gui elements.
+    #     """
+    #     self.logger.debug('Applying config properties to gui elements')
+    #     self.operator._set_scan_start(self.operator.properties['scan']['start'])  # this optional line checks validity
+    #     self.scan_start_spinbox.setValue(self.operator.properties['scan']['start'])
+    #
+    #     self.operator._set_scan_stop(self.operator.properties['scan']['stop'])  # this optional line checks validity
+    #     self.scan_stop_spinbox.setValue(self.operator.properties['scan']['stop'])
+    #
+    #     self.operator._set_scan_step(self.operator.properties['scan']['step'])  # this optional line checks validity
+    #     self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
+    #
+    #     if 'title' in self.operator.properties['scan']:
+    #         self.box_scan.setTitle(self.operator.properties['scan']['title'])
+    #         self.plot1.setTitle(self.operator.properties['scan']['title'])
+    #
+    #     self.plot1.setLabel('bottom', self.operator.properties['scan']['x_label'], units=self.operator.properties['scan']['x_units'])
+    #     self.plot1.setLabel('left', self.operator.properties['scan']['y_label'], units=self.operator.properties['scan']['y_units'])
+    #     self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
+    #
+    #     if 'filename' in self.operator.properties['scan']:
+    #         self.saver.filename.setText(self.operator.properties['scan']['filename'])
 
     def save(self, filename):
         self.operator.save_scan(filename)
 
-    def scan_start_value(self):
-        """
-        Called when Scan Start spinbox is modified.
-        Updates the parameter using a method of operator (which checks validity and also fixes the sign of step) and
-        forces the (corrected) parameter in the gui elements
-        """
-        self.operator._set_scan_start(self.scan_start_spinbox.value())
-        self.scan_start_spinbox.setValue(self.operator.properties['scan']['start'])
-        self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
-        set_spinbox_stepsize(self.scan_start_spinbox)
-        self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
-
-    def scan_stop_value(self):
-        """
-        Called when Scan Stop spinbox is modified.
-        Updates the parameter using a method of operator (which checks validity and also fixes the sign of step) and
-        forces the (corrected) parameter in the gui elements
-        """
-        self.operator._set_scan_stop(self.scan_stop_spinbox.value())
-        self.scan_stop_spinbox.setValue(self.operator.properties['scan']['stop'])
-        self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
-        set_spinbox_stepsize(self.scan_stop_spinbox)
-        self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
-
-    def scan_step_value(self):
-        """
-        Called when Scan Step spinbox is modified.
-        Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element
-        """
-        self.operator._set_scan_step(self.scan_step_spinbox.value())
-        self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
-        set_spinbox_stepsize(self.scan_step_spinbox)
+    # def scan_start_value(self):
+    #     """
+    #     Called when Scan Start spinbox is modified.
+    #     Updates the parameter using a method of operator (which checks validity and also fixes the sign of step) and
+    #     forces the (corrected) parameter in the gui elements
+    #     """
+    #     self.operator._set_scan_start(self.scan_start_spinbox.value())
+    #     self.scan_start_spinbox.setValue(self.operator.properties['scan']['start'])
+    #     self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
+    #     set_spinbox_stepsize(self.scan_start_spinbox)
+    #     self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
+    #
+    # def scan_stop_value(self):
+    #     """
+    #     Called when Scan Stop spinbox is modified.
+    #     Updates the parameter using a method of operator (which checks validity and also fixes the sign of step) and
+    #     forces the (corrected) parameter in the gui elements
+    #     """
+    #     self.operator._set_scan_stop(self.scan_stop_spinbox.value())
+    #     self.scan_stop_spinbox.setValue(self.operator.properties['scan']['stop'])
+    #     self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
+    #     set_spinbox_stepsize(self.scan_stop_spinbox)
+    #     self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
+    #
+    # def scan_step_value(self):
+    #     """
+    #     Called when Scan Step spinbox is modified.
+    #     Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element
+    #     """
+    #     self.operator._set_scan_step(self.scan_step_spinbox.value())
+    #     self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
+    #     set_spinbox_stepsize(self.scan_step_spinbox)
 
     def reset_fields(self):
         """
         Resets gui elements after a scan is finished, stopped or terminated.
         """
-        self.start_button.setEnabled(True)
-        self.pause_button.setText('Pause')
-        self.pause_button.setEnabled(False)
-        self.stop_button.setEnabled(False)
-        self.scan_start_spinbox.setEnabled(True)
-        self.scan_stop_spinbox.setEnabled(True)
-        self.scan_step_spinbox.setEnabled(True)
-        # Reset all flow control flags
+        self.start_action.setEnabled(True)
+        self.pause_action.setEnabled(False)
+        self.stop_action.setEnabled(False)
+        self.pause_action.setText('Pause')
         self.operator._busy = False
         self.operator._pause = False
         self.operator._stop = False
+
+
+        # self.start_button.setEnabled(True)
+        # self.pause_button.setText('Pause')
+        # self.pause_button.setEnabled(False)
+        # self.stop_button.setEnabled(False)
+        # self.scan_start_spinbox.setEnabled(True)
+        # self.scan_stop_spinbox.setEnabled(True)
+        # self.scan_step_spinbox.setEnabled(True)
+        # # Reset all flow control flags
+        # self.operator._busy = False
+        # self.operator._pause = False
+        # self.operator._stop = False
 
     def start_scan(self):
         """
@@ -357,15 +395,23 @@ class ScanWindow(QMainWindow):
             return
         else:
             self.logger.debug('Starting scan')
-            self.start_button.setEnabled(False)
-            self.pause_button.setEnabled(True)
-            self.stop_button.setEnabled(True)
+            self.start_action.setEnabled(False)
+            self.pause_action.setEnabled(True)
+            self.stop_action.setEnabled(True)
+
+            # self.start_button.setEnabled(False)
+            # self.pause_button.setEnabled(True)
+            # self.stop_button.setEnabled(True)
             # self.operator._stop = False  # enable operator monitor loop to run
             self.scan_thread.start()  # start the operator monitor
-            self.scan_timer.start(self.operator.properties['scan']['gui_refresh_time'])  # start the update timer
-            self.scan_start_spinbox.setEnabled(False)
-            self.scan_stop_spinbox.setEnabled(False)
-            self.scan_step_spinbox.setEnabled(False)
+            # Start the update timer with time specified in config if available
+            try:
+                self.scan_timer.start(self.operator.properties['scan']['gui_refresh_time'])
+            except:
+                self.scan_timer.start(0.05)  # otherwise use default value
+            # self.scan_start_spinbox.setEnabled(False)
+            # self.scan_stop_spinbox.setEnabled(False)
+            # self.scan_step_spinbox.setEnabled(False)
 
     def pause(self):
         """
@@ -374,10 +420,10 @@ class ScanWindow(QMainWindow):
         """
         if not self.operator._pause:
             self.operator._pause = True
-            self.pause_button.setText('Continue')
+            self.pause_action.setText('&Continue')
         else:
             self.operator._pause = False
-            self.pause_button.setText('Pause')
+            self.pause_action.setText('Pause')
 
     def stop(self):
         """
@@ -386,10 +432,10 @@ class ScanWindow(QMainWindow):
         - uses the Workthread stop method to wait a bit for the operator to finish, or terminate thread if timeout occurs
         """
         self.logger.debug('Stopping operator')
-        self.stop_button.setEnabled(False)
+        # self.stop_button.setEnabled(False)
         self.operator._stop = True
         if self.scan_thread.isRunning():
-            self.scan_thread.stop(self.operator.properties['scan']['stop_timeout'])
+            self.scan_thread.stop()  # Stop thread with default timeout before killing it
         self.operator._busy = False  # Reset in case the monitor was not stopped gracefully, but forcefully stopped
         self.reset_fields()
 
@@ -410,7 +456,7 @@ class ScanWindow(QMainWindow):
         """
         if self.operator._new_scan_data:
             self.operator._new_scan_data = False
-            self.curve1.setData(self.operator.scan_voltages, self.operator.measured_voltages)
+            self.curve1.setData(self.operator.point_number, self.operator.measured_state)
         if self.scan_thread.isFinished():
             self.logger.debug('Scan thread is finished')
             self.scan_timer.stop()
@@ -447,5 +493,13 @@ if __name__ == '__main__':
     app_icon = QIcon("../view/design/Icons/labphew_icon.png")
     app.setWindowIcon(app_icon)
     window = MonitorWindow(opr)
-    window.show()
+
+    scan_window = ScanWindow(opr, parent = window)
+    scan_window.show()
+    fit_on_screen(scan_window)
+    # scans = {
+    #     'Example scan 1': scan_window
+    # }
+    # window.load_scan_guis(scans)
+    # window.show()
     app.exit(app.exec_())

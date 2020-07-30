@@ -198,20 +198,19 @@ class BlinkOperator:
         # Apply blink_period
         self.instrument.set_blink_period(blink_period)
 
-        self.scan_time = []
+        self.point_number = []
         self.measured_state = []
 
         self._busy = True  # indicate that operator is busy
 
         self.logger.info("Starting scan ...")
-        start_time = time()
         for i in range(number_of_points):
-            self.scan_time.append(time()-start_time)
+            self.point_number.append(i)
             state = int(self.instrument.get_status())  # get the state and convert True/False to 1/0
             self.measured_state.append(state)
             sleep(time_between_points)
 
-            # The remainder of the loop adds functionality to pause and stop the scan when it's run from a gui:
+            # The remainder of the loop adds functionality to plot data and pause and stop the scan when it's run from a gui:
             self._new_scan_data = True
             # before the end of the loop: halt if pause is True
             while self._pause:
@@ -225,7 +224,7 @@ class BlinkOperator:
         self._busy = False  # indicate operator is not busy anymore
         self._pause = False  # is this necessary?
 
-        return self.scan_time, self.measured_state
+        return self.point_number, self.measured_state
 
     # def save_scan(self, filename, metadata=None):
     #     """
@@ -305,6 +304,19 @@ if __name__ == "__main__":
 
     opr = BlinkOperator(instrument)
     opr.load_config()
+
+    import matplotlib.pyplot as plt
+    t, state = opr.do_scan()
+    plt.plot(t, state, '.-')
+    plt.xlabel('scan time [s]')
+    plt.ylabel('binary device state')
+
+    new_scan_properties = {'blink_period': 1.0}
+    t, state = opr.do_scan(new_scan_properties)
+    plt.figure(2)
+    plt.plot(t, state, '.-')
+    plt.xlabel('scan time [s]')
+    plt.ylabel('binary device state')
 
 
 #
