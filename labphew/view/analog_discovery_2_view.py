@@ -228,7 +228,7 @@ class MonitorWindow(QMainWindow):
 
     def open_scan_window(self):
         """
-        This metohd is called by the menu and opens Scan Windows that were "attached" to this Monitor gui with load_scan_guis().
+        This method is called by the menu and opens Scan Windows that were "attached" to this Monitor gui with load_scan_guis().
         """
         self.stop_monitor()
         name = self.sender().text()  # get the name of the QAction (which is also the key of the scanwindow dictionary)
@@ -420,7 +420,7 @@ class ScanWindow(QMainWindow):
         layout_scan_buttons.addWidget(self.stop_button)
         layout_scan_buttons.addWidget(self.kill_button)
 
-        self.saver = SaverWidget(self.save)
+        self.saver = SaverWidget(self.operator.save_scan)
         layout_scan.addWidget(self.saver)
 
         ### Graphs:
@@ -472,9 +472,6 @@ class ScanWindow(QMainWindow):
 
         if 'filename' in self.operator.properties['scan']:
             self.saver.filename.setText(self.operator.properties['scan']['filename'])
-
-    def save(self, filename):
-        self.operator.save_scan(filename)
 
     def scan_start_value(self):
         """

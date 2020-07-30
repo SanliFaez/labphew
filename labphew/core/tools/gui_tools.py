@@ -6,6 +6,7 @@ Collection of tools that might be helpful for GUIs
 
 """
 import logging
+import labphew
 import numpy as np
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -44,19 +45,31 @@ class SaverWidget(QWidget):
         """
         super().__init__()
         self.__save_button_callback = save_button_callback
-        layout = QHBoxLayout()
-        self.setLayout(layout)
+        self.setLayout(QVBoxLayout())
+        top_layout = QHBoxLayout()
+        bottom_layout = QHBoxLayout()
+        self.layout().addLayout(top_layout)
+        self.layout().addLayout(bottom_layout)
+
         self.filename = QLineEdit(r'C:\Temp\data.nc')
         self.filename.textChanged.connect(self.check_file_exists)
         self.check_file_exists()
+        self.browse_button = QPushButton('Browse')
+        self.browse_button.clicked.connect(self.browse)
+
         self.save_button = QPushButton('Save')
         self.save_button.clicked.connect(self.save)
-        layout.addWidget(self.filename)
-        layout.addWidget(self.save_button)
+        self.conf_checkbox = QCheckBox('Store config', checked=True, statusTip='Stores the current operator properties into a yaml config file of the same name')
+
+        top_layout.addWidget(self.filename)
+        top_layout.addWidget(self.browse_button)
+        bottom_layout.addWidget(self.conf_checkbox)
+        bottom_layout.addWidget(self.save_button)
+
 
     def save(self):
         """ Calls the saving method (of operator) and then calls check_file_exists to turn the filename red."""
-        self.__save_button_callback(self.filename.text())
+        self.__save_button_callback(self.filename.text(), store_conf=self.conf_checkbox.isChecked())
         self.check_file_exists()
 
     def check_file_exists(self):
@@ -65,6 +78,15 @@ class SaverWidget(QWidget):
             self.filename.setStyleSheet("color: red;")
         else:
             self.filename.setStyleSheet("color: black;")
+
+    def browse(self):
+        if os.path.isdir(os.path.dirname(self.filename.text())):
+            fname = self.filename.text()
+        else:
+            fname = os.path.join(labphew.parent_path, 'data.nc')
+        fname = QFileDialog.getSaveFileName(self, 'Save data as', fname,
+                                                filter="netCDF4 (*.nc);;All Files (*.*)")
+        self.__save_button_callback(fname[0], store_conf=self.conf_checkbox.isChecked())
 
 
 class ModifyConfig(QDialog):
@@ -90,14 +112,15 @@ class ModifyConfig(QDialog):
         self.logger = logging.getLogger(__name__)
         self.logger.debug('Creating Modify Config window')
         super().__init__(parent=parent)
-        self.resize(1000, 790)
         self._parent = parent
+        self.setWindowTitle('Modify properties with yaml code')
         self.apply_callback = apply_callback
         # self.apply_props = apply
         self.font = QFont("Courier New", 11)
         self.properties_dict = properties_dict
         self.initUI()
         self.reset_text()
+        self.set_size()
 
     def initUI(self):
         """Create the GUI layout"""
@@ -120,6 +143,17 @@ class ModifyConfig(QDialog):
         main_layout.addWidget(self.txt)
         main_layout.addLayout(button_layout)
         self.setLayout(main_layout)
+
+    def set_size(self):
+        # Adjust window size to text (if possible)
+        # These values were chosen in Windows 7
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        font_metrics = QFontMetrics(self.font)
+        max_width = min(QDesktopWidget().availableGeometry(self).width(), QDesktopWidget().screenGeometry(self).width())
+        max_height = min(QDesktopWidget().availableGeometry(self).height(), QDesktopWidget().screenGeometry(self).height())
+        width = max(400, min(max_width-16, self.txt.document().idealWidth() + 42+10))
+        height = max(400, min(max_height-38, font_metrics.size(0, self.txt.toPlainText()).height() + 145))
+        self.resize(width, height)
 
     def changed(self):
         """

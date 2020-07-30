@@ -226,10 +226,12 @@ class BlinkOperator:
 
         return self.point_number, self.measured_state
 
-    def save_scan(self, filename, metadata=None):
+    def save_scan(self, filename, metadata=None, store_conf=False):
         """
         Store data in xarray Dataset and save to netCDF4 file.
         Optional metadata can be passed as a dict. Note that the keys should be strings and the values should be numbers or strings.
+        Optionally stores the entire Operator properties dictionary to a yaml file of the same name.
+
         To load data:
         import xarray as xr
         xr.load_dataset(filename)
@@ -238,6 +240,8 @@ class BlinkOperator:
         :type filename: str
         :param metadata: optional additional data to store (default: None)
         :type metadata: dict
+        :param store_conf: store Operator properties in yaml file (default: False)
+        :type store_conf: bool
         """
         # First test if the required data arrays have been generated (i.e. if the scan has run)
         if not hasattr(self, "point_number") or not hasattr(self, "measured_state"):
@@ -245,6 +249,7 @@ class BlinkOperator:
             return
         if os.path.exists(filename):
             self.logger.warning('overwriting existing file: {}'.format(filename))
+        self.logger.debug('Saving data')
         data = xr.Dataset(
             coords={
                 "point_number": (["point_number"], self.point_number)  # for a "coordinate" use the same name between []
@@ -267,6 +272,16 @@ class BlinkOperator:
             data.attrs.update(metadata)  # add the optional metadata to the Dataset attributes
         self.data = data
         data.to_netcdf(filename)
+        self.logger.info('Data saved in {}'.format(filename))
+
+        if store_conf:
+            try:
+                self.logger.info('Storing Operator properties in yaml file')
+                yml_fname = os.path.splitext(filename)[0] + '.yml'
+                with open(yml_fname, 'w') as f:
+                    yaml.safe_dump(self.properties, f)
+            except:
+                self.logger.warning('An error occurred while trying to save Operator properties to yaml file')
 
     def load_config(self, filename=None):
         """

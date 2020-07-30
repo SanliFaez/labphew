@@ -336,7 +336,7 @@ class ScanWindow(QMainWindow):
             fname = QFileDialog.getSaveFileName(self, 'Save data as', self.operator.properties['scan']['filename'],
                                                 filter="netCDF4 (*.nc);;All Files (*.*)")
         except:
-            fname = QFileDialog.getSaveFileName(self, 'Save data as', labphew.parent_path,
+            fname = QFileDialog.getSaveFileName(self, 'Save data as', os.path.join(labphew.parent_path, 'data.nc'),
                                                 filter="netCDF4 (*.nc);;All Files (*.*)")
         self.operator.save_scan(fname[0])
 
