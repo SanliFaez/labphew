@@ -18,7 +18,7 @@ from .logger_with_time import logger
 from .. import Q_
 
 
-def from_yaml_to_devices(filename = "config/devices.yml", name=None):
+def from_yaml_to_devices(filename = "default_configs/devices.yml", name=None):
     """ Reads a YAML file and returns a list of devices.
 
     :param filename: File where the data is stored
@@ -43,7 +43,7 @@ def from_yaml_to_devices(filename = "config/devices.yml", name=None):
     return devs
 
 
-def from_yaml_to_dict(filename='config/measurement.yml'):
+def from_yaml_to_dict(filename='default_configs/measurement.yml'):
     with open(filename, 'r') as stream:
         output = yaml.load(stream)
     return output
@@ -96,5 +96,5 @@ def from_units_to_volts(self, value, calibration):
 
 
 if __name__ == "__main__":
-    d = from_yaml_to_devices('../../config/devices.yml',name='Santec Laser')
+    d = from_yaml_to_devices('../../default_configs/devices.yml',name='Santec Laser')
     print(d)

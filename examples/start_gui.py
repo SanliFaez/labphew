@@ -10,7 +10,7 @@ from labphew.Model.application import IVscan_aquic as IVscan
 from labphew.View.scan_window import ScanWindow
 
 e = IVscan.Operator
-e.load_config('Config/experiment_dummy.yml')
+e.load_config('default_configs/experiment_dummy.yml')
 e.load_daq()
 
 ap = QApplication(sys.argv)
