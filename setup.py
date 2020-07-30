@@ -3,10 +3,12 @@ from setuptools import setup, find_packages
 with open("README.md") as f:
     long_description = f.read()
 
+DESCRIPTION = "Fun with computer-controlled experiments for beginners"  # test to see if this description is picked up by conda environment manager
+
 setup(
 
     name="labphew",
-    version="0.1.0",
+    version="0.1.1",
 
     packages=find_packages(),
     url="https://github.com/sanlifaez/labphew",
