@@ -106,7 +106,7 @@ if __name__ == "__main__":
     import labphew
 
     device = BlinkController()
-    print(device.get_status())
+    print('The state if the device is:', device.get_status())
 
     device.set_blink_period(3)
     device.set_blink_period(0.1)

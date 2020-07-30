@@ -366,6 +366,10 @@ class Operator:
         :param filename: Path to the filename. Defaults to analog_discovery_2_config.yml in labphew.core.defaults
         :type filename: str
         """
+        if filename and not os.path.isfile(filename):
+            self.logger.error('Config file not found: {}, falling back to default'.format(filename))
+            filename = None
+
         if filename is None:
             filename = os.path.join(labphew.package_path, 'core', 'defaults', 'analog_discovery_2_config.yml')
         with open(filename, 'r') as f:

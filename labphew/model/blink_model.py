@@ -13,7 +13,7 @@ import os.path
 import numpy as np
 import yaml
 from time import time, sleep, localtime, strftime
-from datetime import datetime
+import datetime
 import logging
 import xarray as xr
 import labphew
@@ -49,88 +49,6 @@ class BlinkOperator:
 
         self._monitor_data = ('',False)  # placeholder for monitor data
 
-    def _set_monitor_time_step(self, time_step):
-        """
-        Set Monitor time step.
-        Forces the value to be at least 0.01, and warns for large values
-
-        :param time_step: time step between acquisitions in the monitor loop (seconds)
-        :type time_step: float
-        """
-        if time_step < 0.001:
-            time_step = 0.001
-            self.logger.warning(f"time_step too small, setting: {time_step}s")
-        elif time_step> 0.1:
-            self.logger.warning(f"setting time_step to {time_step}s (are you sure?)")
-        self.properties['monitor']['time_step'] = time_step
-
-    #
-    # def _verify_scan_channels(self):
-    #     """
-    #     Checks if channels in properties are valid and returns analog out and analog in channel.
-    #     Note that None is returned if an error is found
-    #
-    #     :return:  analog out and analog in channel of scan
-    #     :rtype: (int, int)
-    #     """
-    #     if 'scan' not in self.properties:
-    #         self.logger.error("'scan' not found in properties")
-    #         return
-    #     if 'ao_channel' not in self.properties['scan'] or self.properties['scan']['ao_channel'] not in [1,2]:
-    #         self.logger.error("'ao_channel' not found in properties or invalid value (should be 1 or 2)")
-    #         return
-    #     if 'ai_channel' not in self.properties['scan'] or self.properties['scan']['ai_channel'] not in [1,2]:
-    #         self.logger.error("'ai_channel' not found in properties or invalid value (should be 1 or 2)")
-    #         return
-    #     return self.properties['scan']['ao_channel'], self.properties['scan']['ai_channel']
-    #
-    # def _set_scan_start(self, value):
-    #     """
-    #     Set scan start value.
-    #     Forces value to be in valid range and updates properties dictionary.
-    #     Also corrects the sign of step if required.
-    #
-    #     :param value: start value of scan (V)
-    #     :type value: float
-    #     """
-    #     ao_ch, _ = self._verify_scan_channels()
-    #     if ao_ch is None:  # if _verify_scan_channels() returns nothing that means channel is invalid or not found
-    #         return
-    #     value = self.analog_out(ao_ch, value, verify_only=True)
-    #     self.properties['scan']['start'] = value
-    #     self._set_scan_step()
-    #
-    # def _set_scan_stop(self, value):
-    #     """
-    #     Set scan stop value.
-    #     Forces value to be in valid range and updates properties dictionary.
-    #
-    #     :param value: stop value of scan (V)
-    #     :type value: float
-    #     """
-    #     ao_ch, _ = self._verify_scan_channels()
-    #     if ao_ch is None:  # if _verify_scan_channels() returns nothing that means channel is invalid or not found
-    #         return
-    #     value = self.analog_out(ao_ch, value, verify_only=True)
-    #     self.properties['scan']['stop'] = value
-    #     self._set_scan_step()
-    #
-    # def _set_scan_step(self, step=None):
-    #     """
-    #     Set scan step value. Note that it will correct the sign automatically accroding to start and stop values.
-    #     If no step value is supplied it only corrects the sign of step.
-    #
-    #     :param step: the stepsize for the scan (V)
-    #     :type step: float or None
-    #     """
-    #     if step == 0:
-    #         self.logger.warning('stepsize of 0 is not possible')
-    #         return
-    #     if step is not None:
-    #         self.properties['scan']['step'] = step
-    #     if np.sign(self.properties['scan']['step']) != np.sign(self.properties['scan']['stop'] - self.properties['scan']['start']):
-    #         self.properties['scan']['step'] *= -1
-
     def _monitor_loop(self):
         """
         Called by GUI Monitor to start the monitor loop.
@@ -145,7 +63,7 @@ class BlinkOperator:
         next_time = 0
         while not self._stop:
             timestamp = time() - self._monitor_start_time
-            time_str = str(datetime.timedelta(seconds=timestamp))[:-3]   # (strip the last 3 digits)
+            time_str = str(datetime.timedelta(seconds=timestamp))[:-3] + ' blink!'   # (strip the last 3 digits)
             status = self.instrument.get_status()
             self._monitor_data = (time_str, status)
             self._new_monitor_data = True  # signal to a gui that new data is ready to be retrieved
@@ -159,11 +77,29 @@ class BlinkOperator:
         self._stop = False  # reset stop flag to false
         self._busy = False  # indicate the operator is not busy anymore
 
+    def _set_monitor_time_step(self, time_step):
+        """
+        Set Monitor time step (used by gui)
+        Forces the value to be at least 0.01, and warns for large values
+
+        :param time_step: time step between acquisitions in the monitor loop (seconds)
+        :type time_step: float
+        """
+        if time_step < 0.001:
+            time_step = 0.001
+            self.logger.warning(f"time_step too small, setting: {time_step}s")
+        elif time_step> 0.1:
+            self.logger.warning(f"setting time_step to {time_step}s (are you sure?)")
+        self.properties['monitor']['time_step'] = time_step
+
     def do_scan(self, param=None):
         """
         An example of a method that performs a scan (based on parameters in the config file).
         This method can be run from a GUI, from command line or other script
         This scan sweeps the blink rate of the fake device and records its status.
+        Optionally, the scan parameters can be updated by passing a dictionary. These values will overwrite the
+        existing values in Operator.properties['scan']
+        The method returns two lists containing the parameter scanned and the recorded value.
 
         :param param: optional dictionary of parameters that will used to update the scan parameters
         :type param: dict
@@ -198,12 +134,13 @@ class BlinkOperator:
         # Apply blink_period
         self.instrument.set_blink_period(blink_period)
 
+        # Prepare empty data lists
         self.point_number = []
         self.measured_state = []
 
         self._busy = True  # indicate that operator is busy
-
         self.logger.info("Starting scan ...")
+
         for i in range(number_of_points):
             self.point_number.append(i)
             state = int(self.instrument.get_status())  # get the state and convert True/False to 1/0
@@ -258,7 +195,7 @@ class BlinkOperator:
                 "measured_state": (["point_number"], self.measured_state)
             },
             attrs={
-                "time": datetime.now().strftime('%d-%m-%YT%H:%M:%S'),
+                "time": datetime.datetime.now().strftime('%d-%m-%YT%H:%M:%S'),
             }
         )
         for key in ['user', 'config_file']:
@@ -290,8 +227,13 @@ class BlinkOperator:
         :param filename: Path to the filename. Defaults to blink_config.yml in labphew.core.defaults
         :type filename: str
         """
+        if filename and not os.path.isfile(filename):
+            self.logger.error('Config file not found: {}, falling back to default'.format(filename))
+            filename = None
+
         if filename is None:
             filename = os.path.join(labphew.package_path, 'core', 'defaults', 'blink_config.yml')
+
         with open(filename, 'r') as f:
             self.properties.update(yaml.safe_load(f))
         self.properties['config_file'] = filename
@@ -307,12 +249,6 @@ if __name__ == "__main__":
     import labphew   # import this to use labphew style logging (by importing it before matplotlib it also prevents matplotlib from printing many debugs)
     import matplotlib.pyplot as plt
 
-    # from labphew.controller.digilent.waveforms import DfwController
-
-    # To import the actual device:
-    # from labphew.controller.digilent.waveforms import DfwController
-
-    # To import a simulated device:
     from labphew.controller.blink_controller import BlinkController
 
     instrument = BlinkController()
@@ -320,12 +256,16 @@ if __name__ == "__main__":
     opr = BlinkOperator(instrument)
     opr.load_config()
 
-    import matplotlib.pyplot as plt
+    # Perform a scan:
     t, state = opr.do_scan()
+
+    # Example of plotting the data
+    import matplotlib.pyplot as plt
     plt.plot(t, state, '.-')
     plt.xlabel('scan time [s]')
     plt.ylabel('binary device state')
 
+    # Example of s a scan with a properties dictionary as input
     new_scan_properties = {'blink_period': 1.0}
     t, state = opr.do_scan(new_scan_properties)
     plt.figure(2)
@@ -342,137 +282,3 @@ if __name__ == "__main__":
     # print(dat)
     # dat.measured_state.plot()
 
-
-#
-# # coding=utf-8
-# """
-# labphew blink modle
-# ================
-#
-# blink_model.py is a minimalist class for demonstrating the concept view-model-controller to beginner
-#
-#
-# """
-# import os
-# import numpy as np
-# import yaml
-# from time import time, sleep, localtime, strftime
-#
-# class Operator:
-#     """
-#     A primitive class generating a synthetic time series.
-#     the main purpose of this class it to provide the minimal functions required for running a view
-#     and can serve as the basis for a customized model
-#     """
-#
-#     def __init__(self):
-#         self.instrument = None
-#         self.properties = {}  # TODO: read properties from yml config file
-#         self.indicator = 0  # instrument-specific value shared with another display during the scan
-#         self.blinking = False  # signalling scan in progress or instrument is engaged
-#         self.paused = False  # signalling scan in progress or instrument is engaged
-#         self.done = False  # signal for the end of a complete scan
-#         self.t0 = time()
-#
-#     def main_loop(self):
-#         """
-#         primitive function that is called in the MonitorWindow
-#         in blank_model, this function just tells the time
-#         """
-#         if not self.paused:
-#             self.blinking = True
-#             output = strftime("%H:%M:%S", localtime(time()))
-#             sleep(0.03)
-#
-#         return output
-#
-#     def pause(self):
-#         """
-#         primitive function to pause the main loop or readout
-#         """
-#         self.paused = True
-#         self.blinking = False
-#
-#     def resume(self):
-#         """
-#         primitive function to pause the main loop or readout
-#         """
-#         self.paused = False
-#
-#     def shut_down(self):
-#         """
-#         primitive function that is called in the MonitorWindow to safely close the application
-#         """
-#         print("bye bye!")
-#
-#     def do_scan(self, param=None):
-#         """
-#         primitive function for calling by the ScanWindow
-#         """
-#         if self.blinking:
-#             raise Warning('Trying to start simultaneous operations')
-#         self.done = False
-#         if param == None:
-#             start, stop, step = 1, 10, 1
-#         else:
-#             pass
-#             # example of filling in variables from loaded class properties
-#             #start = self.properties['Scan']['start']
-#             #stop = self.properties['Scan']['stop']
-#             #step = self.properties['Scan']['step']
-#
-#         num_points = np.int((stop-start)/step)
-#         scan = np.linspace(start, stop, num_points)
-#         output = 0 * scan
-#         self.blinking = True
-#
-#         ### here comes the main actions of the scan
-#         for i in range(np.size(scan)):
-#             self.indicator = scan[i]
-#             output[i] = 1/scan[i]
-#
-#         self.blinking = False
-#         self.scan_finished()
-#         return scan, output
-#
-#     def scan_finished(self):
-#         """
-#         Here, you can put any signal that has to be returned to the parent program that has called the scan
-#         """
-#         self.done = True
-#
-#     def load_config(self, filename=None):
-#         """
-#         If specified, this function loads the configuration file to generate the properties of the Scan.
-#
-#         :param str filename: Path to the filename. Defaults to Model/default/blink_config.yml if not specified.
-#         """
-#         if filename is None:
-#             filename = '../core/defaults/blink_config.yml'
-#
-#         with open(filename, 'r') as f:
-#             params = yaml.safe_load(f)
-#
-#         self.properties = params
-#         self.properties['config_file'] = filename
-#         self.properties['User'] = self.properties['User']['name']
-#
-#     def load_instrument(self, inst=None):
-#         """
-#         Loads an instrument that is necessary for performing the scan.
-#         :param inst: it can be a model already initailized. If not provided, loads the default instrument.
-#         """
-#         if inst is None:
-#             pass #TODO: put here commands for initializing a primitive controller like blink_controller
-#         else:
-#             self.instrument = inst
-#
-#
-#
-# if __name__ == "__main__":
-#     e = Operator()
-#     #e.load_config()
-#     #e.load_instrument()
-#     #x, data = e.do_scan()
-#     d = e.main_loop()
-#     print(d)

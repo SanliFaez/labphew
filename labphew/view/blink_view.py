@@ -69,6 +69,8 @@ class MonitorWindow(QMainWindow):
         # Note that another (better) approach would be to first retrieve the current setting from the device and set the
         # slider to that position.
 
+        self.resize(400, 200)
+
     def start_monitor(self):
         """
         Called when start button is pressed.
@@ -234,6 +236,7 @@ class ScanWindow(QMainWindow):
         self.plot1.setLabel('left', 'state')
 
         self.setCentralWidget(self.graph_win)
+
 
         #
         #
@@ -508,11 +511,10 @@ if __name__ == '__main__':
     window = MonitorWindow(opr)
 
     scan_window = ScanWindow(opr, parent = window)
-    scan_window.show()
     fit_on_screen(scan_window)
-    # scans = {
-    #     'Example scan 1': scan_window
-    # }
-    # window.load_scan_guis(scans)
-    # window.show()
+    scans = {
+        'Example scan 1': scan_window
+    }
+    window.load_scan_guis(scans)
+    window.show()
     app.exit(app.exec_())
