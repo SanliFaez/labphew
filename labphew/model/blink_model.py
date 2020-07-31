@@ -10,7 +10,6 @@ It may be run from command line or interacted with through a gui: labphew.view.b
 Example usage can be found at the bottom of the file under if __name__=='__main___'
 """
 import os.path
-import numpy as np
 import yaml
 from time import time, sleep, localtime, strftime
 import datetime
@@ -228,8 +227,8 @@ class BlinkOperator:
         :type filename: str
         """
         if filename and not os.path.isfile(filename):
-            self.logger.error('Config file not found: {}, falling back to default'.format(filename))
-            filename = None
+            self.logger.error('Config file not found: {}'.format(filename))
+            return
 
         if filename is None:
             filename = os.path.join(labphew.package_path, 'core', 'defaults', 'blink_config.yml')

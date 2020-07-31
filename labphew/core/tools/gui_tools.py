@@ -221,6 +221,18 @@ class ModifyConfig(QDialog):
             self.close()
 
 
+def open_config_dialog(optional_path=None):
+    app = QApplication([])
+    ofdlg = QFileDialog()
+    config_file = ofdlg.getOpenFileName(None, 'Open config file', directory=optional_path, filter = "YAML (*.yml);;All Files (*.*)")
+    ofdlg.close()
+    del app
+    if config_file[0]:
+        return config_file[0]
+    else:
+        return '-default'
+
+
 class ValueLabelItem(pg.LabelItem):
     """
     Convenience class that combines functionality of pyqtgraph.ValueLabel() into a pyqtgraph.LabelItem().
