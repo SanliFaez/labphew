@@ -35,6 +35,8 @@ class SaverWidget(QWidget):
     """
     Simple widget for saving, consisting of a line edit to enter the filename and a save button.
     It overwrites existing files without confirmation, but the line edit turns red to warn the user that the file exists.
+    In addition it has the option to save through a browse window.
+    And it has the option to store the entire properties dictionary in a yaml file (of the same name).
     """
     def __init__(self, save_button_callback):
         """
@@ -87,6 +89,7 @@ class SaverWidget(QWidget):
         fname = QFileDialog.getSaveFileName(self, 'Save data as', fname,
                                                 filter="netCDF4 (*.nc);;All Files (*.*)")
         self.__save_button_callback(fname[0], store_conf=self.conf_checkbox.isChecked())
+        self.filename.setText(fname[0])
 
 
 class ModifyConfig(QDialog):
@@ -222,6 +225,17 @@ class ModifyConfig(QDialog):
 
 
 def open_config_dialog(optional_path=None):
+    """
+    Displays an Open file dialog window, to open a yaml config file.
+    It returns the path to the file or '-default'  if window closed/cancelled
+    An optional argument may be passed to indicate the path where to start the browse window. If omitted the default
+    location for PyQt QFileDialog.getOpenFileName will be used.
+
+    :param optional_path: optional path where to start the open dialog
+    :type optional_path: str
+    :return: path to the file (or '-default' if window closed/cancelled)
+    :rtype: str
+    """
     app = QApplication([])
     ofdlg = QFileDialog()
     config_file = ofdlg.getOpenFileName(None, 'Open config file', directory=optional_path, filter = "YAML (*.yml);;All Files (*.*)")
