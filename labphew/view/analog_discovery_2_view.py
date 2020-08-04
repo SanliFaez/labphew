@@ -9,7 +9,7 @@ MonitorWindow class is used to display continuous stream of live data from the D
 All the processes that are not relating to user interaction are handled by the Operator class in the model folder.
 
 ScanWindow class is used to control and visualize a specific scan defined in the Operator. Note that scan itself is
-performed in the Operator and the ScanWindow is only used modify parameters, start/stop and visualize data.
+performed in the Operator and the ScanWindow is only used to modify parameters, start/stop and visualize data.
 
 These Windows may be run separately, but it's also possible to add the ScanWindow (or multiple ScanWindows) to the
 MonitorWindow.
@@ -19,12 +19,10 @@ Examples of how to use can be found at the end of the file under if __name__=='_
 """
 
 import pyqtgraph as pg   # used for additional plotting features
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtWidgets import * # QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication, QSlider, QLabel, QMessageBox
-from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import *
 import logging
 from time import time
-
 from labphew.core.tools.gui_tools import set_spinbox_stepsize, ValueLabelItem, SaverWidget, ModifyConfig, fit_on_screen
 from labphew.core.base.general_worker import WorkThread
 
@@ -63,14 +61,6 @@ class MonitorWindow(QMainWindow):
         self.monitor_timer = QTimer()
         self.monitor_timer.timeout.connect(self.update_monitor)
         self.monitor_thread = WorkThread(self.operator._monitor_loop)
-
-        # TODO: uncomment for testing the child windows
-        # self.config_window = ConfigWindow(operator, parent=self)
-        # self.config_window.propertiesChanged.connect(self.update_properties)
-        # self.actionConfig.triggered.connect(self.config_window.show)
-        #
-        # self.scan_window = ScanWindow(operator)
-        # self.actionScan.triggered.connect(self.scan_window.show)
 
     def set_UI(self):
         """

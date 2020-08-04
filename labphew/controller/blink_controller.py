@@ -48,8 +48,8 @@ class BlinkController:
         """
         Method that mimics setting a device parameter.
 
-        :param period_s:
-        :type period_s:
+        :param period_s: blink period (in seconds)
+        :type period_s: float
         """
         # You could do some checks first. For example to see if the value is in an allowed range:
         if period_s > self.max_blink_period:
@@ -81,7 +81,7 @@ class BlinkController:
         """
         Method that mimics communicating with a device and retrieving a status.
 
-        :return: Device is "on"
+        :return: True when device is "on"
         :rtype: bool
         """
         # Your code to communicate with the device goes here.
@@ -99,18 +99,20 @@ class BlinkController:
         :return:
         :rtype:
         """
-        self.logger.info('"Disconnected" to fake blink device')
+        self.logger.info('"Disconnected" from fake blink device')
 
 
 if __name__ == "__main__":
-    import labphew
+    import labphew  # Import labphew, for labphew style logging
 
     device = BlinkController()
     print('The state if the device is:', device.get_status())
 
+    # Example of modifying the blink period:
     device.set_blink_period(3)
     device.set_blink_period(0.1)
 
+    # # Example of acquiring data (the device state) in a for loop and then plotting it with matplotlib: 
     # import matplotlib.pyplot as plt
     # record = []
     # for i in range(100):

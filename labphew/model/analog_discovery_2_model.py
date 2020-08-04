@@ -8,7 +8,7 @@ This module contains an example class of an Operator for the Digilent Analog dis
 This Operator contains:
 - basic methods to get analog in values, set analog out values
 - a monitor, to provide continuous data for a Monitor gui
-- an example of a scan that could be run from command line or from s Scan gui
+- an example of a scan that could be run from command line or from a Scan gui
 
 Example usage can be found at the bottom of the file under if __name__=='__main___'
 """
@@ -19,10 +19,11 @@ from time import time, sleep, localtime, strftime
 import logging
 import xarray as xr
 from datetime import datetime
+from labphew.core.base import OperatorBase
 import labphew
 
 
-class Operator:
+class Operator(OperatorBase):
     """
     Example Operator class for Digilent Analog Discovery 2.
     """
@@ -37,6 +38,7 @@ class Operator:
         :type properties: dict
         """
         self.logger = logging.getLogger(__name__)
+        # self.verify()
         self.properties = properties
         self.instrument = instrument
 
@@ -358,6 +360,14 @@ class Operator:
             except:
                 self.logger.warning('An error occurred while trying to save Operator properties to yaml file')
 
+    def disconnect_devices(self):
+        """
+        Close connection to all instruments/devices used by this operator.
+        (Note that this method will get called when exiting a python with block)
+        """
+        # This method is included because it is recommended (this method gets called when closing the gui), but the
+        # WaveForms controller does not have a disconnect, hence this method does nothing.
+        self.logger.info('Disconnecting from device(s)')
 
     def load_config(self, filename=None):
         """

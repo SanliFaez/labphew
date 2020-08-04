@@ -15,10 +15,11 @@ from time import time, sleep, localtime, strftime
 import datetime
 import logging
 import xarray as xr
+from labphew.core.base import OperatorBase
 import labphew
 
 
-class BlinkOperator:
+class BlinkOperator(OperatorBase):
     """
     Example Operator class (to work with fake device)
     """
@@ -218,6 +219,14 @@ class BlinkOperator:
                     yaml.safe_dump(self.properties, f)
             except:
                 self.logger.warning('An error occurred while trying to save Operator properties to yaml file')
+
+    def disconnect_devices(self):
+        """
+        Close connection to all instruments/devices used by this operator.
+        (Note that this method will get called when exiting a python with block)
+        """
+        self.logger.info('Disconnecting from device(s)')
+        self.instrument.disconnect()
 
     def load_config(self, filename=None):
         """
