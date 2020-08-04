@@ -5,7 +5,7 @@ Operator Base Class
 
 Base class for operators.
 - When the object of the child class is created the base class checks if required and recommended methods are present
-  in the child class.
+  in the child class (and in the base class itself).
 - By inheriting, methods from this base class will be used if they are missing in the child class. This allows to
   implement some fallback functionality and to warn the user.
 - In addition it implements the __enter__ and __exit__ methods to allow the class to be used in a python with block.
@@ -19,6 +19,38 @@ import os.path
 import yaml
 
 
+def _check_method_presence(cls, base, method):
+    """
+    Test is a method is present in a class and whether it's inherited, overwritten, or "new".
+    Table to explain return values:
+    (cls, base)
+    False, False    Neither child nor base has the method
+    False, True     The child class inherits the method from the base class
+    True,  False    The child has the method, the base doesn't
+    True,  True     Both classes have the method, but the child has overwritten the one from the base
+
+    :param cls: The child class
+    :type cls: class
+    :param base: The parent or base class from which the child inherits
+    :type base: class
+    :param method: name of the method to test
+    :type method: str
+    :return: uniquely present in cls, present in base
+    :rtype: bool, bool
+    """
+    if not hasattr(cls, method):
+        # Neither cls nor base has the method
+        return False, False
+    elif not hasattr(base, method):
+        # Only cls has the method
+        return True, False
+    elif getattr(cls, method) is getattr(base, method):
+        # Only base has the method and cls inherits the identical method
+        return False, True
+    else:
+        # last option: cls has a different implementation of the method
+        return True, True
+
 class OperatorBase:
     def __new__(cls, *args, **kwargs):
         """
@@ -29,15 +61,20 @@ class OperatorBase:
         required = ['__init__']
         recommended = ['load_config', 'disconnect_devices', '_monitor_loop', 'save_scan', 'do_scan']
 
-        mr = cls.mro()
+        base = cls.mro()[1]
         missing_required = []
         for method in required:
-            if not hasattr(cls, method) or getattr(mr[0], method) is getattr(mr[1], method):
+            if _check_method_presence(cls, base, method)[0] != True:
                 print('MISSING required method [{}] in class [{}]'.format(method, cls.__name__))
                 missing_required.append(method)
         for method in recommended:
-            if not hasattr(cls, method) or getattr(mr[0], method) is getattr(mr[1], method):
-                print('MISSING recommended method [{}] in class [{}]'.format(method, cls.__name__))
+            c, b = _check_method_presence(cls, base, method)
+            if not c:
+                if b:
+                    print('MISSING required method [{}] in class [{}], falling back on base class method'.format(method, cls.__name__))
+                else:
+                    print('MISSING required method [{}] in class [{}], ALSO MISSING in base class'.format(method, cls.__name__))
+                    missing_required.append(method)
         if missing_required:
             raise NotImplementedError(missing_required)
         return super().__new__(cls)
@@ -80,7 +117,6 @@ class OperatorBase:
         """)
 
     def disconnect_devices(self):
-        _in_base_class = True
         self.logger.warning("Your Operator is missing the disconnect_devices method. Use that to disconnect from your devices when required.")
 
     # the next two methods are needed so the context manager 'with' works.

@@ -32,16 +32,8 @@ class MonitorWindow(QMainWindow):
         """
         Creates the monitor window.
 
-        scan_windows is an optional dictionary to add scan windows to the gui. For each item of this dictionary the key
-        should be the name for the scanwindow, and the value is a list. The first element of this list is the instance
-        of the scan window the second (optional) element of this list is dictionary of features to pass to the menu
-        (things like shortcut and tooltip).
-
-
         :param operator: The operator
         :type operator: labphew operator instance
-        :param scan_windows: Scan windows to be added to the GUI (optional)
-        :type scan_windows: dict
         :param parent: Optional parent GUI
         :type parent: QWidget
         """
@@ -49,7 +41,7 @@ class MonitorWindow(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle('Analog Discovery 2')
         self.operator = operator
-        self.scan_windows = {}
+        self.scan_windows = {}  # If any scan windows are loaded, they will be placed in this dict
 
         # # For loading a .ui file (created with QtDesigner):
         # p = os.path.dirname(__file__)
@@ -63,10 +55,9 @@ class MonitorWindow(QMainWindow):
         self.monitor_thread = WorkThread(self.operator._monitor_loop)
 
     def set_UI(self):
-        """
-        Code-based generation of the user-interface based on PyQT
-        """
+        """ Code-based generation of the user-interface based on PyQT """
 
+        self.setWindowTitle('Digilent AD2')
         # display statusbar
         self.statusBar()
         ### The menu bar:
@@ -117,7 +108,6 @@ class MonitorWindow(QMainWindow):
         layout_monitor.addLayout(layout_monitor_form)
         layout_monitor_buttons = QHBoxLayout()
         layout_monitor.addLayout(layout_monitor_buttons)
-
 
         self.time_step_spinbox = QDoubleSpinBox()
         self.time_step_spinbox.setSuffix('s')
@@ -355,6 +345,7 @@ class ScanWindow(QMainWindow):
         Code-based generation of the user-interface based on PyQT
         """
 
+        self.setWindowTitle('Digilent AD2 Scan example')
         # display statusbar
         self.statusBar()
         ### The menu bar:
