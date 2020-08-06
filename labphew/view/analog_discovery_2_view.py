@@ -523,7 +523,7 @@ class ScanWindow(QMainWindow):
             self.scan_stop_spinbox.setEnabled(False)
             self.scan_step_spinbox.setEnabled(False)
 
-    def pause(self):
+    def pause_scan(self):
         """
         Called when pause button is clicked.
         Signals the operator scan to pause. Updates buttons accordingly
@@ -535,7 +535,7 @@ class ScanWindow(QMainWindow):
             self.operator._pause = False
             self.pause_button.setText('Pause')
 
-    def stop(self):
+    def stop_scan(self):
         """
         Stop all loop threads:
         - flags the operator to stop

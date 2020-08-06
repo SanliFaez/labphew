@@ -313,7 +313,7 @@ class ScanWindow(QMainWindow):
             except:
                 self.scan_timer.start(0.05)  # otherwise use default value
 
-    def pause(self):
+    def pause_scan(self):
         """
         Called when pause button is clicked.
         Signals the operator scan to pause. Updates buttons accordingly
@@ -325,7 +325,7 @@ class ScanWindow(QMainWindow):
             self.operator._pause = False
             self.pause_action.setText('Pause')
 
-    def stop(self):
+    def stop_scan(self):
         """
         Stop all loop threads:
         - flags the operator to stop
