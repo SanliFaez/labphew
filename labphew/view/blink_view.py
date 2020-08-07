@@ -31,8 +31,9 @@ from PyQt5.QtGui import QFont, QIcon
 import pyqtgraph as pg
 from labphew.core.base.general_worker import WorkThread
 from labphew.core.tools.gui_tools import fit_on_screen, ModifyConfig
+from labphew.core.base import MonitorWindowBase, ScanWindowBase
 
-class MonitorWindow(QMainWindow):
+class MonitorWindow(MonitorWindowBase):
     def __init__(self, operator, parent=None):
         """
         Creates the monitor window.
@@ -206,7 +207,7 @@ class MonitorWindow(QMainWindow):
         event.accept()
 
 
-class ScanWindow(QMainWindow):
+class ScanWindow(ScanWindowBase):
     def __init__(self, operator, parent=None):
         self.logger = logging.getLogger(__name__)
         super().__init__(parent)
@@ -237,8 +238,8 @@ class ScanWindow(QMainWindow):
         quit_action = QAction("&Close", self, triggered=self.close, shortcut="Ctrl+W", statusTip='Close the scan window')
 
         self.start_action = QAction("&Start", self, triggered=self.start_scan, shortcut="F5", statusTip='Start the Scan')
-        self.pause_action = QAction("&Pause", self, triggered=self.pause, shortcut="Ctrl+P", statusTip='Pause the scan', enabled=False)
-        self.stop_action = QAction("S&top", self, triggered=self.stop, shortcut="Ctrl+A", statusTip='Stop the scan after current iteration', enabled=False)
+        self.pause_action = QAction("&Pause", self, triggered=self.pause_scan, shortcut="Ctrl+P", statusTip='Pause the scan', enabled=False)
+        self.stop_action = QAction("S&top", self, triggered=self.stop_scan, shortcut="Ctrl+A", statusTip='Stop the scan after current iteration', enabled=False)
         self.kill_action = QAction("&Kill", self, triggered=self.kill_scan, shortcut="Ctrl+K", statusTip='Immediately kill the scan')
 
         mainMenu = self.menuBar()
@@ -371,9 +372,8 @@ class ScanWindow(QMainWindow):
         # if reply == QMessageBox.No:
         #     event.ignore()
         #     return
-        self.stop()  # stop scan
+        self.stop_scan()  # stop scan
         self.scan_timer.stop()  # stop scan timer, just to be sure
-        # perhaps also disconnect devices
         event.accept()
 
 

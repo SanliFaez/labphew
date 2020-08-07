@@ -25,9 +25,10 @@ import logging
 from time import time
 from labphew.core.tools.gui_tools import set_spinbox_stepsize, ValueLabelItem, SaverWidget, ModifyConfig, fit_on_screen
 from labphew.core.base.general_worker import WorkThread
+from labphew.core.base import MonitorWindowBase, ScanWindowBase
 
 
-class MonitorWindow(QMainWindow):
+class MonitorWindow(MonitorWindowBase):
     def __init__(self, operator, parent=None):
         """
         Creates the monitor window.
@@ -37,7 +38,7 @@ class MonitorWindow(QMainWindow):
         :param parent: Optional parent GUI
         :type parent: QWidget
         """
-        self.logger = logging.getLogger(__name__)
+        # self.logger = logging.getLogger(__name__)
         super().__init__(parent)
         self.setWindowTitle('Analog Discovery 2')
         self.operator = operator
@@ -319,11 +320,11 @@ class MonitorWindow(QMainWindow):
         # Close all child scan windows
         for scan_win in self.scan_windows.values():
             scan_win[0].close()
-        # It would be good to also disconnect any devices here
+        self.operator.disconnect_devices()
         event.accept()
 
 
-class ScanWindow(QMainWindow):
+class ScanWindow(ScanWindowBase):
     def __init__(self, operator, parent=None):
         self.logger = logging.getLogger(__name__)
         super().__init__(parent)
@@ -390,8 +391,8 @@ class ScanWindow(QMainWindow):
         layout_scan_form.addRow(self.scan_step_label, self.scan_step_spinbox)
 
         self.start_button = QPushButton('Start', clicked=self.start_scan)
-        self.pause_button = QPushButton('Pause', clicked=self.pause)
-        self.stop_button = QPushButton('Stop', clicked=self.stop)
+        self.pause_button = QPushButton('Pause', clicked=self.pause_scan)
+        self.stop_button = QPushButton('Stop', clicked=self.stop_scan)
         self.kill_button = QPushButton('Kill', clicked=self.kill_scan)
         # Haven't decided what names are best. Suggestions:
         # start, pause, interrupt, stop, abort, quit, kill
@@ -421,13 +422,13 @@ class ScanWindow(QMainWindow):
 
         self.apply_properties()
         self.reset_fields()
-
-    def mod_scan_config(self):
-        """
-        Open the Modify Config window for the scan properties
-        """
-        conf_win = ModifyConfig(self.operator.properties['scan'], apply_callback=self.apply_properties, parent=self)
-        conf_win.show()
+    #
+    # def mod_scan_config(self):
+    #     """
+    #     Open the Modify Config window for the scan properties
+    #     """
+    #     conf_win = ModifyConfig(self.operator.properties['scan'], apply_callback=self.apply_properties, parent=self)
+    #     conf_win.show()
 
     def apply_properties(self):
         """
@@ -581,9 +582,8 @@ class ScanWindow(QMainWindow):
         # if reply == QMessageBox.No:
         #     event.ignore()
         #     return
-        self.stop()  # stop scan
+        self.stop_scan()  # stop scan
         self.scan_timer.stop()  # stop scan timer, just to be sure
-        # perhaps also disconnect devices
         event.accept()
 
 

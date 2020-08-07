@@ -38,7 +38,6 @@ class Operator(OperatorBase):
         :type properties: dict
         """
         self.logger = logging.getLogger(__name__)
-        # self.verify()
         self.properties = properties
         self.instrument = instrument
 
