@@ -16,12 +16,12 @@ from time import time
 def main():
     """Starts the GUI for the application using the config file specified as system argument.
     """
-    if len(sys.argv) < 2 or sys.argv[1] != 'start':
+    if len(sys.argv) < 3:# or sys.argv[1] != 'start':
         show_help()
         return
 
-    # if no second argument (i.e. config file) was given, show open file dialog:
-    if len(sys.argv) == 2:
+    # if no additional argument (i.e. config file) was given, show open file dialog:
+    if len(sys.argv) < 4:
         app = QApplication([])
         ofdlg = QFileDialog()
         config_file = ofdlg.getOpenFileName(None, 'Open config file', filter = "YAML (*.yml);;All Files (*.*)")
@@ -48,11 +48,12 @@ help_message = \
 """
 Congratulations! 
 You're almost ready to run your labphew module
------------------------------
+----------------------------------------------
 In order to run a module with labphew, you need to insert the module name (and optionally the path to the config file). 
 For example, you can invoke this program as:
-labphew start_blink {}
-If you don't specify the config file 
+labphew start blink {}
+If you don't specify the config file an open file dialog window will be displayed.
+If you use -default for the config name, the default config file will be used if that is built in.  
 """
 
 if __name__ == "__main__":

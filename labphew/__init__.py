@@ -76,7 +76,6 @@ class _Start:
         if len(args) < 1:
             print('ERROR')
             return
-        print(args[1:])
         return self.__getattribute__(args[0])(*args[1:])
 
 start = _Start()

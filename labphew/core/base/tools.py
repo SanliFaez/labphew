@@ -1,3 +1,10 @@
+"""
+Tools for base classes
+======================
+
+Functions used by the base classes
+
+"""
 
 def _check_method_presence(cls, base, method):
     """

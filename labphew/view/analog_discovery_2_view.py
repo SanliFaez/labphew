@@ -422,13 +422,13 @@ class ScanWindow(ScanWindowBase):
 
         self.apply_properties()
         self.reset_fields()
-    #
-    # def mod_scan_config(self):
-    #     """
-    #     Open the Modify Config window for the scan properties
-    #     """
-    #     conf_win = ModifyConfig(self.operator.properties['scan'], apply_callback=self.apply_properties, parent=self)
-    #     conf_win.show()
+
+    def mod_scan_config(self):
+        """
+        Open the Modify Config window for the scan properties
+        """
+        conf_win = ModifyConfig(self.operator.properties['scan'], apply_callback=self.apply_properties, parent=self)
+        conf_win.show()
 
     def apply_properties(self):
         """
