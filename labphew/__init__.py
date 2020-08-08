@@ -8,7 +8,7 @@ More documentation can be found on `Read the Docs <https://labphew.readthedocs.i
 The repository can be found on `Github <https://github.com/SanliFaez/labphew>`_.
 
 To quickly test if it works try this from command line:
-  >>> labphew start_blink -default
+  >>> labphew start blink -default
 Or from an interactive python console:
   >>> import labphew
   >>> labphew.start.blink('-default')

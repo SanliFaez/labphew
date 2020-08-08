@@ -10,11 +10,11 @@ default_config = None
 
 def main(config_file = None):
     """
-    Starts the GUI of the Blink example.
+    Starts the GUI of the Digilent Analog Discovery 2 example.
     Note, if config_file is not specified, or is set to '-default' or '-d', it will fall back to a default file
     specified in this module.
     Note, if '-browse' or '-b' is used for config_file, it will display a window that allows you to browse to the file.
-    Note, if no config_file is specified, load_config() of the operator wil be called without config filename.
+    Note, if no config_file is specified, load_config() of the operator wil be called without
 
     :param config_file: optional path to config file
     :type config_file: str
@@ -33,29 +33,25 @@ def main(config_file = None):
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # Load your classes and create your gui:
 
-    from labphew.controller.blink_controller import BlinkController
-    from labphew.model.blink_model import BlinkOperator
-    from labphew.view.blink_view import MonitorWindow, ScanWindow
+    # from labphew.controller.digilent.waveforms import DfwController  If you were to use with real device
+    from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController  # To test with simulated device
+    from labphew.model.analog_discovery_2_model import Operator
+    from labphew.view.analog_discovery_2_view import MonitorWindow, ScanWindow
 
-    instr = BlinkController()
-    opr = BlinkOperator(instr)
+    instrument = DfwController()
+    opr = Operator(instrument)
+    opr.load_config()
 
-    opr.load_config( config_file )
-
-    # Create a PyQt application:
-    app = QApplication([])
-    app.setWindowIcon(QIcon("../view/design/Icons/labphew_icon.png"))  # set an icon
-    # Gui elements created now will be part of the PyQt application
-
+    # Create a PyQt application
+    app = QApplication(sys.argv)
     main_gui = MonitorWindow(opr)
-
-    scan_gui = ScanWindow(opr, parent=main_gui)
-    # fit_on_screen(scan_window)
+    # To add Scan window(s) to the Monitor window use the following code.
+    scan_1 = ScanWindow(opr, parent=main_gui)
     scans = {
-        'Example scan 1': scan_gui
-    }
+        'Sweep &voltage': [scan_1, {'shortcut':"Ctrl+Shift+V", 'statusTip':'Voltage sweep scan'}]  # note that the dictionary is optional
+             }
     main_gui.load_scan_guis(scans)
-    main_gui.show()
+    main_gui.show()  # make sure the GUI will be displayed
 
     # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
