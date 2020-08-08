@@ -6,3 +6,4 @@ pyserial
 PyYAML
 xarray
 scipy
+pypylon
