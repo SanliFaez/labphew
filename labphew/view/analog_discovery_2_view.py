@@ -611,7 +611,7 @@ if __name__ == "__main__":
 
     if create_scan_window_only:
         app = QApplication(sys.argv)
-        app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'Icons', 'labphew_icon.png'))
+        app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'icons', 'labphew_icon.png'))
         app.setWindowIcon(app_icon)  # set an icon
         gui = ScanWindow(opr)
         gui.show()
@@ -620,7 +620,7 @@ if __name__ == "__main__":
     else:
         # Create a PyQt application
         app = QApplication(sys.argv)
-        app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'Icons', 'labphew_icon.png'))
+        app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'icons', 'labphew_icon.png'))
         app.setWindowIcon(app_icon)  # set an icon
         gui = MonitorWindow(opr)
         # To add Scan window(s) to the Monitor window use the following code.

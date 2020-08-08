@@ -386,7 +386,7 @@ if __name__ == '__main__':
     opr.load_config()
 
     app = QApplication([])
-    app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'Icons', 'labphew_icon.png'))
+    app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'icons', 'labphew_icon.png'))
     app.setWindowIcon(app_icon)  # set an icon
     window = MonitorWindow(opr)
 

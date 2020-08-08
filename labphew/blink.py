@@ -46,7 +46,7 @@ def main(config_file = None):
 
     # Create a PyQt application:
     app = QApplication([])
-    app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'Icons', 'labphew_icon.png'))
+    app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'icons', 'labphew_icon.png'))
     app.setWindowIcon(app_icon)  # set an icon
     # Gui elements created now will be part of the PyQt application
 
