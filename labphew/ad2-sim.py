@@ -1,4 +1,6 @@
 import sys
+import os
+import labphew
 from labphew.core.tools.gui_tools import open_config_dialog
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon
@@ -44,6 +46,8 @@ def main(config_file = None):
 
     # Create a PyQt application
     app = QApplication(sys.argv)
+    app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'Icons', 'labphew_icon.png'))
+    app.setWindowIcon(app_icon)  # set an icon
     main_gui = MonitorWindow(opr)
     # To add Scan window(s) to the Monitor window use the following code.
     scan_1 = ScanWindow(opr, parent=main_gui)

@@ -1,4 +1,6 @@
 import sys
+import os
+import labphew
 from labphew.core.tools.gui_tools import open_config_dialog
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon
@@ -44,7 +46,8 @@ def main(config_file = None):
 
     # Create a PyQt application:
     app = QApplication([])
-    app.setWindowIcon(QIcon("../view/design/Icons/labphew_icon.png"))  # set an icon
+    app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'Icons', 'labphew_icon.png'))
+    app.setWindowIcon(app_icon)  # set an icon
     # Gui elements created now will be part of the PyQt application
 
     main_gui = MonitorWindow(opr)

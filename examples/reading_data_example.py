@@ -7,7 +7,7 @@ be tun trough the accompanying gui in view)
 import xarray as xr
 
 # modify the filename
-filename = r'Example scan.nc'
+filename = r'example scan data.nc'
 
 dat = xr.load_dataset(filename)
 

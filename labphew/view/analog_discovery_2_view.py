@@ -21,7 +21,10 @@ Examples of how to use can be found at the end of the file under if __name__=='_
 import pyqtgraph as pg   # used for additional plotting features
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QIcon
+import labphew
 import logging
+import os
 from time import time
 from labphew.core.tools.gui_tools import set_spinbox_stepsize, ValueLabelItem, SaverWidget, ModifyConfig, fit_on_screen
 from labphew.core.base.general_worker import WorkThread
@@ -608,6 +611,8 @@ if __name__ == "__main__":
 
     if create_scan_window_only:
         app = QApplication(sys.argv)
+        app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'Icons', 'labphew_icon.png'))
+        app.setWindowIcon(app_icon)  # set an icon
         gui = ScanWindow(opr)
         gui.show()
         app.exit(app.exec_())
@@ -615,6 +620,8 @@ if __name__ == "__main__":
     else:
         # Create a PyQt application
         app = QApplication(sys.argv)
+        app_icon = QIcon(os.path.join(labphew.package_path, 'view', 'design', 'Icons', 'labphew_icon.png'))
+        app.setWindowIcon(app_icon)  # set an icon
         gui = MonitorWindow(opr)
         # To add Scan window(s) to the Monitor window use the following code.
         add_scan_to_monitor = True  ##### Toggle this to showcase monitor with and without scanwindow
