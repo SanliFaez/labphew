@@ -8,7 +8,7 @@ DESCRIPTION = "Fun with computer-controlled experiments for beginners"  # test t
 setup(
 
     name="labphew",
-    version="0.1.1",
+    version="0.3.1",
 
     packages=find_packages(),
     url="https://github.com/sanlifaez/labphew",
@@ -18,7 +18,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
-    author='Sanli Faez',
+    author='Sanli Faez, Aron Opheij',
     author_email='s.faez@uu.nl',
     description='Fun with computer-controlled experiments for beginners',
     long_description=long_description,
@@ -41,6 +41,5 @@ setup(
         'dwf',          # for Digilent WaveForms devices
         'xarray',       # (to save in netcdf4 format, xarray requires scipy or netcdf4)
         'scipy',
-        'pypylon'       # for Basler camera
     ],
 )
