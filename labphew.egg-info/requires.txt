@@ -1,0 +1,9 @@
+pint
+pyqt5
+pyqtgraph
+numpy
+PyYAML
+pyserial
+dwf
+xarray
+scipy
