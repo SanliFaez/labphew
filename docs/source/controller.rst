@@ -8,7 +8,6 @@ The controllers currently included in Labphew
     :maxdepth: 2
     :caption: Controllers:
 
-    controller/basler
     controller/waveforms
 
 

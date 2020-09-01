@@ -7,6 +7,5 @@ The Models / Operators currently included in Labphew.
     :maxdepth: 2
     :caption: Models:
 
-    model/basler
     model/digilent_ad2
 
