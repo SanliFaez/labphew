@@ -47,8 +47,8 @@ classes and building blocks
     + ``ScanWindow``: Class containing the GUI and update inquiries for one-time operations that can be called from another window or command line
     + ``WorkThread``: Class wrapping a PyQt QThread. Called to perform certain operations in a separate thread (e.g. to avoid locking the GUI).
 
-folders structure
-^^^^^^^^^^^^^^^^^
+developers folders
+^^^^^^^^^^^^^^^^^^
 
     + adapt : folder containing python routines from other packages that are in progress of being imported
     + attic : folder containing old versions that might be deleted before each major release
@@ -56,6 +56,7 @@ folders structure
 reserved phrases
 ^^^^^^^^^^^^^^^^
 
-    + blink_* : files in the program hierarchy that can be used to guide beginners
-    + _blank_* : skeleton of files that can be used to develop a new driver or model, almost from scratch
+    + blink : used for filenames in the program hierarchy that can be used to guide beginners
+    + base : added to filenames that contain the base class for a certain layer or instrument of labphew
+
 
