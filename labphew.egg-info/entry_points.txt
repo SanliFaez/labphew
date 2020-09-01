@@ -1,3 +1,0 @@
-[console_scripts]
-labphew = labphew.__main__:main
-
