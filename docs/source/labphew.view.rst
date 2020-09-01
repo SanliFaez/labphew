@@ -20,23 +20,24 @@ it is possible to quickly prototype solutions that in most cases are enough for 
 Essential methods
 -----------------
 
-.. automodule:: PythonForTheLab.View.scan_window
-   :members:
-   :undoc-members:
-   :show-inheritance:
+..
+    .. automodule:: PythonForTheLab.view.scan_window
+       :members:
+       :undoc-members:
+       :show-inheritance:
 
-.. automodule:: PythonForTheLab.View.monitor_window
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    .. automodule:: PythonForTheLab.View.monitor_window
+       :members:
+       :undoc-members:
+       :show-inheritance:
 
-.. automodule:: PythonForTheLab.View.config_window
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    .. automodule:: PythonForTheLab.View.config_window
+       :members:
+       :undoc-members:
+       :show-inheritance:
 
 
-.. automodule:: PythonForTheLab.View.general_worker
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    .. automodule:: PythonForTheLab.View.general_worker
+       :members:
+       :undoc-members:
+       :show-inheritance:

@@ -1,4 +1,4 @@
-.. automodule:: labphew.contoller.blink_controller
+.. automodule:: labphew.controller.blink_controller
     :members:
     :undoc-members:
     :show-inheritance:

@@ -213,6 +213,7 @@ class BaslerCamera(BaseCamera):
 
     def get_frame_asarray(img):
         # todo : to convert a single readout frame to an array of correct format
+        pass
 
     def start_free_run(self):
         """ Starts a free run from the camera. It will preserve only the latest image. It depends
