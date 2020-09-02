@@ -28,7 +28,7 @@ Installation from source
 
 Building the labphew dependencies are tested on Windows and Mac PCs. It should be possible to install also on linux but we have not tested it yet.
 
-.. code-block::
+.. code::
 
     git clone https://github.com/sanlifaez/labphew.git
     cd labphew
@@ -45,6 +45,6 @@ Once you have installed labphew, successfully, you can test your installation by
     labphew start blink -d
 
 You can expect a labphew window with with you can interact. To go further,
-you can consider checking the :doc:`walkthrough`.
+you can consider checking the :doc:`./walkthrough`.
 
 

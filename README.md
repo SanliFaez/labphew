@@ -41,7 +41,7 @@ If you want to start editing or adding to the code, we recommend that you fork t
 ### Owning it
 
 If you are ready to be more engaged and adapt labphew to control your own favorite setup, please read
-[how to labphew]().
+[how to labphew](https://labphew.readthedocs.io/en/latest/howtolabphew.html).
 
 ## How to contribute
 

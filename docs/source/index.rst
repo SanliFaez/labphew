@@ -67,7 +67,7 @@ Other Python resources for lab automation
 =========================================
 
 If you are an experience Python programmer, labphew might be too basic for your needs.
-These are some other open-source instrumentation projects which might be interesting for you (no guarantees!):
+These are some other open-source instrumentation projects under development, which might be interesting for you (no guarantees!):
 
 + `autolab <https://github.com/qcha41/autolab>`_
 + `lantz <https://github.com/LabPy/lantz>`_
