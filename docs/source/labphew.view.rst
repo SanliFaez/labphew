@@ -23,20 +23,20 @@ your experiments, it is better to conform with the defaut GUI that comes with la
 
 There are two main GUIs implemented in labphew
 
-`MonitorWindow`: is meant to stay active while the experiment is running. One can use this
+``MonitorWindow``: is meant to stay active while the experiment is running. One can use this
 interface to monitor the signals from the setup or make adjustments to the (physical) parameters.
 Think of focusing on a certain imaging plane or adjusting the feedback parameters for a control loop.
 Most of the operations that are required for safely starting and safely closing the connected devices
-are also programmed in the `MonitorWindow` methods. One can easily change which signals are viewed.
+are also programmed in the ``MonitorWindow`` methods. One can easily change which signals are viewed.
 
-One can also adjust the device or measurement parameters from the `MonitorWindow` which is effective done by
+One can also adjust the device or measurement parameters from the ``MonitorWindow`` which is effective done by
 editing the corresponding `config.yml` file.
 
-`ScanWindow`: can be called either from the `MonitorWindow` (inheriting the adjusted parameters throught the config file)
+``ScanWindow``: can be called either from the ``MonitorWindow`` (inheriting the adjusted parameters throught the config file)
 or from the command line (requires initializing the device connections, manually). The scan operations are measurement
 sequences that are run with a fixed set of parameters and are meant to be saved for further processing.
 
-It is relatively "easy" to define multiple scan operations and call them seprately from the `MonitorWindow`.
+It is relatively "easy" to define multiple scan operations and call them seprately from the ``MonitorWindow``.
 
 Essential methods
 -----------------

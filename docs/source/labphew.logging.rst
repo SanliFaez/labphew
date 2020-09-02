@@ -25,7 +25,7 @@ CRITICAL 50 A serious error, indicating that the program itself may be unable to
 To use logging, the logging module needs to be imported and a logging object needs to be created
 using the getLogger() function of the logging module.
 
-.. code-block::
+.. code-block:: python
 
    import logging
    logging.basicConfig(level=logging.DEBUG)  # Change root logging level
@@ -43,6 +43,6 @@ It is a common practice to use the module name (i.e. __name__) as the name for t
 This helps in finding where the logging statement originated from.
 The level of the logger can be modified using setLevel(). The level is a numeric value, but the logging
 module has some handy shorthands like logging.INFO.
-Note that the logging level of the logger object can't be lower than the "root level" which
+Note that the logging level of the logger object cannot be lower than the "root level" which
 can be changed with logging.basicConfig().
 More detailed information can be found in the official python logging documentation.

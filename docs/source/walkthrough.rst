@@ -66,7 +66,7 @@ Views can be both working with command-line interface (CLI) or a graphical user 
 Read more about how to navigate through the labphew view modules in :doc:`./labphew.view`
 
 How to play
------------
+^^^^^^^^^^^
 
 If you have already installed labphew, here are some suggestions on :doc:`./howtolabphew`.
 

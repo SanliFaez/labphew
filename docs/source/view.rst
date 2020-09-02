@@ -1,11 +1,11 @@
-Views
-=====
+Default views
+=============
 
-The Views GUIs currently included in Labphew.
+The user interfaces currently included in labphew.
 
 .. toctree::
     :maxdepth: 2
-    :caption: Views:
+    :caption: views:
 
     view/blink
     view/digilent_ad2
