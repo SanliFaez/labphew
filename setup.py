@@ -41,5 +41,6 @@ setup(
         'dwf',          # for Digilent WaveForms devices
         'xarray',       # (to save in netcdf4 format, xarray requires scipy or netcdf4)
         'scipy',
+        'pypylon',      # for basler camera
     ],
 )
