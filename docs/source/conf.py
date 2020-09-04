@@ -40,7 +40,7 @@ extensions = ['sphinx.ext.autodoc',]
 #     # 'sphinx.ext.napoleon'
 #     ]
 
-autodoc_mock_imports = ['pyqtgraph']
+autodoc_mock_imports = ['pyqtgraph', 'pypylon']
 # autodoc_mock_imports = ['sip', 'PyQt5', 'PyQt5.QtGui', 'PyQt5.QtCore', 'PyQt5.QtWidgets', 'pyqtgraph']
 
 # Add any paths that contain templates here, relative to this directory.
