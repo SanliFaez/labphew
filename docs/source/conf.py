@@ -28,16 +28,17 @@ sys.path.insert(0, labphew_package_dir)
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    'sphinx.ext.todo',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.autodoc',
-    'sphinx.ext.coverage',
-    'sphinx.ext.doctest',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.imgmath'
-    # 'sphinx.ext.napoleon'
-    ]
+extensions = ['sphinx.ext.autodoc',]
+# extensions = [
+#     'sphinx.ext.todo',
+#     'sphinx.ext.viewcode',
+#     'sphinx.ext.autodoc',
+#     'sphinx.ext.coverage',
+#     'sphinx.ext.doctest',
+#     'sphinx.ext.autosummary',
+#     'sphinx.ext.imgmath'
+#     # 'sphinx.ext.napoleon'
+#     ]
 
 autodoc_mock_imports = ['pyqtgraph']
 # autodoc_mock_imports = ['sip', 'PyQt5', 'PyQt5.QtGui', 'PyQt5.QtCore', 'PyQt5.QtWidgets', 'pyqtgraph']
