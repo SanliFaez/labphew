@@ -33,7 +33,7 @@ setup(
     },
     install_requires=[
         'pint',
-        'pyqt5',
+        'pyqt5==5.13.2',
         'pyqtgraph',
         'numpy',
         'PyYAML',
