@@ -28,7 +28,7 @@ import os
 from time import time
 from labphew.core.tools.gui_tools import set_spinbox_stepsize, ValueLabelItem, SaverWidget, ModifyConfig, fit_on_screen
 from labphew.core.base.general_worker import WorkThread
-from labphew.core.base import MonitorWindowBase, ScanWindowBase
+from labphew.core.base.view_base import MonitorWindowBase, ScanWindowBase
 
 
 class MonitorWindow(MonitorWindowBase):

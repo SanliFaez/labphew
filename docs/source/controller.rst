@@ -1,12 +1,12 @@
-Default controllers
-===================
+Controller
+==========
 
-The controllers currently included in Labphew.
+For explanation, see :doc:`./labphew.controller`.
 
+The controllers currently included in labphew are:
 
 .. toctree::
     :maxdepth: 3
-    :caption: Controllers:
 
     controller/blink
     controller/basler

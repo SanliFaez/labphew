@@ -39,10 +39,20 @@ extensions = [
     # 'sphinx.ext.napoleon'
     ]
 
-autodoc_mock_imports = ['sip', 'PyQt5', 'PyQt5.QtGui', 'PyQt5.QtCore', 'PyQt5.QtWidgets']
+autodoc_mock_imports = ['pyqtgraph']
+# autodoc_mock_imports = ['sip', 'PyQt5', 'PyQt5.QtGui', 'PyQt5.QtCore', 'PyQt5.QtWidgets', 'pyqtgraph']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
+
+# Prevent __init__() method from being ignored by autodoc
+def skip(app, what, name, obj, would_skip, options):
+    if name == "__init__":
+        return False
+    return would_skip
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip)
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:

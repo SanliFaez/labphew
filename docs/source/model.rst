@@ -1,12 +1,13 @@
-Default models
-==============
+Model
+=====
 
-The models / Operators currently included in labphew.
+For explanation, see :doc:`./labphew.model`.
+
+The models currently included in labphew are:
 
 .. toctree::
     :maxdepth: 2
-    :caption: models:
 
-    view/blink
-    view/digilent_ad2
+    model/blink
+    model/digilent_ad2
 

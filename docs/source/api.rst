@@ -11,3 +11,4 @@ Here you can see the detailed documentation of all modules, classes, methods and
     controller
     model
     view
+    core

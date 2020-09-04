@@ -1,4 +1,7 @@
-.. automodule:: labphew.view.analog_discovery_2_view
+Tools
+=====
+
+.. automodule:: labphew.core.tools.gui_tools
     :members:
     :undoc-members:
     :show-inheritance:

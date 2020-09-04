@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+=================
+Basler controller
+=================
+
+BOTH THE FILE AND THE DOCUMENTATION ARE INCOMPLETE
+
+"""
+
 import time
 #from threading import Event
 
