@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>labphew.core.base.operator_base &mdash; labphew 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> labphew
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Further in the docs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../howtolabphew.html">How to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../walkthrough.html">A short guided tour</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.model.html">M for model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.view.html">V for view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.controller.html">C for controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.core.html">The core files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.logging.html">Logging and debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples.html">Simple examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../devices.html">Supported devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../customize.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">labphew</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>labphew.core.base.operator_base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for labphew.core.base.operator_base</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding=utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Operator Base Class</span>
+<span class="sd">===================</span>
+
+<span class="sd">Base class for operators.</span>
+<span class="sd">- When the object of the child class is created the base class checks if required and recommended methods are present</span>
+<span class="sd">  in the child class (and in the base class itself).</span>
+<span class="sd">- By inheriting, methods from this base class will be used if they are missing in the child class. This allows to</span>
+<span class="sd">  implement some fallback functionality and to warn the user.</span>
+<span class="sd">- In addition it implements the __enter__ and __exit__ methods to allow the class to be used in a python with block.</span>
+
+<span class="sd">Example usage can be found at the bottom of the file under if __name__==&#39;__main___&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">labphew</span>
+<span class="kn">from</span> <span class="nn">labphew.core.base.tools</span> <span class="kn">import</span> <span class="n">check_method_presence_and_warn</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+
+
+<div class="viewcode-block" id="OperatorBase"><a class="viewcode-back" href="../../../../core/base.html#labphew.core.base.operator_base.OperatorBase">[docs]</a><span class="k">class</span> <span class="nc">OperatorBase</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get&#39;s called before the object (of the child class) is created and warns if required or</span>
+<span class="sd">        recommended methods are missing in that class.</span>
+<span class="sd">        Note that required and recommended methods may exist in this Base class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">required</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;__init__&#39;</span><span class="p">]</span>
+        <span class="n">recommended</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;load_config&#39;</span><span class="p">,</span> <span class="s1">&#39;disconnect_devices&#39;</span><span class="p">,</span> <span class="s1">&#39;_monitor_loop&#39;</span><span class="p">,</span> <span class="s1">&#39;save_scan&#39;</span><span class="p">,</span> <span class="s1">&#39;do_scan&#39;</span><span class="p">]</span>
+        <span class="n">check_method_presence_and_warn</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">required</span><span class="p">,</span> <span class="n">recommended</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OperatorBase.__init__"><a class="viewcode-back" href="../../../../core/base.html#labphew.core.base.operator_base.OperatorBase.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__module__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Your </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> class should have an __init__ method&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;You must override __init__&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OperatorBase._monitor_loop"><a class="viewcode-back" href="../../../../core/base.html#labphew.core.base.operator_base.OperatorBase._monitor_loop">[docs]</a>    <span class="k">def</span> <span class="nf">_monitor_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;If you want to use your </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> class in a MonitorWindow, your Operator should have a _monitor_loop method&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Must override _monitor_loop to use it&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OperatorBase.load_config"><a class="viewcode-back" href="../../../../core/base.html#labphew.core.base.operator_base.OperatorBase.load_config">[docs]</a>    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Your </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> class should have a load_config method. Using method from OperatorBase&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;properties&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Your </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> class does&#39;t have a properties dictionary yet: creating one&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Config file not found: </span><span class="si">{}</span><span class="s1">, falling back to default&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;config_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filename</span></div>
+
+<div class="viewcode-block" id="OperatorBase.do_scan"><a class="viewcode-back" href="../../../../core/base.html#labphew.core.base.operator_base.OperatorBase.do_scan">[docs]</a>    <span class="k">def</span> <span class="nf">do_scan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        do_scan is the default name for a scan method of an Operator. If you see this message that means you&#39;re trying to</span>
+<span class="s2">        run do_scan() without having created it in your Operator. Note that you could use a different name, or create </span>
+<span class="s2">        multiple scan methods, but that you have to modify your GUI to actually  start those methods. </span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OperatorBase.save_scan"><a class="viewcode-back" href="../../../../core/base.html#labphew.core.base.operator_base.OperatorBase.save_scan">[docs]</a>    <span class="k">def</span> <span class="nf">save_scan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        save_scan is the default name for method of an Operator to save scan data. If you see this message that means </span>
+<span class="s2">        you&#39;re trying to call it (perhaps from a ScanWindow?) without having created it in your Operator. Note that you </span>
+<span class="s2">        could use a different name, or create multiple save methods (for multiple scans?), but that you have to modify </span>
+<span class="s2">        your GUI to actually use those save methods. </span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OperatorBase.disconnect_devices"><a class="viewcode-back" href="../../../../core/base.html#labphew.core.base.operator_base.OperatorBase.disconnect_devices">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect_devices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Your </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is missing the disconnect_devices method. Use that to disconnect from your devices when required.&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># the next two methods are needed so the context manager &#39;with&#39; works.</span>
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; This method get&#39;s called when exiting a python with block (when the code completed but also when an error occured)&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Calling disconnect_devices() before exiting with block&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disconnect_devices</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Sanli Faez
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

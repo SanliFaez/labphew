@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Blink Model &mdash; labphew 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Analog Discovery 2" href="digilent_ad2.html" />
+    <link rel="prev" title="Model" href="../model.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> labphew
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Further in the docs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howtolabphew.html">How to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../walkthrough.html">A short guided tour</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.model.html">M for model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.view.html">V for view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.controller.html">C for controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.core.html">The core files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.logging.html">Logging and debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Simple examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devices.html">Supported devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customize.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../controller.html">Controller</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../model.html">Model</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Blink Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="digilent_ad2.html">Analog Discovery 2</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../view.html">View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../core.html">Core</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">labphew</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../api.html">API documentation</a> &raquo;</li>
+        
+          <li><a href="../model.html">Model</a> &raquo;</li>
+        
+      <li>Blink Model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/model/blink.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-labphew.model.blink_model"></span><div class="section" id="blink-model">
+<h1>Blink Model<a class="headerlink" href="#blink-model" title="Permalink to this headline">¶</a></h1>
+<p>This module contains an example class of an Operator.
+The purpose of this file is to illustrate the basic structure of an Operator.
+This Operator is intended to work with labphew.controller.blink_controller.BlinkController
+It may be run from command line or interacted with through a gui: labphew.view.blink_view.MonitorWindow</p>
+<p>Example usage can be found at the bottom of the file under if __name__==’__main___’</p>
+<dl class="class">
+<dt id="labphew.model.blink_model.BlinkOperator">
+<em class="property">class </em><code class="descclassname">labphew.model.blink_model.</code><code class="descname">BlinkOperator</code><span class="sig-paren">(</span><em>instrument</em>, <em>properties={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/model/blink_model.html#BlinkOperator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.model.blink_model.BlinkOperator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/base.html#labphew.core.base.operator_base.OperatorBase" title="labphew.core.base.operator_base.OperatorBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">labphew.core.base.operator_base.OperatorBase</span></code></a></p>
+<p>Example Operator class (to work with fake device)</p>
+<dl class="method">
+<dt id="labphew.model.blink_model.BlinkOperator.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>instrument</em>, <em>properties={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/model/blink_model.html#BlinkOperator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.model.blink_model.BlinkOperator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the Operator object
+The BlinkController object needs to be created before and passed as an argument.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>instrument</strong> (<em>BlinkController object</em>) – The instrument used by this Operator</li>
+<li><strong>properties</strong> (<em>dict</em>) – optional properties dictionary, note that this can be loaded from file with load_config()</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.model.blink_model.BlinkOperator._monitor_loop">
+<code class="descname">_monitor_loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/model/blink_model.html#BlinkOperator._monitor_loop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.model.blink_model.BlinkOperator._monitor_loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by GUI Monitor to start the monitor loop.
+Not intended to be called from Operator. (Which should be blocked)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.model.blink_model.BlinkOperator._set_monitor_time_step">
+<code class="descname">_set_monitor_time_step</code><span class="sig-paren">(</span><em>time_step</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/model/blink_model.html#BlinkOperator._set_monitor_time_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.model.blink_model.BlinkOperator._set_monitor_time_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set Monitor time step (used by gui)
+Forces the value to be at least 0.01, and warns for large values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time_step</strong> (<em>float</em>) – time step between acquisitions in the monitor loop (seconds)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.model.blink_model.BlinkOperator.disconnect_devices">
+<code class="descname">disconnect_devices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/model/blink_model.html#BlinkOperator.disconnect_devices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.model.blink_model.BlinkOperator.disconnect_devices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close connection to all instruments/devices used by this operator.
+(Note that this method will get called when exiting a python with block)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.model.blink_model.BlinkOperator.do_scan">
+<code class="descname">do_scan</code><span class="sig-paren">(</span><em>param=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/model/blink_model.html#BlinkOperator.do_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.model.blink_model.BlinkOperator.do_scan" title="Permalink to this definition">¶</a></dt>
+<dd><p>An example of a method that performs a scan (based on parameters in the config file).
+This method can be run from a GUI, from command line or other script
+This scan sweeps the blink rate of the fake device and records its status.
+Optionally, the scan parameters can be updated by passing a dictionary. These values will overwrite the
+existing values in Operator.properties[‘scan’]
+The method returns two lists containing the parameter scanned and the recorded value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>param</strong> (<em>dict</em>) – optional dictionary of parameters that will used to update the scan parameters</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the AO voltage, and the measured AI voltages</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list, list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.model.blink_model.BlinkOperator.load_config">
+<code class="descname">load_config</code><span class="sig-paren">(</span><em>filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/model/blink_model.html#BlinkOperator.load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.model.blink_model.BlinkOperator.load_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>If specified, this function loads properties from the configuration file and sets some settings to the instrument.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>str</em>) – Path to the filename. Defaults to blink_config.yml in labphew.core.defaults</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.model.blink_model.BlinkOperator.save_scan">
+<code class="descname">save_scan</code><span class="sig-paren">(</span><em>filename</em>, <em>metadata=None</em>, <em>store_conf=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/model/blink_model.html#BlinkOperator.save_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.model.blink_model.BlinkOperator.save_scan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store data in xarray Dataset and save to netCDF4 file.
+Optional metadata can be passed as a dict. Note that the keys should be strings and the values should be numbers or strings.
+Optionally stores the entire Operator properties dictionary to a yaml file of the same name.</p>
+<p>To load data:
+import xarray as xr
+xr.load_dataset(filename)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<em>str</em>) – full path and filename</li>
+<li><strong>metadata</strong> (<em>dict</em>) – optional additional data to store (default: None)</li>
+<li><strong>store_conf</strong> (<em>bool</em>) – store Operator properties in yaml file (default: False)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="digilent_ad2.html" class="btn btn-neutral float-right" title="Analog Discovery 2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../model.html" class="btn btn-neutral float-left" title="Model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Sanli Faez
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

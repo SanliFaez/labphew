@@ -1,0 +1,548 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>labphew.core.tools.gui_tools &mdash; labphew 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> labphew
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Further in the docs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../howtolabphew.html">How to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../walkthrough.html">A short guided tour</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.model.html">M for model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.view.html">V for view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.controller.html">C for controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.core.html">The core files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.logging.html">Logging and debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples.html">Simple examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../devices.html">Supported devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../customize.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">labphew</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>labphew.core.tools.gui_tools</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for labphew.core.tools.gui_tools</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">GUI Tools</span>
+<span class="sd">=========</span>
+
+<span class="sd">Collection of tools that might be helpful for GUIs</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">labphew</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="k">as</span> <span class="nn">pg</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+
+<div class="viewcode-block" id="set_spinbox_stepsize"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.set_spinbox_stepsize">[docs]</a><span class="k">def</span> <span class="nf">set_spinbox_stepsize</span><span class="p">(</span><span class="n">spinbox</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Helper function that sets the stepsize of a spinbox to one order of magnitude below current value. &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">spinbox</span><span class="p">)</span> <span class="ow">is</span> <span class="n">QDoubleSpinBox</span><span class="p">:</span>
+        <span class="n">min_pow</span> <span class="o">=</span> <span class="o">-</span> <span class="n">spinbox</span><span class="o">.</span><span class="n">decimals</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">spinbox</span><span class="p">)</span> <span class="ow">is</span> <span class="n">QSpinBox</span><span class="p">:</span>
+        <span class="n">min_pow</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">spinbox</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">min_pow</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">min_pow</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">spinbox</span><span class="o">.</span><span class="n">value</span><span class="p">()))))</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">spinbox</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="n">p</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SaverWidget"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.SaverWidget">[docs]</a><span class="k">class</span> <span class="nc">SaverWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple widget for saving, consisting of a line edit to enter the filename and a save button.</span>
+<span class="sd">    It overwrites existing files without confirmation, but the line edit turns red to warn the user that the file exists.</span>
+<span class="sd">    In addition it has the option to save through a browse window.</span>
+<span class="sd">    And it has the option to store the entire properties dictionary in a yaml file (of the same name).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SaverWidget.__init__"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.SaverWidget.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_button_callback</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the saver widget. The saving method (of the operator) needs to be passed as argument.</span>
+
+<span class="sd">        :param save_button_callback: the saving method to call</span>
+<span class="sd">        :type save_button_callback: method</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__save_button_callback</span> <span class="o">=</span> <span class="n">save_button_callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QVBoxLayout</span><span class="p">())</span>
+        <span class="n">top_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">bottom_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">top_layout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">bottom_layout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;C:\Temp\data.nc&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">textChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_file_exists</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_file_exists</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browse_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Browse&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browse_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browse</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Save&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conf_checkbox</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="s1">&#39;Store config&#39;</span><span class="p">,</span> <span class="n">checked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">statusTip</span><span class="o">=</span><span class="s1">&#39;Stores the current operator properties into a yaml config file of the same name&#39;</span><span class="p">)</span>
+
+        <span class="n">top_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">top_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browse_button</span><span class="p">)</span>
+        <span class="n">bottom_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conf_checkbox</span><span class="p">)</span>
+        <span class="n">bottom_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_button</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SaverWidget.save"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.SaverWidget.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calls the saving method (of operator) and then calls check_file_exists to turn the filename red.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__save_button_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">text</span><span class="p">(),</span> <span class="n">store_conf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">conf_checkbox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_file_exists</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SaverWidget.check_file_exists"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.SaverWidget.check_file_exists">[docs]</a>    <span class="k">def</span> <span class="nf">check_file_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Makes the filename line edit red if file exists, or black otherwise.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">text</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;color: red;&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;color: black;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SaverWidget.browse"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.SaverWidget.browse">[docs]</a>    <span class="k">def</span> <span class="nf">browse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">text</span><span class="p">())):</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">labphew</span><span class="o">.</span><span class="n">parent_path</span><span class="p">,</span> <span class="s1">&#39;data.nc&#39;</span><span class="p">)</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getSaveFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Save data as&#39;</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span>
+                                                <span class="nb">filter</span><span class="o">=</span><span class="s2">&quot;netCDF4 (*.nc);;All Files (*.*)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__save_button_callback</span><span class="p">(</span><span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">store_conf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">conf_checkbox</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="ModifyConfig"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.ModifyConfig">[docs]</a><span class="k">class</span> <span class="nc">ModifyConfig</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Window to modify any dictionary as if it were yaml text.</span>
+<span class="sd">    Note that for a gui it is useful to update the gui elements affected by the changes. For that purpose the parent gui</span>
+<span class="sd">    can pass an update method to this window through apply_callback.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ModifyConfig.__init__"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.ModifyConfig.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">properties_dict</span><span class="p">,</span> <span class="n">apply_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the Modify Config window.</span>
+
+<span class="sd">        :param properties_dict: dictionary to be modified</span>
+<span class="sd">        :type properties_dict: dict</span>
+<span class="sd">        :param apply_callback: optional method to be called by apply button after updating the dictionary</span>
+<span class="sd">        :type apply_callback: method (or None)</span>
+<span class="sd">        :param parent: The parent window</span>
+<span class="sd">        :type parent: QtWidget</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Creating Modify Config window&#39;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Modify properties with yaml code&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">apply_callback</span> <span class="o">=</span> <span class="n">apply_callback</span>
+        <span class="c1"># self.apply_props = apply</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span> <span class="n">QFont</span><span class="p">(</span><span class="s2">&quot;Courier New&quot;</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties_dict</span> <span class="o">=</span> <span class="n">properties_dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initUI</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_text</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_size</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ModifyConfig.initUI"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.ModifyConfig.initUI">[docs]</a>    <span class="k">def</span> <span class="nf">initUI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create the GUI layout&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Expanding</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Expanding</span><span class="p">)</span>
+        <span class="n">main_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">button_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="c1"># create buttons, labels and the textedit:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_apply</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;&amp;Apply&#39;</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_reset</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;&amp;Reset&#39;</span><span class="p">,</span> <span class="n">clicked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_cancel</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;&amp;Cancel&#39;</span><span class="p">,</span> <span class="n">clicked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">txt</span> <span class="o">=</span> <span class="n">QTextEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">setLineWrapMode</span><span class="p">(</span><span class="n">QTextEdit</span><span class="o">.</span><span class="n">NoWrap</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">setFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">textChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">changed</span><span class="p">)</span>
+
+        <span class="n">button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button_apply</span><span class="p">)</span>
+        <span class="n">button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button_reset</span><span class="p">)</span>
+        <span class="n">button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button_cancel</span><span class="p">)</span>
+        <span class="n">main_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txt</span><span class="p">)</span>
+        <span class="n">main_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">button_layout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">main_layout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ModifyConfig.set_size"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.ModifyConfig.set_size">[docs]</a>    <span class="k">def</span> <span class="nf">set_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Adjust window size to text (if possible)</span>
+        <span class="c1"># These values were chosen in Windows 7</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Expanding</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="o">.</span><span class="n">Expanding</span><span class="p">)</span>
+        <span class="n">font_metrics</span> <span class="o">=</span> <span class="n">QFontMetrics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="p">)</span>
+        <span class="n">max_width</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">QDesktopWidget</span><span class="p">()</span><span class="o">.</span><span class="n">availableGeometry</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span> <span class="n">QDesktopWidget</span><span class="p">()</span><span class="o">.</span><span class="n">screenGeometry</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">width</span><span class="p">())</span>
+        <span class="n">max_height</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">QDesktopWidget</span><span class="p">()</span><span class="o">.</span><span class="n">availableGeometry</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">height</span><span class="p">(),</span> <span class="n">QDesktopWidget</span><span class="p">()</span><span class="o">.</span><span class="n">screenGeometry</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">height</span><span class="p">())</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_width</span><span class="o">-</span><span class="mi">16</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">document</span><span class="p">()</span><span class="o">.</span><span class="n">idealWidth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">42</span><span class="o">+</span><span class="mi">10</span><span class="p">))</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_height</span><span class="o">-</span><span class="mi">38</span><span class="p">,</span> <span class="n">font_metrics</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">toPlainText</span><span class="p">())</span><span class="o">.</span><span class="n">height</span><span class="p">()</span> <span class="o">+</span> <span class="mi">145</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ModifyConfig.changed"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.ModifyConfig.changed">[docs]</a>    <span class="k">def</span> <span class="nf">changed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the correct enabled state of buttons after the text field has changed. (Is called after every change).</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">        It also checks if the yaml is valid after every change (and sets button state accordingly). If that turns out to</span>
+<span class="sd">        be too intensive, there&#39;s a suggestion for modification in the source code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_reset</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_apply</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">valid_yaml</span><span class="p">())</span></div>
+        <span class="c1"># It might be a bit intensive to continuously check if the whole text is valid yaml.</span>
+        <span class="c1"># If that turns out to be the case, just change it to:</span>
+        <span class="c1"># self.button_apply.setEnabled(True)</span>
+
+<div class="viewcode-block" id="ModifyConfig.reset_text"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.ModifyConfig.reset_text">[docs]</a>    <span class="k">def</span> <span class="nf">reset_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called by reset button. Resets the text field to the original dictionary and resets the buttons accordingly.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties_dict</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_reset</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_apply</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ModifyConfig.valid_yaml"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.ModifyConfig.valid_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">valid_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if text in input field can be interpreted as valid yaml.</span>
+<span class="sd">        Returns True for valid yaml, False otherwise</span>
+<span class="sd">        If optional keyword quiet is set to False it will also display a warning pop-up.</span>
+
+<span class="sd">        :param quiet: flag to suppress the warning pop-up (default: True)</span>
+<span class="sd">        :type quiet: bool</span>
+<span class="sd">        :return: yaml validity</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_list</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">toPlainText</span><span class="p">())</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="n">yaml</span><span class="o">.</span><span class="n">YAMLError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+                <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Invalid YAML&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">),</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Ok</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ModifyConfig.apply"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.ModifyConfig.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called by apply button.</span>
+<span class="sd">        Converts the text window to dictionary (using yaml) and updates the original dictionary.</span>
+<span class="sd">        If a apply_callback was supplied it will attempt to execute it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_yaml</span><span class="p">(</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># self.logger.debug(&#39;Converting text to dictionary&#39;)</span>
+                <span class="n">dic</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">txt</span><span class="o">.</span><span class="n">toPlainText</span><span class="p">())</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">dict</span><span class="p">:</span>
+                    <span class="k">raise</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Converting text to dictionary failed&#39;</span><span class="p">)</span>
+                <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Reading YAML failed&#39;</span><span class="p">,</span> <span class="s1">&#39;Error while converting yaml to dictionary&#39;</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Ok</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">apply_callback</span><span class="p">()</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Apply callback caused unexpected exception&#39;</span><span class="p">)</span>
+                    <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="s1">&#39;Apply callback caused unexpected exception&#39;</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Ok</span><span class="p">)</span>
+                    <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="open_config_dialog"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.open_config_dialog">[docs]</a><span class="k">def</span> <span class="nf">open_config_dialog</span><span class="p">(</span><span class="n">optional_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Displays an Open file dialog window, to open a yaml config file.</span>
+<span class="sd">    It returns the path to the file or &#39;-default&#39;  if window closed/cancelled</span>
+<span class="sd">    An optional argument may be passed to indicate the path where to start the browse window. If omitted the default</span>
+<span class="sd">    location for PyQt QFileDialog.getOpenFileName will be used.</span>
+
+<span class="sd">    :param optional_path: optional path where to start the open dialog</span>
+<span class="sd">    :type optional_path: str</span>
+<span class="sd">    :return: path to the file (or &#39;-default&#39; if window closed/cancelled)</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">([])</span>
+    <span class="n">ofdlg</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="p">()</span>
+    <span class="n">config_file</span> <span class="o">=</span> <span class="n">ofdlg</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Open config file&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">optional_path</span><span class="p">,</span> <span class="nb">filter</span> <span class="o">=</span> <span class="s2">&quot;YAML (*.yml);;All Files (*.*)&quot;</span><span class="p">)</span>
+    <span class="n">ofdlg</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">del</span> <span class="n">app</span>
+    <span class="k">if</span> <span class="n">config_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">config_file</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;-default&#39;</span></div>
+
+
+<div class="viewcode-block" id="ValueLabelItem"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.ValueLabelItem">[docs]</a><span class="k">class</span> <span class="nc">ValueLabelItem</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">LabelItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convenience class that combines functionality of pyqtgraph.ValueLabel() into a pyqtgraph.LabelItem().</span>
+<span class="sd">    It inherits from LabelItem and thus may be used in the same manner. But it adds the a setValue() method of</span>
+<span class="sd">    ValueLabel and it also accepts the keyword arguments of ValueLabel.</span>
+<span class="sd">    Additionally, the precision may be modified (with siPrecision) when using siPrefix mode.</span>
+<span class="sd">    Additionally, the rate at which the text is updated may be controlled through textUpdateTime.</span>
+<span class="sd">    Additionally, any method unknown to LabelItem will be passed to the internal ValueLabel object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ValueLabelItem.__init__"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.ValueLabelItem.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">siPrefix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">averageTime</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">formatStr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">siPrecision</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">textUpdateTime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convenience class that combines pyqtgraph.ValueLabel into a pyqtgraph.LabelItem.</span>
+<span class="sd">        It inherits from LabelItem so see that documentation for usage and arguments.</span>
+<span class="sd">        It adds the setValue method of ValueLabel. All other unknown methods are passed on to the internal ValueLabel</span>
+<span class="sd">        object.</span>
+<span class="sd">        The ValueLabel arguments are passed on to the internal ValueLabel object.</span>
+<span class="sd">        It has two additional arguments. siPrecision allows to modify the number of significant digits while the</span>
+<span class="sd">        ValueLabel has siPrefix=True. textUpdateTime allows to reduce the frequency of updating the gui by not updating</span>
+<span class="sd">        the text every call to setValue (default value of None, does update every time)</span>
+<span class="sd">        Note that the arguments of LabelItem are not included in this docstring (except for text), please refer to</span>
+<span class="sd">        LabelItem documentation.</span>
+
+<span class="sd">        :param text: initial text to display (see pyqtgraph.LabelItem)</span>
+<span class="sd">        :type text: str</span>
+<span class="sd">        :param suffix: the (SI) unit</span>
+<span class="sd">        :type suffix: str</span>
+<span class="sd">        :param siPrefix: when True it converts things like 0.024 V to 24 mV</span>
+<span class="sd">        :type siPrefix: bool</span>
+<span class="sd">        :param averageTime: optional, see pyqtgraph.ValueLabel</span>
+<span class="sd">        :type averageTime: float</span>
+<span class="sd">        :param formatStr: optional, see pyqtgraph.ValueLabel</span>
+<span class="sd">        :type formatStr: str</span>
+<span class="sd">        :param siPrecision: optional, allows to deviate from the default of 3 significant digits</span>
+<span class="sd">        :type siPrecision: int</span>
+<span class="sd">        :param textUpdateTime: optional, time between updates of text (default is None which updates every time)</span>
+<span class="sd">        :type textUpdateTime: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;parent&#39;</span><span class="p">:</span><span class="n">parent</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">suffix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value_kwargs</span><span class="p">[</span><span class="s1">&#39;suffix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">suffix</span>
+        <span class="k">if</span> <span class="n">siPrefix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value_kwargs</span><span class="p">[</span><span class="s1">&#39;siPrefix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">siPrefix</span>
+        <span class="k">if</span> <span class="n">averageTime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value_kwargs</span><span class="p">[</span><span class="s1">&#39;averageTime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">averageTime</span>
+        <span class="k">if</span> <span class="n">formatStr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value_kwargs</span><span class="p">[</span><span class="s1">&#39;formatStr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">formatStr</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ValueLabel</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">ValueLabel</span><span class="p">(</span><span class="o">**</span><span class="n">value_kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__siPrecision</span> <span class="o">=</span> <span class="n">siPrecision</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__textUpdateTime</span> <span class="o">=</span> <span class="n">textUpdateTime</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__last_update_text</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ValueLabelItem.setValue"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.ValueLabelItem.setValue">[docs]</a>    <span class="k">def</span> <span class="nf">setValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ValueLabel</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__textUpdateTime</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__last_update_text</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__textUpdateTime</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__last_update_text</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ValueLabel</span><span class="o">.</span><span class="n">siPrefix</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">functions</span><span class="o">.</span><span class="n">siFormat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ValueLabel</span><span class="o">.</span><span class="n">averageValue</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__siPrecision</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ValueLabel</span><span class="o">.</span><span class="n">suffix</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ValueLabel</span><span class="o">.</span><span class="n">generateText</span><span class="p">())</span></div>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ValueLabel</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="fit_on_screen"><a class="viewcode-back" href="../../../../core/tools.html#labphew.core.tools.gui_tools.fit_on_screen">[docs]</a><span class="k">def</span> <span class="nf">fit_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function to move and resize a QMainWindow (or maybe any QWidget) to fit on the available space of the current desktop screen.&quot;&quot;&quot;</span>
+    <span class="n">frameGm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frameGeometry</span><span class="p">()</span>
+    <span class="n">screen</span> <span class="o">=</span> <span class="n">QApplication</span><span class="o">.</span><span class="n">desktop</span><span class="p">()</span><span class="o">.</span><span class="n">screenNumber</span><span class="p">(</span><span class="n">QApplication</span><span class="o">.</span><span class="n">desktop</span><span class="p">()</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span><span class="o">.</span><span class="n">pos</span><span class="p">())</span>
+    <span class="n">availGm</span> <span class="o">=</span> <span class="n">QApplication</span><span class="o">.</span><span class="n">desktop</span><span class="p">()</span><span class="o">.</span><span class="n">availableGeometry</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+    <span class="c1"># reduce size if larger than available desktop area</span>
+    <span class="k">if</span> <span class="n">frameGm</span><span class="o">.</span><span class="n">height</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">availGm</span><span class="o">.</span><span class="n">height</span><span class="p">():</span>
+        <span class="n">frameGm</span><span class="o">.</span><span class="n">setHeight</span><span class="p">(</span><span class="n">availGm</span><span class="o">.</span><span class="n">height</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">frameGm</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">availGm</span><span class="o">.</span><span class="n">width</span><span class="p">():</span>
+        <span class="n">frameGm</span><span class="o">.</span><span class="n">setWidth</span><span class="p">(</span><span class="n">availGm</span><span class="o">.</span><span class="n">width</span><span class="p">())</span>
+    <span class="c1"># move if any side is outside available desktop area</span>
+    <span class="k">if</span> <span class="n">frameGm</span><span class="o">.</span><span class="n">top</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">availGm</span><span class="o">.</span><span class="n">top</span><span class="p">():</span>
+        <span class="n">frameGm</span><span class="o">.</span><span class="n">moveTop</span><span class="p">(</span><span class="n">availGm</span><span class="o">.</span><span class="n">top</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">frameGm</span><span class="o">.</span><span class="n">bottom</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">availGm</span><span class="o">.</span><span class="n">bottom</span><span class="p">():</span>
+        <span class="n">frameGm</span><span class="o">.</span><span class="n">moveBottom</span><span class="p">(</span><span class="n">availGm</span><span class="o">.</span><span class="n">bottom</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">frameGm</span><span class="o">.</span><span class="n">left</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">availGm</span><span class="o">.</span><span class="n">left</span><span class="p">():</span>
+        <span class="n">frameGm</span><span class="o">.</span><span class="n">moveLeft</span><span class="p">(</span><span class="n">availGm</span><span class="o">.</span><span class="n">left</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">frameGm</span><span class="o">.</span><span class="n">right</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">availGm</span><span class="o">.</span><span class="n">right</span><span class="p">():</span>
+        <span class="n">frameGm</span><span class="o">.</span><span class="n">moveRight</span><span class="p">(</span><span class="n">availGm</span><span class="o">.</span><span class="n">right</span><span class="p">())</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="n">frameGm</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Sanli Faez
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

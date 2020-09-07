@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>labphew.controller.basler.basler_controller &mdash; labphew 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> labphew
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Further in the docs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../howtolabphew.html">How to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../walkthrough.html">A short guided tour</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.model.html">M for model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.view.html">V for view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.controller.html">C for controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.core.html">The core files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../labphew.logging.html">Logging and debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples.html">Simple examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../devices.html">Supported devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../customize.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">labphew</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>labphew.controller.basler.basler_controller</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for labphew.controller.basler.basler_controller</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">=================</span>
+<span class="sd">Basler controller</span>
+<span class="sd">=================</span>
+
+<span class="sd">BOTH THE FILE AND THE DOCUMENTATION ARE INCOMPLETE</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="c1">#from threading import Event</span>
+
+<span class="kn">from</span> <span class="nn">pypylon</span> <span class="kn">import</span> <span class="n">pylon</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">labphew.core.base.camera_base</span> <span class="kn">import</span> <span class="n">BaseCamera</span>
+
+<div class="viewcode-block" id="BaslerCamera"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera">[docs]</a><span class="k">class</span> <span class="nc">BaslerCamera</span><span class="p">(</span><span class="n">BaseCamera</span><span class="p">):</span>
+    <span class="n">_acquisition_mode</span> <span class="o">=</span> <span class="n">BaseCamera</span><span class="o">.</span><span class="n">MODE_SINGLE_SHOT</span>
+
+<div class="viewcode-block" id="BaslerCamera.__init__"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">camera</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">camera</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Creating BaslerCamera object&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">friendly_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">free_run_running</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1">#self._stop_free_run = Event()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fps</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="BaslerCamera.initialize"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initializes the communication with the camera. Get&#39;s the maximum and minimum width. It also forces</span>
+<span class="sd">        the camera to work on Software Trigger.</span>
+
+<span class="sd">        .. warning:: It may be useful to integrate other types of triggers in applications that need to</span>
+<span class="sd">            synchronize with other hardware.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Initializing Basler Camera&#39;</span><span class="p">)</span>
+        <span class="n">tl_factory</span> <span class="o">=</span> <span class="n">pylon</span><span class="o">.</span><span class="n">TlFactory</span><span class="o">.</span><span class="n">GetInstance</span><span class="p">()</span>
+        <span class="n">devices</span> <span class="o">=</span> <span class="n">tl_factory</span><span class="o">.</span><span class="n">EnumerateDevices</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">devices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1">#print(&#39;No camera found&#39;)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;No camera found&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam_num</span> <span class="ow">in</span> <span class="n">device</span><span class="o">.</span><span class="n">GetFriendlyName</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="n">pylon</span><span class="o">.</span><span class="n">InstantCamera</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Attach</span><span class="p">(</span><span class="n">tl_factory</span><span class="o">.</span><span class="n">CreateDevice</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Open</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">friendly_name</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">GetFriendlyName</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">GetFriendlyName</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Basler </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_num</span><span class="si">}</span><span class="s1"> not found. Please check if the camera is connected&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">return</span></div>
+
+        <span class="c1"># self.logger.info(f&#39;Loaded camera {self._driver.GetDeviceInfo().GetModelName()}&#39;)</span>
+
+        <span class="c1"># self._driver.RegisterConfiguration(pylon.SoftwareTriggerConfiguration(), pylon.RegistrationMode_ReplaceAll,</span>
+        <span class="c1">#                                   pylon.Cleanup_Delete)</span>
+
+        <span class="c1">#self.config.fetch_all()</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">friendly_name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Camera </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">friendly_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BaslerCamera.get_exposure"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.get_exposure">[docs]</a>    <span class="k">def</span> <span class="nf">get_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The exposure of the camera defined in microseconds &quot;&quot;&quot;</span>
+        <span class="n">exposure</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">ExposureTime</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">exposure</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.set_exposure"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.set_exposure">[docs]</a>    <span class="k">def</span> <span class="nf">set_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exposure</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The exposure of the camera is defined in microseconds &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Setting exposure to </span><span class="si">{</span><span class="n">exposure</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">ExposureTime</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">exposure</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.get_gain"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.get_gain">[docs]</a>    <span class="k">def</span> <span class="nf">get_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gain is a float &quot;&quot;&quot;</span>
+        <span class="n">gain</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Gain</span><span class="o">.</span><span class="n">Value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gain</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.set_gain"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.set_gain">[docs]</a>    <span class="k">def</span> <span class="nf">set_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gain</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Setting gain to </span><span class="si">{</span><span class="n">gain</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Gain</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">gain</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.get_acquisition_mode"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.get_acquisition_mode">[docs]</a>    <span class="k">def</span> <span class="nf">get_acquisition_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_acquisition_mode</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.set_acquisition_mode"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.set_acquisition_mode">[docs]</a>    <span class="k">def</span> <span class="nf">set_acquisition_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="c1"># todo: this function requires careful adjustments to talk to Basler</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">IsGrabbing</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s1"> Changing acquisition mode for a grabbing camera&#39;</span><span class="p">)</span>
+
+        <span class="c1">#self.logger.info(f&#39;{self} Setting acquisition mode to {mode}&#39;)</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">MODE_CONTINUOUS</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Setting buffer to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">MaxNumBuffer</span><span class="o">.</span><span class="n">Value</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_acquisition_mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">MODE_SINGLE_SHOT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Setting buffer to 1&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_acquisition_mode</span> <span class="o">=</span> <span class="n">mode</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.get_auto_exposure"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.get_auto_exposure">[docs]</a>    <span class="k">def</span> <span class="nf">get_auto_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Auto exposure can take one of three values: Off, Once, Continuous &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">ExposureAuto</span><span class="o">.</span><span class="n">Value</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.set_auto_exposure"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.set_auto_exposure">[docs]</a>    <span class="k">def</span> <span class="nf">set_auto_exposure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">modes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Off&#39;</span><span class="p">,</span> <span class="s1">&#39;Once&#39;</span><span class="p">,</span> <span class="s1">&#39;Continuous&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mode must be one of </span><span class="si">{</span><span class="n">modes</span><span class="si">}</span><span class="s1"> and not </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">ExposureAuto</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.get_auto_gain"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.get_auto_gain">[docs]</a>    <span class="k">def</span> <span class="nf">get_auto_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Auto Gain must be one of three values: Off, Once, Continuous&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">GainAuto</span><span class="o">.</span><span class="n">Value</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.set_auto_gain"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.set_auto_gain">[docs]</a>    <span class="k">def</span> <span class="nf">set_auto_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="n">modes</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Off&#39;</span><span class="p">,</span> <span class="s1">&#39;Once&#39;</span><span class="p">,</span> <span class="s1">&#39;Continuous&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mode must be one of </span><span class="si">{</span><span class="n">modes</span><span class="si">}</span><span class="s1"> and not </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">GainAuto</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.get_pixel_format"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.get_pixel_format">[docs]</a>    <span class="k">def</span> <span class="nf">get_pixel_format</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Pixel format must be one of Mono8, Mono12, Mono12p&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">PixelFormat</span><span class="o">.</span><span class="n">GetValue</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.set_pixel_format"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.set_pixel_format">[docs]</a>    <span class="k">def</span> <span class="nf">set_pixel_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Pixel format must be one of Mono8, Mono12, Mono12p&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Setting pixel format to </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">PixelFormat</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.get_ROI"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.get_ROI">[docs]</a>    <span class="k">def</span> <span class="nf">get_ROI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">offset_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">OffsetX</span><span class="o">.</span><span class="n">Value</span>
+        <span class="n">offset_Y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">OffsetY</span><span class="o">.</span><span class="n">Value</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Width</span><span class="o">.</span><span class="n">Value</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Height</span><span class="o">.</span><span class="n">Value</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">offset_X</span><span class="p">,</span> <span class="n">offset_X</span><span class="o">+</span><span class="n">width</span><span class="p">),(</span><span class="n">offset_Y</span><span class="p">,</span> <span class="n">offset_Y</span><span class="o">+</span><span class="n">height</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.set_ROI"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.set_ROI">[docs]</a>    <span class="k">def</span> <span class="nf">set_ROI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">x_pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">Y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">y_pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Updating ROI: (x, y, width, height) = (</span><span class="si">{</span><span class="n">x_pos</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">y_pos</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">OffsetX</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">OffsetY</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Width</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ccd_height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Height</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ccd_height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Setting width to </span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Width</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Setting Height to </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Height</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Setting X offset to </span><span class="si">{</span><span class="n">x_pos</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">OffsetX</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">x_pos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Setting Y offset to </span><span class="si">{</span><span class="n">y_pos</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">OffsetY</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">y_pos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">x_pos</span> <span class="o">+</span> <span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_pos</span><span class="p">,</span> <span class="n">y_pos</span> <span class="o">+</span> <span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Width</span><span class="o">.</span><span class="n">Value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Height</span><span class="o">.</span><span class="n">Value</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.get_ccd_height"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.get_ccd_height">[docs]</a>    <span class="k">def</span> <span class="nf">get_ccd_height</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Height</span><span class="o">.</span><span class="n">Max</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.get_ccd_width"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.get_ccd_width">[docs]</a>    <span class="k">def</span> <span class="nf">get_ccd_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">Width</span><span class="o">.</span><span class="n">Max</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.trigger_camera"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.trigger_camera">[docs]</a>    <span class="k">def</span> <span class="nf">trigger_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">IsGrabbing</span><span class="p">():</span>
+            <span class="k">pass</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Triggering a grabbing camera&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">StopGrabbing</span><span class="p">()</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">acquisition_mode</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">MODE_CONTINUOUS</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">StartGrabbing</span><span class="p">(</span><span class="n">pylon</span><span class="o">.</span><span class="n">GrabStrategy_OneByOne</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Grab Strategy: One by One&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">MODE_SINGLE_SHOT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">StartGrabbing</span><span class="p">(</span><span class="n">pylon</span><span class="o">.</span><span class="n">GrabStrategy_LatestImageOnly</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Grab Strategy: Latest Image&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">MODE_LAST</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">StartGrabbing</span><span class="p">(</span><span class="n">pylon</span><span class="o">.</span><span class="n">GrabStrategy_LatestImages</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">ExecuteSoftwareTrigger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Executed Software Trigger&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.read_camera"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.read_camera">[docs]</a>    <span class="k">def</span> <span class="nf">read_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="c1">#todo: have to understand how the images are stored</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">acquisition_mode</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">MODE_SINGLE_SHOT</span> <span class="ow">or</span> <span class="n">mode</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">MODE_LAST</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Grabbing mode: </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">grab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">RetrieveResult</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exposure</span><span class="p">)</span> <span class="o">+</span> <span class="mi">100</span><span class="p">,</span> <span class="n">pylon</span><span class="o">.</span><span class="n">TimeoutHandling_Return</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">grab</span> <span class="ow">and</span> <span class="n">grab</span><span class="o">.</span><span class="n">GrabSucceeded</span><span class="p">():</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="p">[</span><span class="n">grab</span><span class="o">.</span><span class="n">GetArray</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">temp_image</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">grab</span><span class="o">.</span><span class="n">Release</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">MODE_SINGLE_SHOT</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">StopGrabbing</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">img</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">IsGrabbing</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You need to trigger the camera before reading&#39;</span><span class="p">)</span>
+            <span class="n">num_buffers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">NumReadyBuffers</span><span class="o">.</span><span class="n">Value</span>
+            <span class="k">if</span> <span class="n">num_buffers</span><span class="p">:</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_buffers</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_buffers</span><span class="p">):</span>
+                    <span class="n">grab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">RetrieveResult</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exposure</span><span class="p">)</span> <span class="o">+</span> <span class="mi">100</span><span class="p">,</span> <span class="n">pylon</span><span class="o">.</span><span class="n">TimeoutHandling_ThrowException</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">grab</span> <span class="ow">and</span> <span class="n">grab</span><span class="o">.</span><span class="n">GrabSucceeded</span><span class="p">():</span>
+                        <span class="n">img</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">grab</span><span class="o">.</span><span class="n">GetArray</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+                        <span class="n">grab</span><span class="o">.</span><span class="n">Release</span><span class="p">()</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">img</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp_image</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">img</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.get_frame_asarray"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.get_frame_asarray">[docs]</a>    <span class="k">def</span> <span class="nf">get_frame_asarray</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
+        <span class="c1"># todo : to convert a single readout frame to an array of correct format</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.start_free_run"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.start_free_run">[docs]</a>    <span class="k">def</span> <span class="nf">start_free_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Starts a free run from the camera. It will preserve only the latest image. It depends</span>
+<span class="sd">        on how quickly the experiment reads from the camera whether all the images will be available</span>
+<span class="sd">        or only some.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_run_running</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Trying to start again the free acquisition of camera </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Starting a free run acquisition of camera </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">free_run_running</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;First frame of a free_run&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acquisition_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MODE_CONTINUOUS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trigger_camera</span><span class="p">()</span>  <span class="c1"># Triggers the camera only once</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.stop_free_run"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.stop_free_run">[docs]</a>    <span class="k">def</span> <span class="nf">stop_free_run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop_free_run</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.stop_camera"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.stop_camera">[docs]</a>    <span class="k">def</span> <span class="nf">stop_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">StopGrabbing</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BaslerCamera.finalize"><a class="viewcode-back" href="../../../../controller/basler.html#labphew.controller.basler.basler_controller.BaslerCamera.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_free_run</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_camera</span><span class="p">()</span></div></div>
+        <span class="c1">#self.clean_up_threads()</span>
+        <span class="c1">#super().finalize()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>  <span class="c1"># This allows logging comments of levels DEBUG and above (i.e. all levels)</span>
+    <span class="c1"># Change this to INFO or WARNING to see less logging prints.</span>
+
+    <span class="n">cam</span> <span class="o">=</span> <span class="n">BaslerCamera</span><span class="p">(</span><span class="s1">&#39;da&#39;</span><span class="p">)</span>
+    <span class="n">cam</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+    <span class="n">Nx</span> <span class="p">,</span> <span class="n">Ny</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">get_ccd_width</span><span class="p">(),</span> <span class="n">cam</span><span class="o">.</span><span class="n">get_ccd_height</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;chip size:&quot;</span><span class="p">,</span> <span class="n">Nx</span><span class="p">,</span> <span class="n">Ny</span><span class="p">)</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">get_acquisition_mode</span><span class="p">()</span>
+    <span class="n">cam</span><span class="o">.</span><span class="n">start_free_run</span><span class="p">()</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">read_camera</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+    <span class="n">cam</span><span class="o">.</span><span class="n">stop_camera</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Sanli Faez
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

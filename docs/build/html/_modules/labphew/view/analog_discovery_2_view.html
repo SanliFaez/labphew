@@ -1,0 +1,852 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>labphew.view.analog_discovery_2_view &mdash; labphew 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> labphew
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Further in the docs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../howtolabphew.html">How to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../walkthrough.html">A short guided tour</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labphew.model.html">M for model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labphew.view.html">V for view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labphew.controller.html">C for controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labphew.core.html">The core files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labphew.logging.html">Logging and debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Simple examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../devices.html">Supported devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../customize.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">labphew</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>labphew.view.analog_discovery_2_view</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for labphew.view.analog_discovery_2_view</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Analog Discovery 2 View</span>
+<span class="sd">=======================</span>
+
+<span class="sd">This module contains 2 classes which are intended to work with a specific Operator (in this case</span>
+<span class="sd">labphew.model.analog_discovery_2_model.Operator )</span>
+
+<span class="sd">MonitorWindow class is used to display continuous stream of live data from the Digilent Analog Discovery 2.</span>
+<span class="sd">All the processes that are not relating to user interaction are handled by the Operator class in the model folder.</span>
+
+<span class="sd">ScanWindow class is used to control and visualize a specific scan defined in the Operator. Note that scan itself is</span>
+<span class="sd">performed in the Operator and the ScanWindow is only used to modify parameters, start/stop and visualize data.</span>
+
+<span class="sd">These Windows may be run separately, but it&#39;s also possible to add the ScanWindow (or multiple ScanWindows) to the</span>
+<span class="sd">MonitorWindow.</span>
+
+<span class="sd">Examples of how to use can be found at the end of the file under if __name__==&#39;__main__&#39;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="k">as</span> <span class="nn">pg</span>   <span class="c1"># used for additional plotting features</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="kn">import</span> <span class="n">QTimer</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="kn">import</span> <span class="n">QIcon</span>
+<span class="kn">import</span> <span class="nn">labphew</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="nn">labphew.core.tools.gui_tools</span> <span class="kn">import</span> <span class="n">set_spinbox_stepsize</span><span class="p">,</span> <span class="n">ValueLabelItem</span><span class="p">,</span> <span class="n">SaverWidget</span><span class="p">,</span> <span class="n">ModifyConfig</span><span class="p">,</span> <span class="n">fit_on_screen</span>
+<span class="kn">from</span> <span class="nn">labphew.core.base.general_worker</span> <span class="kn">import</span> <span class="n">WorkThread</span>
+<span class="kn">from</span> <span class="nn">labphew.core.base.view_base</span> <span class="kn">import</span> <span class="n">MonitorWindowBase</span><span class="p">,</span> <span class="n">ScanWindowBase</span>
+
+
+<div class="viewcode-block" id="MonitorWindow"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow">[docs]</a><span class="k">class</span> <span class="nc">MonitorWindow</span><span class="p">(</span><span class="n">MonitorWindowBase</span><span class="p">):</span>
+<div class="viewcode-block" id="MonitorWindow.__init__"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates the monitor window.</span>
+
+<span class="sd">        :param operator: The operator</span>
+<span class="sd">        :type operator: labphew operator instance</span>
+<span class="sd">        :param parent: Optional parent GUI</span>
+<span class="sd">        :type parent: QWidget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># self.logger = logging.getLogger(__name__)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Analog Discovery 2&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span> <span class="o">=</span> <span class="n">operator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_windows</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># If any scan windows are loaded, they will be placed in this dict</span>
+
+        <span class="c1"># # For loading a .ui file (created with QtDesigner):</span>
+        <span class="c1"># p = os.path.dirname(__file__)</span>
+        <span class="c1"># uic.loadUi(os.path.join(p, &#39;design/UI/main_window.ui&#39;), self)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_UI</span><span class="p">()</span>
+
+        <span class="c1"># create thread and timer objects for monitor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span> <span class="o">=</span> <span class="n">QTimer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_monitor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_thread</span> <span class="o">=</span> <span class="n">WorkThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_monitor_loop</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MonitorWindow.set_UI"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.set_UI">[docs]</a>    <span class="k">def</span> <span class="nf">set_UI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Code-based generation of the user-interface based on PyQT &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Digilent AD2&#39;</span><span class="p">)</span>
+        <span class="c1"># display statusbar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="p">()</span>
+        <span class="c1">### The menu bar:</span>
+        <span class="n">quit_action</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;E&amp;xit&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">triggered</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">,</span> <span class="n">shortcut</span><span class="o">=</span><span class="s2">&quot;Alt+F4&quot;</span><span class="p">,</span> <span class="n">statusTip</span><span class="o">=</span><span class="s1">&#39;Close the scan window&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mainMenu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuBar</span><span class="p">()</span>
+        <span class="n">fileMenu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mainMenu</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="s1">&#39;&amp;File&#39;</span><span class="p">)</span>
+        <span class="n">fileMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">quit_action</span><span class="p">)</span>
+
+        <span class="c1">### General layout</span>
+        <span class="n">central_widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">central_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">central_widget</span><span class="p">)</span>
+
+        <span class="c1"># Layout for left hand controls</span>
+        <span class="n">control_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+        <span class="c1">### Analog Out</span>
+        <span class="n">box_ao</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Analog Out&#39;</span><span class="p">)</span>
+        <span class="n">layout_ao</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">box_ao</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout_ao</span><span class="p">)</span>
+        <span class="n">control_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">box_ao</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao1_spinbox</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao1_spinbox</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s1">&#39;V&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao1_spinbox</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># limits are checked by the Operator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao1_spinbox</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ao1_value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao1_spinbox</span><span class="o">.</span><span class="n">setDecimals</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao1_spinbox</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao2_spinbox</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao2_spinbox</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s1">&#39;V&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao2_spinbox</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># limits are checked by the Operator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao2_spinbox</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ao2_value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao2_spinbox</span><span class="o">.</span><span class="n">setDecimals</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao2_spinbox</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao1_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao2_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">()</span>
+        <span class="n">layout_ao</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ao1_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ao1_spinbox</span><span class="p">)</span>
+        <span class="n">layout_ao</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ao2_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ao2_spinbox</span><span class="p">)</span>
+
+        <span class="c1">### Monitor</span>
+        <span class="n">box_monitor</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Monitor&#39;</span><span class="p">)</span>
+        <span class="n">layout_monitor</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">box_monitor</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout_monitor</span><span class="p">)</span>
+        <span class="n">control_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">box_monitor</span><span class="p">)</span>
+
+        <span class="n">layout_monitor_form</span>  <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">layout_monitor</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">layout_monitor_form</span><span class="p">)</span>
+        <span class="n">layout_monitor_buttons</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">layout_monitor</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">layout_monitor_buttons</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_step_spinbox</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_step_spinbox</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_step_spinbox</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="o">.</span><span class="mi">01</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_step_spinbox</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_step</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_step_spinbox</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">layout_monitor_form</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Time step&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_step_spinbox</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_points</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">layout_monitor_form</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Plot points&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Start&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_monitor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Stop&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stop_monitor</span><span class="p">)</span>
+
+        <span class="n">layout_monitor_buttons</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_button</span><span class="p">)</span>
+        <span class="n">layout_monitor_buttons</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stop_button</span><span class="p">)</span>
+
+        <span class="c1">### Graphs:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">GraphicsWindow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span><span class="o">.</span><span class="n">addPlot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;voltage&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curve1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pen</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+        <span class="n">text_update_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;text_update_time&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label_1</span> <span class="o">=</span> <span class="n">ValueLabelItem</span><span class="p">(</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">siPrefix</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="n">siPrecision</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                                      <span class="n">averageTime</span><span class="o">=</span><span class="n">text_update_time</span><span class="p">,</span> <span class="n">textUpdateTime</span><span class="o">=</span><span class="n">text_update_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label_1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span><span class="o">.</span><span class="n">nextRow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span><span class="o">.</span><span class="n">addPlot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot2</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot2</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;voltage&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curve2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pen</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label_2</span> <span class="o">=</span> <span class="n">ValueLabelItem</span><span class="p">(</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">siPrefix</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="n">siPrecision</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                                      <span class="n">averageTime</span><span class="o">=</span><span class="n">text_update_time</span><span class="p">,</span> <span class="n">textUpdateTime</span><span class="o">=</span><span class="n">text_update_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label_2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_values_update_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+
+        <span class="c1"># Add an empty widget at the bottom of the control layout to make layout nicer</span>
+        <span class="n">dummy</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">dummy</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">)</span>
+        <span class="n">control_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">dummy</span><span class="p">)</span>
+        <span class="c1"># Add control layout and graph window to central layout and apply central layout to window</span>
+        <span class="n">central_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">control_layout</span><span class="p">)</span>
+        <span class="n">central_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">central_widget</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">apply_properties</span><span class="p">()</span>
+
+        <span class="c1"># To make it look a bit nicer at the beginning (this is not strictly necessary):</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;plot_points&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;time_step&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">setXRange</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot2</span><span class="o">.</span><span class="n">setXRange</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">enableAutoRange</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot2</span><span class="o">.</span><span class="n">enableAutoRange</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MonitorWindow.apply_properties"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.apply_properties">[docs]</a>    <span class="k">def</span> <span class="nf">apply_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply properties dictionary to gui elements.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao1_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;ao&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao2_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;ao&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_step_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;time_step&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;plot_points&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot2</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="MonitorWindow.load_scan_guis"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.load_scan_guis">[docs]</a>    <span class="k">def</span> <span class="nf">load_scan_guis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan_windows</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load scan windows and add them to a menu in this monitor window.</span>
+<span class="sd">        Note that the scan windows should be instantiated before adding them.</span>
+<span class="sd">        The keys of the dictionary should be strings that will act as the names in the Scan menu.</span>
+<span class="sd">        The values of the dictionary could be the ScanWindowObjects or a list that also contains some PyQt gui settings</span>
+<span class="sd">        in a dictionary: [ScanWindowObject, {&#39;shortcut&#39;:&quot;Ctrl+Shift+V&quot;, &#39;statusTip&#39;:&#39;Voltage sweep scan&#39;}]</span>
+
+<span class="sd">        :param scan_windows: scan windows dict</span>
+<span class="sd">        :type scan_windows: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scanMenu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mainMenu</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="s1">&#39;&amp;Scans&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">scan_lst</span> <span class="ow">in</span> <span class="n">scan_windows</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">scan_lst</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="n">scan_lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">scan_lst</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scan_lst</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">scan_lst</span><span class="o">.</span><span class="n">append</span><span class="p">({})</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scan_windows</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">scan_lst</span>
+            <span class="n">scanMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">QAction</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">triggered</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">open_scan_window</span><span class="p">,</span> <span class="o">**</span><span class="n">scan_lst</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span></div>
+
+<div class="viewcode-block" id="MonitorWindow.open_scan_window"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.open_scan_window">[docs]</a>    <span class="k">def</span> <span class="nf">open_scan_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method is called by the menu and opens Scan Windows that were &quot;attached&quot; to this Monitor gui with load_scan_guis().</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_monitor</span><span class="p">()</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>  <span class="c1"># get the name of the QAction (which is also the key of the scanwindow dictionary)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Opening scan window </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_windows</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="n">fit_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_windows</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="MonitorWindow.ao1_value"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.ao1_value">[docs]</a>    <span class="k">def</span> <span class="nf">ao1_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when AO Channel 2 spinbox is modified.</span>
+<span class="sd">        Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">analog_out</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ao1_spinbox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao1_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">set_spinbox_stepsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ao1_spinbox</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MonitorWindow.ao2_value"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.ao2_value">[docs]</a>    <span class="k">def</span> <span class="nf">ao2_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when AO Channel 2 spinbox is modified.</span>
+<span class="sd">        Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">analog_out</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ao2_spinbox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ao2_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">set_spinbox_stepsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ao2_spinbox</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MonitorWindow.time_step"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.time_step">[docs]</a>    <span class="k">def</span> <span class="nf">time_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when time step spinbox is modified.</span>
+<span class="sd">        Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_set_monitor_time_step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_step_spinbox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_step_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;time_step&#39;</span><span class="p">])</span>
+        <span class="n">set_spinbox_stepsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_step_spinbox</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MonitorWindow.plot_points"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.plot_points">[docs]</a>    <span class="k">def</span> <span class="nf">plot_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when plot points spinbox is modified.</span>
+<span class="sd">        Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_set_monitor_plot_points</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;plot_points&#39;</span><span class="p">])</span>
+        <span class="n">set_spinbox_stepsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MonitorWindow.start_monitor"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.start_monitor">[docs]</a>    <span class="k">def</span> <span class="nf">start_monitor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when start button is pressed.</span>
+<span class="sd">        Starts the monitor (thread and timer) and disables some gui elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_busy</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Operator is busy&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Starting monitor&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_allow_monitor</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># enable operator monitor loop to run</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">monitor_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>  <span class="c1"># start the operator monitor</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;gui_refresh_time&#39;</span><span class="p">])</span>  <span class="c1"># start the update timer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_button</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MonitorWindow.stop_monitor"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.stop_monitor">[docs]</a>    <span class="k">def</span> <span class="nf">stop_monitor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when stop button is pressed.</span>
+<span class="sd">        Stops the monitor:</span>
+<span class="sd">        - flags the operator to stop</span>
+<span class="sd">        - uses the Workthread stop method to wait a bit for the operator to finish, or terminate thread if timeout occurs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_thread</span><span class="o">.</span><span class="n">isRunning</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Monitor is not running&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># set flag to to tell the operator to stop:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Stopping monitor&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">monitor_thread</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;stop_timeout&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_allow_monitor</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># disable monitor again</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_busy</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Reset in case the monitor was not stopped gracefully, but forcefully stopped</span></div>
+
+<div class="viewcode-block" id="MonitorWindow.update_monitor"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.update_monitor">[docs]</a>    <span class="k">def</span> <span class="nf">update_monitor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if new data is available and updates the graph.</span>
+<span class="sd">        Checks if thread is still running and if not: stops timer and reset gui elements</span>
+<span class="sd">        (called by timer)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_new_monitor_data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_new_monitor_data</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">curve1</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">analog_monitor_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">analog_monitor_1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">curve2</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">analog_monitor_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">analog_monitor_2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">label_1</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">analog_monitor_1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">label_2</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">analog_monitor_2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_thread</span><span class="o">.</span><span class="n">isFinished</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Monitor thread is finished&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot_points_spinbox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_button</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MonitorWindow.closeEvent"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.MonitorWindow.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets called when the window is closed. Could be used to do some cleanup before closing. &quot;&quot;&quot;</span>
+
+        <span class="c1"># # Use this bit to display an &quot;Are you sure&quot;-dialogbox</span>
+        <span class="c1"># quit_msg = &quot;Are you sure you want to exit labphew monitor?&quot;</span>
+        <span class="c1"># reply = QMessageBox.question(self, &#39;Message&#39;, quit_msg, QMessageBox.Yes, QMessageBox.No)</span>
+        <span class="c1"># if reply == QMessageBox.No:</span>
+        <span class="c1">#     event.ignore()</span>
+        <span class="c1">#     return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_monitor</span><span class="p">()</span>  <span class="c1"># stop monitor if it was running</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>  <span class="c1"># stop monitor timer, just to be nice</span>
+        <span class="c1"># Close all child scan windows</span>
+        <span class="k">for</span> <span class="n">scan_win</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_windows</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">scan_win</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">disconnect_devices</span><span class="p">()</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="ScanWindow"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow">[docs]</a><span class="k">class</span> <span class="nc">ScanWindow</span><span class="p">(</span><span class="n">ScanWindowBase</span><span class="p">):</span>
+<div class="viewcode-block" id="ScanWindow.__init__"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Analog Discovery 2&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span> <span class="o">=</span> <span class="n">operator</span>
+
+        <span class="c1"># # For loading a .ui file (created with QtDesigner):</span>
+        <span class="c1"># p = os.path.dirname(__file__)</span>
+        <span class="c1"># uic.loadUi(os.path.join(p, &#39;design/UI/main_window.ui&#39;), self)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_UI</span><span class="p">()</span>
+
+        <span class="c1"># create thread and timer objects for scan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_timer</span> <span class="o">=</span> <span class="n">QTimer</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">update_scan</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_thread</span> <span class="o">=</span> <span class="n">WorkThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">do_scan</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ScanWindow.set_UI"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.set_UI">[docs]</a>    <span class="k">def</span> <span class="nf">set_UI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Code-based generation of the user-interface based on PyQT</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Digilent AD2 Scan example&#39;</span><span class="p">)</span>
+        <span class="c1"># display statusbar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="p">()</span>
+        <span class="c1">### The menu bar:</span>
+        <span class="n">mod_config_action</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Con&amp;fig&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">triggered</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mod_scan_config</span><span class="p">,</span> <span class="n">shortcut</span><span class="o">=</span><span class="s2">&quot;Ctrl+Shift+C&quot;</span><span class="p">,</span> <span class="n">statusTip</span><span class="o">=</span><span class="s1">&#39;Modify the scan config&#39;</span><span class="p">)</span>
+        <span class="n">quit_action</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;&amp;Close&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">triggered</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">,</span> <span class="n">shortcut</span><span class="o">=</span><span class="s2">&quot;Ctrl+W&quot;</span><span class="p">,</span> <span class="n">statusTip</span><span class="o">=</span><span class="s1">&#39;Close the scan window&#39;</span><span class="p">)</span>
+
+        <span class="n">mainMenu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuBar</span><span class="p">()</span>
+        <span class="n">fileMenu</span> <span class="o">=</span> <span class="n">mainMenu</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="s1">&#39;&amp;File&#39;</span><span class="p">)</span>
+        <span class="n">fileMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">mod_config_action</span><span class="p">)</span>
+        <span class="n">fileMenu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">quit_action</span><span class="p">)</span>
+
+        <span class="c1">### General layout</span>
+        <span class="n">central_widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">central_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">central_widget</span><span class="p">)</span>
+
+        <span class="c1"># Layout for left hand controls</span>
+        <span class="n">control_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+        <span class="c1">### Scan box</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">box_scan</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Scan&#39;</span><span class="p">)</span>
+        <span class="n">layout_scan</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">box_scan</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout_scan</span><span class="p">)</span>
+        <span class="n">control_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box_scan</span><span class="p">)</span>
+
+        <span class="n">layout_scan_form</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">layout_scan</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">layout_scan_form</span><span class="p">)</span>
+        <span class="n">layout_scan_buttons</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">layout_scan</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">layout_scan_buttons</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_start_spinbox</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">singleStep</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">valueChanged</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_start_value</span><span class="p">)</span>
+        <span class="c1"># self.scan_start_spinbox.valueChanged.connect(self.scan_start_value)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_stop_spinbox</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">singleStep</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">valueChanged</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_stop_value</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_step_spinbox</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">singleStep</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">valueChanged</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_step_value</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_start_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_stop_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;stop&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_step_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;step&#39;</span><span class="p">)</span>
+        <span class="n">layout_scan_form</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_start_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_start_spinbox</span><span class="p">)</span>
+        <span class="n">layout_scan_form</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_stop_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_stop_spinbox</span><span class="p">)</span>
+        <span class="n">layout_scan_form</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_step_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_step_spinbox</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Start&#39;</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start_scan</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pause_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Pause&#39;</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pause_scan</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Stop&#39;</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stop_scan</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kill_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Kill&#39;</span><span class="p">,</span> <span class="n">clicked</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kill_scan</span><span class="p">)</span>
+        <span class="c1"># Haven&#39;t decided what names are best. Suggestions:</span>
+        <span class="c1"># start, pause, interrupt, stop, abort, quit, kill</span>
+
+        <span class="n">layout_scan_buttons</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_button</span><span class="p">)</span>
+        <span class="n">layout_scan_buttons</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pause_button</span><span class="p">)</span>
+        <span class="n">layout_scan_buttons</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stop_button</span><span class="p">)</span>
+        <span class="n">layout_scan_buttons</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kill_button</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">saver</span> <span class="o">=</span> <span class="n">SaverWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">save_scan</span><span class="p">)</span>
+        <span class="n">layout_scan</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saver</span><span class="p">)</span>
+
+        <span class="c1">### Graphs:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">GraphicsWindow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span><span class="o">.</span><span class="n">addPlot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curve1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pen</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Add an empty widget at the bottom of the control layout to make layout nicer</span>
+        <span class="n">dummy</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">dummy</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSizePolicy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">,</span> <span class="n">QSizePolicy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">)</span>
+        <span class="n">control_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">dummy</span><span class="p">)</span>
+        <span class="c1"># Add control layout and graph window to central layout and apply central layout to window</span>
+        <span class="n">central_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">control_layout</span><span class="p">)</span>
+        <span class="n">central_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_win</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">central_widget</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">apply_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_fields</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ScanWindow.mod_scan_config"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.mod_scan_config">[docs]</a>    <span class="k">def</span> <span class="nf">mod_scan_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Open the Modify Config window for the scan properties</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">conf_win</span> <span class="o">=</span> <span class="n">ModifyConfig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">],</span> <span class="n">apply_callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_properties</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">conf_win</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ScanWindow.apply_properties"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.apply_properties">[docs]</a>    <span class="k">def</span> <span class="nf">apply_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply properties dictionary to gui elements.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Applying config properties to gui elements&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_set_scan_start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">])</span>  <span class="c1"># this optional line checks validity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_start_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_set_scan_stop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;stop&#39;</span><span class="p">])</span>  <span class="c1"># this optional line checks validity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_stop_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;stop&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_set_scan_step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>  <span class="c1"># this optional line checks validity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_step_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="s1">&#39;title&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">box_scan</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;x_label&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;x_units&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;y_label&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;y_units&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">setXRange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;stop&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="s1">&#39;filename&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">saver</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;filename&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="ScanWindow.scan_start_value"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.scan_start_value">[docs]</a>    <span class="k">def</span> <span class="nf">scan_start_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when Scan Start spinbox is modified.</span>
+<span class="sd">        Updates the parameter using a method of operator (which checks validity and also fixes the sign of step) and</span>
+<span class="sd">        forces the (corrected) parameter in the gui elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_set_scan_start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_start_spinbox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_start_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_step_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
+        <span class="n">set_spinbox_stepsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_start_spinbox</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">setXRange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;stop&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="ScanWindow.scan_stop_value"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.scan_stop_value">[docs]</a>    <span class="k">def</span> <span class="nf">scan_stop_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when Scan Stop spinbox is modified.</span>
+<span class="sd">        Updates the parameter using a method of operator (which checks validity and also fixes the sign of step) and</span>
+<span class="sd">        forces the (corrected) parameter in the gui elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_set_scan_stop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_stop_spinbox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_stop_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;stop&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_step_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
+        <span class="n">set_spinbox_stepsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_stop_spinbox</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot1</span><span class="o">.</span><span class="n">setXRange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;stop&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="ScanWindow.scan_step_value"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.scan_step_value">[docs]</a>    <span class="k">def</span> <span class="nf">scan_step_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when Scan Step spinbox is modified.</span>
+<span class="sd">        Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_set_scan_step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_step_spinbox</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_step_spinbox</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;step&#39;</span><span class="p">])</span>
+        <span class="n">set_spinbox_stepsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_step_spinbox</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ScanWindow.reset_fields"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.reset_fields">[docs]</a>    <span class="k">def</span> <span class="nf">reset_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets gui elements after a scan is finished, stopped or terminated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_button</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pause_button</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Pause&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pause_button</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_button</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_start_spinbox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_stop_spinbox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_step_spinbox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Reset all flow control flags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_busy</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_pause</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ScanWindow.start_scan"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.start_scan">[docs]</a>    <span class="k">def</span> <span class="nf">start_scan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when start button is pressed.</span>
+<span class="sd">        Starts the monitor (thread and timer) and disables some gui elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_busy</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Operator is busy&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Starting scan&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_button</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pause_button</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stop_button</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># self.operator._stop = False  # enable operator monitor loop to run</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scan_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>  <span class="c1"># start the operator monitor</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scan_timer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;gui_refresh_time&#39;</span><span class="p">])</span>  <span class="c1"># start the update timer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scan_start_spinbox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scan_stop_spinbox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scan_step_spinbox</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ScanWindow.pause_scan"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.pause_scan">[docs]</a>    <span class="k">def</span> <span class="nf">pause_scan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when pause button is clicked.</span>
+<span class="sd">        Signals the operator scan to pause. Updates buttons accordingly</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_pause</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_pause</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pause_button</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Continue&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_pause</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pause_button</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Pause&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ScanWindow.stop_scan"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.stop_scan">[docs]</a>    <span class="k">def</span> <span class="nf">stop_scan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stop all loop threads:</span>
+<span class="sd">        - flags the operator to stop</span>
+<span class="sd">        - uses the Workthread stop method to wait a bit for the operator to finish, or terminate thread if timeout occurs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Stopping operator&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_button</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_thread</span><span class="o">.</span><span class="n">isRunning</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scan_thread</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;stop_timeout&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_busy</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Reset in case the monitor was not stopped gracefully, but forcefully stopped</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_fields</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ScanWindow.kill_scan"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.kill_scan">[docs]</a>    <span class="k">def</span> <span class="nf">kill_scan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forcefully terminates the scan thread</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Killing operator threads&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_thread</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_fields</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ScanWindow.update_scan"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.update_scan">[docs]</a>    <span class="k">def</span> <span class="nf">update_scan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if new data is available and updates the graph.</span>
+<span class="sd">        Checks if thread is still running and if not: stops timer and reset gui elements</span>
+<span class="sd">        (called by timer)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_new_scan_data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">_new_scan_data</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">curve1</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">scan_voltages</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="o">.</span><span class="n">measured_voltages</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_thread</span><span class="o">.</span><span class="n">isFinished</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Scan thread is finished&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scan_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_fields</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ScanWindow.closeEvent"><a class="viewcode-back" href="../../../view/digilent_ad2.html#labphew.view.analog_discovery_2_view.ScanWindow.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Gets called when the window is closed. Could be used to do some cleanup before closing. &quot;&quot;&quot;</span>
+
+        <span class="c1"># # Use this bit to display an &quot;Are you sure&quot;-dialogbox</span>
+        <span class="c1"># quit_msg = &quot;Are you sure you want to exit labphew monitor?&quot;</span>
+        <span class="c1"># reply = QMessageBox.question(self, &#39;Message&#39;, quit_msg, QMessageBox.Yes, QMessageBox.No)</span>
+        <span class="c1"># if reply == QMessageBox.No:</span>
+        <span class="c1">#     event.ignore()</span>
+        <span class="c1">#     return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_scan</span><span class="p">()</span>  <span class="c1"># stop scan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>  <span class="c1"># stop scan timer, just to be sure</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">labphew</span>  <span class="c1"># import this to use labphew style logging</span>
+
+    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="kn">import</span> <span class="n">QApplication</span>
+    <span class="kn">from</span> <span class="nn">labphew.model.analog_discovery_2_model</span> <span class="kn">import</span> <span class="n">Operator</span>
+
+    <span class="c1"># To use with real device</span>
+    <span class="c1"># from labphew.controller.digilent.waveforms import DfwController</span>
+
+    <span class="c1"># To test with simulated device</span>
+    <span class="kn">from</span> <span class="nn">labphew.controller.digilent.waveforms</span> <span class="kn">import</span> <span class="n">SimulatedDfwController</span> <span class="k">as</span> <span class="n">DfwController</span>
+
+    <span class="n">instrument</span> <span class="o">=</span> <span class="n">DfwController</span><span class="p">()</span>
+    <span class="n">opr</span> <span class="o">=</span> <span class="n">Operator</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+    <span class="n">opr</span><span class="o">.</span><span class="n">load_config</span><span class="p">()</span>
+
+    <span class="n">create_scan_window_only</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">##### Toggle this to showcase the scanwindow or the monitor</span>
+
+    <span class="k">if</span> <span class="n">create_scan_window_only</span><span class="p">:</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+        <span class="n">app_icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">labphew</span><span class="o">.</span><span class="n">package_path</span><span class="p">,</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;design&#39;</span><span class="p">,</span> <span class="s1">&#39;icons&#39;</span><span class="p">,</span> <span class="s1">&#39;labphew_icon.png&#39;</span><span class="p">))</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">app_icon</span><span class="p">)</span>  <span class="c1"># set an icon</span>
+        <span class="n">gui</span> <span class="o">=</span> <span class="n">ScanWindow</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+        <span class="n">gui</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">closeAllWindows</span><span class="p">()</span>  <span class="c1"># close any child window that might have been open</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Create a PyQt application</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+        <span class="n">app_icon</span> <span class="o">=</span> <span class="n">QIcon</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">labphew</span><span class="o">.</span><span class="n">package_path</span><span class="p">,</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;design&#39;</span><span class="p">,</span> <span class="s1">&#39;icons&#39;</span><span class="p">,</span> <span class="s1">&#39;labphew_icon.png&#39;</span><span class="p">))</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">app_icon</span><span class="p">)</span>  <span class="c1"># set an icon</span>
+        <span class="n">gui</span> <span class="o">=</span> <span class="n">MonitorWindow</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+        <span class="c1"># To add Scan window(s) to the Monitor window use the following code.</span>
+        <span class="n">add_scan_to_monitor</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">##### Toggle this to showcase monitor with and without scanwindow</span>
+        <span class="k">if</span> <span class="n">add_scan_to_monitor</span><span class="p">:</span>
+            <span class="n">scan_1</span> <span class="o">=</span> <span class="n">ScanWindow</span><span class="p">(</span><span class="n">opr</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">gui</span><span class="p">)</span>
+            <span class="n">scans</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;Sweep &amp;voltage&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">scan_1</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;shortcut&#39;</span><span class="p">:</span><span class="s2">&quot;Ctrl+Shift+V&quot;</span><span class="p">,</span> <span class="s1">&#39;statusTip&#39;</span><span class="p">:</span><span class="s1">&#39;Voltage sweep scan&#39;</span><span class="p">}]</span>  <span class="c1"># note that the dictionary is optional</span>
+                     <span class="p">}</span>
+            <span class="n">gui</span><span class="o">.</span><span class="n">load_scan_guis</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span>
+        <span class="n">gui</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  <span class="c1"># make sure the GUI will be displayed</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span>  <span class="c1"># run the application</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">closeAllWindows</span><span class="p">()</span>  <span class="c1"># close any child window that might have been open</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Sanli Faez
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>A short guided tour &mdash; labphew 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="M for model" href="labphew.model.html" />
+    <link rel="prev" title="How to labphew" href="howtolabphew.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> labphew
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Further in the docs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howtolabphew.html">How to labphew</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">A short guided tour</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#controller">Controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#view">View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-play">How to play</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="labphew.model.html">M for model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labphew.view.html">V for view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labphew.controller.html">C for controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labphew.core.html">The core files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labphew.logging.html">Logging and debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Simple examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devices.html">Supported devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">labphew</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>A short guided tour</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/walkthrough.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="a-short-guided-tour">
+<h1>A short guided tour<a class="headerlink" href="#a-short-guided-tour" title="Permalink to this headline">¶</a></h1>
+<p>This short guide walks you through the folder structure of the labphew package and introduces you to the main
+classes and functions that you might want to tinker with</p>
+<a class="reference internal image-reference" href="_images/mvc_diagram.png"><img alt="the model-view-controller framework" src="_images/mvc_diagram.png" style="width: 290.0px; height: 362.5px;" /></a>
+<p>labphew is developed following the Model-View-Controller (MVC) structure.
+In this structure the code is separated into different subfolders,
+with a clear separation of tasks. These modules and their interactions with the user and electronics
+are schematically presented in the figure above. The MVC subfolders can be explained as follows:</p>
+<ul class="simple">
+<li><em>model</em>: Specifies the logic and the order of operations to perform a certain measurement.</li>
+<li><em>view</em>: User-facing elements, such as the graphical user interface (GUI), or the command-line interface (CLI).</li>
+<li><em>controller</em>: The drivers for the hardware. These modules handle the low-level communication with the devices.</li>
+</ul>
+<p>Additional to the MVC subfolders, labphew has three subfolder for managing communication with users</p>
+<ul class="simple">
+<li><em>core</em>: Includes the templates and base classes that are introduced for inter-operability.</li>
+<li><em>docs</em>: Contains the documentation, such as this file</li>
+<li><em>Examples</em>: a few examples of labphew applications written for generic or special purposes</li>
+</ul>
+<p>To further understand the architecture of the code, we specify some of the main contents of each module.</p>
+<div class="section" id="controller">
+<h2>Controller<a class="headerlink" href="#controller" title="Permalink to this headline">¶</a></h2>
+<p>The controllers can be regarded as the drivers for devices, or the Python wrappers for these drivers.
+Manufacturers of hardware sometimes offer the drivers, such as <a class="reference external" href="https://github.com/basler/pypylon">PyPylon</a>
+for Basler cameras or <a class="reference external" href="https://github.com/ni/nidaqmx-python/">NIDAQmx</a> for National Instruments cards.
+Often, drivers are developed by other researchers and can be find on github.
+Sometimes there is no available driver for the cameras and the user will need to develop their own.</p>
+<p>Learn more about the labphew basic controllers in <a class="reference internal" href="labphew.controller.html"><span class="doc">C for controller</span></a></p>
+</div>
+<div class="section" id="model">
+<h2>Model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h2>
+<p>Models translate the logic of the measurement into machine-iterable algorithms that communicate with
+the devices using the controller module. Each model contains an <code class="docutils literal notranslate"><span class="pre">Operator</span></code> class
+(remember the Operator in the Matrix series?).
+A simple case could be capturing a single frame with a camera
+in which it is usually needed to open a shutter, trigger the camera, acquire a frame, close the shutter,
+and readout the acquired data and save or display.
+This specific sequence of operation are determined by the user
+and thus should be separated from the controllers.
+In labphew, this procedure is included in various method of the Operator class, for example
+<code class="docutils literal notranslate"><span class="pre">read_frame</span></code> which starts a captures and displays a single frame,
+or <code class="docutils literal notranslate"><span class="pre">record_sequence</span></code> which continuously saves the acquired images to the hard drive.</p>
+<p>You can read more about the labphew standard models in <a class="reference internal" href="labphew.model.html"><span class="doc">M for model</span></a></p>
+</div>
+<div class="section" id="view">
+<h2>View<a class="headerlink" href="#view" title="Permalink to this headline">¶</a></h2>
+<p>The view folder is the collection of interfaces for users to run an experiment. Different views can be written for the
+same model, dependent on how the user likes to interact with the setup. A generic view can also work with different
+models. A view module is usually initiated by calling an <code class="docutils literal notranslate"><span class="pre">Operator</span></code> to take care of the communication with devices
+and the steps of the main control loop.
+Views can be both working with command-line interface (CLI) or a graphical user interface (GUI).</p>
+<p>Read more about how to navigate through the labphew view modules in <a class="reference internal" href="labphew.view.html"><span class="doc">V for view</span></a></p>
+</div>
+<div class="section" id="how-to-play">
+<h2>How to play<a class="headerlink" href="#how-to-play" title="Permalink to this headline">¶</a></h2>
+<p>If you have already installed labphew, here are some suggestions on <a class="reference internal" href="howtolabphew.html"><span class="doc">How to labphew</span></a>.</p>
+<p>Otherwise, see <a class="reference internal" href="installation.html"><span class="doc">How to install</span></a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="labphew.model.html" class="btn btn-neutral float-right" title="M for model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="howtolabphew.html" class="btn btn-neutral float-left" title="How to labphew" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Sanli Faez
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

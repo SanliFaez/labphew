@@ -1,0 +1,433 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Basler controller &mdash; labphew 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Digilent WaveForms Controller" href="waveforms.html" />
+    <link rel="prev" title="Blink controller" href="blink.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> labphew
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Further in the docs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howtolabphew.html">How to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../walkthrough.html">A short guided tour</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.model.html">M for model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.view.html">V for view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.controller.html">C for controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.core.html">The core files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.logging.html">Logging and debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Simple examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devices.html">Supported devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customize.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../controller.html">Controller</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="blink.html">Blink controller</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Basler controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="waveforms.html">Digilent WaveForms Controller</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../model.html">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../view.html">View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../core.html">Core</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">labphew</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../api.html">API documentation</a> &raquo;</li>
+        
+          <li><a href="../controller.html">Controller</a> &raquo;</li>
+        
+      <li>Basler controller</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/controller/basler.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-labphew.controller.basler.basler_controller"></span><div class="section" id="basler-controller">
+<h1>Basler controller<a class="headerlink" href="#basler-controller" title="Permalink to this headline">¶</a></h1>
+<p>BOTH THE FILE AND THE DOCUMENTATION ARE INCOMPLETE</p>
+<dl class="class">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera">
+<em class="property">class </em><code class="descclassname">labphew.controller.basler.basler_controller.</code><code class="descname">BaslerCamera</code><span class="sig-paren">(</span><em>camera</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/base.html#labphew.core.base.camera_base.BaseCamera" title="labphew.core.base.camera_base.BaseCamera"><code class="xref py py-class docutils literal notranslate"><span class="pre">labphew.core.base.camera_base.BaseCamera</span></code></a></p>
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>camera</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera._acquisition_mode">
+<code class="descname">_acquisition_mode</code><em class="property"> = 0</em><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera._acquisition_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.finalize">
+<code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.finalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.get_ROI">
+<code class="descname">get_ROI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.get_ROI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.get_ROI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.get_acquisition_mode">
+<code class="descname">get_acquisition_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.get_acquisition_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.get_acquisition_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the acquisition mode, either continuous or single shot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.get_auto_exposure">
+<code class="descname">get_auto_exposure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.get_auto_exposure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.get_auto_exposure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auto exposure can take one of three values: Off, Once, Continuous</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.get_auto_gain">
+<code class="descname">get_auto_gain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.get_auto_gain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.get_auto_gain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auto Gain must be one of three values: Off, Once, Continuous</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.get_ccd_height">
+<code class="descname">get_ccd_height</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.get_ccd_height"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.get_ccd_height" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.get_ccd_width">
+<code class="descname">get_ccd_width</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.get_ccd_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.get_ccd_width" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.get_exposure">
+<code class="descname">get_exposure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.get_exposure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.get_exposure" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exposure of the camera defined in microseconds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.get_frame_asarray">
+<code class="descname">get_frame_asarray</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.get_frame_asarray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.get_frame_asarray" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.get_gain">
+<code class="descname">get_gain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.get_gain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.get_gain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gain is a float</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.get_pixel_format">
+<code class="descname">get_pixel_format</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.get_pixel_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.get_pixel_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pixel format must be one of Mono8, Mono12, Mono12p</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.initialize">
+<code class="descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the communication with the camera. Get’s the maximum and minimum width. It also forces
+the camera to work on Software Trigger.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It may be useful to integrate other types of triggers in applications that need to
+synchronize with other hardware.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.read_camera">
+<code class="descname">read_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; list<a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.read_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.read_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the camera</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.set_ROI">
+<code class="descname">set_ROI</code><span class="sig-paren">(</span><em>vals</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.set_ROI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.set_ROI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up the ROI. Not all cameras are 0-indexed, so this is an important
+place to define the proper ROI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>list</em>) – array type with the coordinates for the ROI X[0], X[1]</li>
+<li><strong>Y</strong> (<em>list</em>) – array type with the coordinates for the ROI Y[0], Y[1]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">X, Y lists with the current ROI information</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.set_acquisition_mode">
+<code class="descname">set_acquisition_mode</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.set_acquisition_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.set_acquisition_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the readout mode of the camera: Single or continuous.
+:param int mode: One of self.MODE_CONTINUOUS, self.MODE_SINGLE_SHOT
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.set_auto_exposure">
+<code class="descname">set_auto_exposure</code><span class="sig-paren">(</span><em>mode: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.set_auto_exposure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.set_auto_exposure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.set_auto_gain">
+<code class="descname">set_auto_gain</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.set_auto_gain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.set_auto_gain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.set_exposure">
+<code class="descname">set_exposure</code><span class="sig-paren">(</span><em>exposure</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.set_exposure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.set_exposure" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exposure of the camera is defined in microseconds</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.set_gain">
+<code class="descname">set_gain</code><span class="sig-paren">(</span><em>gain: float</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.set_gain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.set_gain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the gain on the camera, if possible</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gain</strong> – a float representing the gain</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.set_pixel_format">
+<code class="descname">set_pixel_format</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.set_pixel_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.set_pixel_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pixel format must be one of Mono8, Mono12, Mono12p</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.start_free_run">
+<code class="descname">start_free_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.start_free_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.start_free_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts a free run from the camera. It will preserve only the latest image. It depends
+on how quickly the experiment reads from the camera whether all the images will be available
+or only some.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.stop_camera">
+<code class="descname">stop_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.stop_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.stop_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the acquisition and closes the connection with the camera.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.stop_free_run">
+<code class="descname">stop_free_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.stop_free_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.stop_free_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.controller.basler.basler_controller.BaslerCamera.trigger_camera">
+<code class="descname">trigger_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/controller/basler/basler_controller.html#BaslerCamera.trigger_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.controller.basler.basler_controller.BaslerCamera.trigger_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggers the camera.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="waveforms.html" class="btn btn-neutral float-right" title="Digilent WaveForms Controller" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="blink.html" class="btn btn-neutral float-left" title="Blink controller" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Sanli Faez
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

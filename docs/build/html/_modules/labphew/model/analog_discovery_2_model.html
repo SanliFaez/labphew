@@ -1,0 +1,622 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>labphew.model.analog_discovery_2_model &mdash; labphew 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> labphew
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Further in the docs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../howtolabphew.html">How to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../walkthrough.html">A short guided tour</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labphew.model.html">M for model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labphew.view.html">V for view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labphew.controller.html">C for controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labphew.core.html">The core files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../labphew.logging.html">Logging and debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Simple examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../devices.html">Supported devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../customize.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">labphew</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>labphew.model.analog_discovery_2_model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for labphew.model.analog_discovery_2_model</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding=utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Analog Discovery 2</span>
+<span class="sd">==================</span>
+
+<span class="sd">This module contains an example class of an Operator for the Digilent Analog discovery 2</span>
+
+<span class="sd">This Operator contains:</span>
+<span class="sd">- basic methods to get analog in values, set analog out values</span>
+<span class="sd">- a monitor, to provide continuous data for a Monitor gui</span>
+<span class="sd">- an example of a scan that could be run from command line or from a Scan gui</span>
+
+<span class="sd">Example usage can be found at the bottom of the file under if __name__==&#39;__main___&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span><span class="p">,</span> <span class="n">sleep</span><span class="p">,</span> <span class="n">localtime</span><span class="p">,</span> <span class="n">strftime</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">labphew.core.base.operator_base</span> <span class="kn">import</span> <span class="n">OperatorBase</span>
+<span class="kn">import</span> <span class="nn">labphew</span>
+
+
+<div class="viewcode-block" id="Operator"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator">[docs]</a><span class="k">class</span> <span class="nc">Operator</span><span class="p">(</span><span class="n">OperatorBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Example Operator class for Digilent Analog Discovery 2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Operator.__init__"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instrument</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the Operator object for the Digilent Analog Discovery 2.</span>
+<span class="sd">        The DigilentWaveForms controller object for the instrument needs to be created before and passed as an argument.</span>
+
+<span class="sd">        :param instrument: The instrument used by this Operator</span>
+<span class="sd">        :type instrument: DigilentWaveForms controller object</span>
+<span class="sd">        :param properties: optional properties dictionary, note that this can be loaded from file with load_config()</span>
+<span class="sd">        :type properties: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="n">properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instrument</span> <span class="o">=</span> <span class="n">instrument</span>
+
+        <span class="c1"># Flags controlled by operator:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_busy</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># indicates the operator is busy (e.g. with scan or monitor)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_new_scan_data</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># signal there&#39;s new data that could be displayed (a gui would reset this to False after retrieving the data)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_new_monitor_data</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># used to flag gui that new data is available</span>
+
+        <span class="c1"># Flags controlled by external gui to control flow of loops (e.g. scan or monitor)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># signal a loop to stop (whenever operator is not busy it should be False)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pause</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># signal a loop to pause (whenever operator is not busy it should be False)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allow_monitor</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># monitor should not be run from command line, a gui can set this to True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_start_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_plot_points</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="c1"># Create direct alias for this method of the instrument:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analog_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">read_analog</span></div>
+
+<div class="viewcode-block" id="Operator.analog_out"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator.analog_out">[docs]</a>    <span class="k">def</span> <span class="nf">analog_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verify_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set analog_out.</span>
+<span class="sd">        Forces value to be in allowed range.</span>
+<span class="sd">        Applies the value to the output channel.</span>
+<span class="sd">        Returns the (corrected) value.</span>
+<span class="sd">        Note: if verify_only is set True it does not apply the value, but only return the corrected value</span>
+
+<span class="sd">        :param channel: channel 1 or 2</span>
+<span class="sd">        :type channel: int</span>
+<span class="sd">        :param value: voltage to set (in Volt)</span>
+<span class="sd">        :type value: float</span>
+<span class="sd">        :param verify_only: if True it does not apply the value to the channel (default: False)</span>
+<span class="sd">        :type verify_only: bool</span>
+<span class="sd">        :return: the value set to the channel</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">channel</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;incorrect channel number&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">upr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;ao&#39;</span><span class="p">][</span><span class="n">channel</span><span class="p">][</span><span class="s1">&#39;upper_limit&#39;</span><span class="p">]</span>
+        <span class="n">lwr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;ao&#39;</span><span class="p">][</span><span class="n">channel</span><span class="p">][</span><span class="s1">&#39;lower_limit&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">upr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1"> exceeds ch</span><span class="si">{</span><span class="n">channel</span><span class="si">}</span><span class="s1"> limit, clipping to </span><span class="si">{</span><span class="n">upr</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">upr</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">lwr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1"> exceeds ch</span><span class="si">{</span><span class="n">channel</span><span class="si">}</span><span class="s1"> limit, clipping to </span><span class="si">{</span><span class="n">lwr</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">lwr</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">verify_only</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">write_analog</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">channel</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Operator._set_monitor_time_step"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator._set_monitor_time_step">[docs]</a>    <span class="k">def</span> <span class="nf">_set_monitor_time_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_step</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set Monitor time step.</span>
+<span class="sd">        Forces the value to be at least 0.01, and warns for large values</span>
+
+<span class="sd">        :param time_step: time step between acquisitions in the monitor loop (seconds)</span>
+<span class="sd">        :type time_step: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">time_step</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">:</span>
+            <span class="n">time_step</span> <span class="o">=</span> <span class="mf">0.01</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;time_step too small, setting: </span><span class="si">{</span><span class="n">time_step</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">time_step</span><span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;setting time_step to </span><span class="si">{</span><span class="n">time_step</span><span class="si">}</span><span class="s2">s (are you sure?)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;time_step&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_step</span></div>
+
+<div class="viewcode-block" id="Operator._set_monitor_plot_points"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator._set_monitor_plot_points">[docs]</a>    <span class="k">def</span> <span class="nf">_set_monitor_plot_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_points</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set number of plot points for Monitor.</span>
+<span class="sd">        Forces the value to be at least 2, and warns for large values.</span>
+
+<span class="sd">        :param plot_points: time step between acquisitions in the monitor loop (seconds)</span>
+<span class="sd">        :type plot_points: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">plot_points</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">plot_points</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;points too low, setting: </span><span class="si">{</span><span class="n">plot_points</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">plot_points</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;setting plot_points to </span><span class="si">{</span><span class="n">plot_points</span><span class="si">}</span><span class="s2">s (are you sure?)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;plot_points&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_points</span></div>
+
+<div class="viewcode-block" id="Operator._verify_scan_channels"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator._verify_scan_channels">[docs]</a>    <span class="k">def</span> <span class="nf">_verify_scan_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if channels in properties are valid and returns analog out and analog in channel.</span>
+<span class="sd">        Note that None is returned if an error is found</span>
+
+<span class="sd">        :return:  analog out and analog in channel of scan</span>
+<span class="sd">        :rtype: (int, int)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;scan&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;&#39;scan&#39; not found in properties&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="s1">&#39;ao_channel&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;ao_channel&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;&#39;ao_channel&#39; not found in properties or invalid value (should be 1 or 2)&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="s1">&#39;ai_channel&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;ai_channel&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;&#39;ai_channel&#39; not found in properties or invalid value (should be 1 or 2)&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;ao_channel&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;ai_channel&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Operator._set_scan_start"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator._set_scan_start">[docs]</a>    <span class="k">def</span> <span class="nf">_set_scan_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set scan start value.</span>
+<span class="sd">        Forces value to be in valid range and updates properties dictionary.</span>
+<span class="sd">        Also corrects the sign of step if required.</span>
+
+<span class="sd">        :param value: start value of scan (V)</span>
+<span class="sd">        :type value: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ao_ch</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verify_scan_channels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ao_ch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if _verify_scan_channels() returns nothing that means channel is invalid or not found</span>
+            <span class="k">return</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analog_out</span><span class="p">(</span><span class="n">ao_ch</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">verify_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_scan_step</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Operator._set_scan_stop"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator._set_scan_stop">[docs]</a>    <span class="k">def</span> <span class="nf">_set_scan_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set scan stop value.</span>
+<span class="sd">        Forces value to be in valid range and updates properties dictionary.</span>
+
+<span class="sd">        :param value: stop value of scan (V)</span>
+<span class="sd">        :type value: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ao_ch</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verify_scan_channels</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ao_ch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if _verify_scan_channels() returns nothing that means channel is invalid or not found</span>
+            <span class="k">return</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analog_out</span><span class="p">(</span><span class="n">ao_ch</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">verify_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;stop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_scan_step</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Operator._set_scan_step"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator._set_scan_step">[docs]</a>    <span class="k">def</span> <span class="nf">_set_scan_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set scan step value. Note that it will correct the sign automatically accroding to start and stop values.</span>
+<span class="sd">        If no step value is supplied it only corrects the sign of step.</span>
+
+<span class="sd">        :param step: the stepsize for the scan (V)</span>
+<span class="sd">        :type step: float or None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;stepsize of 0 is not possible&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">step</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">step</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;step&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;stop&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span></div>
+
+<div class="viewcode-block" id="Operator._monitor_loop"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator._monitor_loop">[docs]</a>    <span class="k">def</span> <span class="nf">_monitor_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called by GUI Monitor to start the monitor loop.</span>
+<span class="sd">        Not intended to be called from Operator. (Which should be blocked)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First check if monitor is allowed to start</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_busy</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allow_monitor</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Monitor should only be run from GUI and not while Operator is busy&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Preparations before running the monitor</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;plot_points&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;plot_points&#39;</span><span class="p">])</span>
+            <span class="c1"># self.analog_monitor_time = np.zeros(self.properties[&#39;monitor&#39;][&#39;plot_points&#39;])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;plot_points&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;time_step&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;&#39;plot_points&#39; or &#39;time_step&#39; missing or invalid in config&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_busy</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># set flag to indicate operator is busy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="n">next_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="p">:</span>
+            <span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_monitor_start_time</span>
+            <span class="n">analog_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrument</span><span class="o">.</span><span class="n">read_analog</span><span class="p">()</span>  <span class="c1"># read the two analog in channels</span>
+            <span class="c1"># To keep the length constant, roll/shift the buffers and add the new datapoints</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_time</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">analog_in</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">analog_in</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analog_monitor_time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">timestamp</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_new_monitor_data</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># in stead of sleep, calculate when the next datapoint should be acquired and wait until that time arrives</span>
+            <span class="c1"># this allows to keep the timing correct</span>
+            <span class="n">next_time</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;monitor&#39;</span><span class="p">][</span><span class="s1">&#39;time_step&#39;</span><span class="p">]</span>
+            <span class="k">while</span> <span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_monitor_start_time</span><span class="o">&lt;</span><span class="n">next_time</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="p">:</span> <span class="k">break</span>  <span class="c1"># check for stop flag while waiting to move to next point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># reset stop flag to false</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_busy</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># indicate the operator is not busy anymore</span></div>
+
+<div class="viewcode-block" id="Operator.do_scan"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator.do_scan">[docs]</a>    <span class="k">def</span> <span class="nf">do_scan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        An example of a method that performs a scan (based on parameters in the config file).</span>
+<span class="sd">        This method can be run from a GUI, from command line or other script</span>
+<span class="sd">        This scan sweeps the voltage on one of the AO channels and reads one of the AI channels.</span>
+
+<span class="sd">        :param param: optional dictionary of parameters that will used to update the scan parameters</span>
+<span class="sd">        :type param: dict</span>
+<span class="sd">        :return: the AO voltage, and the measured AI voltages</span>
+<span class="sd">        :rtype: list, list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Updating scan properties with supplied parameters dictionary.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+        <span class="c1"># Start with various checks and warn+return if something is wrong</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_busy</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Scan should not be started while Operator is busy.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="s1">&#39;scan&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;The config file or properties dict should contain &#39;scan&#39; section.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">required_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">,</span> <span class="s1">&#39;step&#39;</span><span class="p">,</span> <span class="s1">&#39;ao_channel&#39;</span><span class="p">,</span> <span class="s1">&#39;ai_channel&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">required_keys</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;&#39;scan&#39; should contain: &quot;</span><span class="o">+</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">required_keys</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;stop&#39;</span><span class="p">]</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;step&#39;</span><span class="p">]</span>
+            <span class="n">ch_ao</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;ao_channel&#39;</span><span class="p">])</span>
+            <span class="n">ch_ai</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;ai_channel&#39;</span><span class="p">])</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error occured while reading scan config values&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">ch_ai</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="n">ch_ao</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;AI and AO channel need to be 1 or 2&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="s1">&#39;stabilize_time&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">]:</span>
+            <span class="n">stabilize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">][</span><span class="s1">&#39;stabilize_time&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;stabilize_time not found in config, using 0s&quot;</span><span class="p">)</span>
+            <span class="n">stabilize</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">num_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span> <span class="p">(</span><span class="n">stop</span><span class="o">-</span><span class="n">start</span><span class="p">)</span><span class="o">/</span><span class="n">step</span><span class="o">+</span><span class="mi">1</span> <span class="p">))</span>  <span class="c1"># use round to catch the occasional rounding error</span>
+        <span class="k">if</span> <span class="n">num_points</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Start, stop and step result in 0 or fewer points to sweep&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">voltages_to_scan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">num_points</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scan_voltages</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">measured_voltages</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_busy</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># indicate that operator is busy</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">voltage</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">voltages_to_scan</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;applying </span><span class="si">{}</span><span class="s1"> to ch </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">voltage</span><span class="p">,</span> <span class="n">ch_ao</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analog_out</span><span class="p">(</span><span class="n">ch_ao</span><span class="p">,</span> <span class="n">voltage</span><span class="p">)</span>
+            <span class="n">sleep</span><span class="p">(</span><span class="n">stabilize</span><span class="p">)</span>
+            <span class="n">measured</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analog_in</span><span class="p">()[</span><span class="n">ch_ai</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">measured_voltages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">measured</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scan_voltages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">voltage</span><span class="p">)</span>
+
+            <span class="c1"># The remainder of the loop adds functionality to plot data and pause and stop the scan when it&#39;s run from a gui:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_new_scan_data</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># before the end of the loop: halt if pause is True</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pause</span><span class="p">:</span>
+                <span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="p">:</span> <span class="k">break</span>
+            <span class="c1"># if (soft) stop was requested, break out of loop</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># reset stop flag to false</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_busy</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># indicate operator is not busy anymore</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pause</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># is this necessary?</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_voltages</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">measured_voltages</span></div>
+
+<div class="viewcode-block" id="Operator.save_scan"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator.save_scan">[docs]</a>    <span class="k">def</span> <span class="nf">save_scan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">store_conf</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Store data in xarray Dataset and save to netCDF4 file.</span>
+<span class="sd">        Optional metadata can be passed as a dict. Note that the keys should be strings and the values should be numbers or strings.</span>
+<span class="sd">        Optionally stores the entire Operator properties dictionary to a yaml file of the same name.</span>
+
+<span class="sd">        To load data:</span>
+<span class="sd">        import xarray as xr</span>
+<span class="sd">        xr.load_dataset(filename)</span>
+
+<span class="sd">        :param filename: full path and filename</span>
+<span class="sd">        :type filename: str</span>
+<span class="sd">        :param metadata: optional additional data to store (default: None)</span>
+<span class="sd">        :type metadata: dict</span>
+<span class="sd">        :param store_conf: store Operator properties in yaml file (default: False)</span>
+<span class="sd">        :type store_conf: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First test if the required data arrays have been generated (i.e. if the scan has run)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;scan_voltages&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;measured_voltages&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;no data to save yet&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;overwriting existing file: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Saving data&#39;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span>
+            <span class="n">coords</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;scan_voltage&quot;</span><span class="p">:</span> <span class="p">([</span><span class="s2">&quot;scan_voltage&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_voltages</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s1">&#39;V&#39;</span><span class="p">})</span>
+            <span class="p">},</span>
+            <span class="n">data_vars</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;measured_voltage&quot;</span><span class="p">:</span> <span class="p">([</span><span class="s2">&quot;scan_voltage&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">measured_voltages</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;units&quot;</span><span class="p">:</span><span class="s1">&#39;V&#39;</span><span class="p">})</span>
+            <span class="p">},</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">-%m-%YT%H:%M:%S&#39;</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;config_file&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="c1"># Add all numeric and string keys</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;scan&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>  <span class="c1"># add the optional metadata to the Dataset attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">to_netcdf</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Data saved in </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">store_conf</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Storing Operator properties in yaml file&#39;</span><span class="p">)</span>
+                <span class="n">yml_fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.yml&#39;</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yml_fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">yaml</span><span class="o">.</span><span class="n">safe_dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;An error occurred while trying to save Operator properties to yaml file&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Operator.disconnect_devices"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator.disconnect_devices">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect_devices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close connection to all instruments/devices used by this operator.</span>
+<span class="sd">        (Note that this method will get called when exiting a python with block)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># This method is included because it is recommended (this method gets called when closing the gui), but the</span>
+        <span class="c1"># WaveForms controller does not have a disconnect, hence this method does nothing.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Disconnecting from device(s)&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Operator.load_config"><a class="viewcode-back" href="../../../model/digilent_ad2.html#labphew.model.analog_discovery_2_model.Operator.load_config">[docs]</a>    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If specified, this function loads the configuration file to generate the properties of the Scan.</span>
+
+<span class="sd">        :param filename: Path to the filename. Defaults to analog_discovery_2_config.yml in labphew.core.defaults</span>
+<span class="sd">        :type filename: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Config file not found: </span><span class="si">{}</span><span class="s1">, falling back to default&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">labphew</span><span class="o">.</span><span class="n">package_path</span><span class="p">,</span> <span class="s1">&#39;core&#39;</span><span class="p">,</span> <span class="s1">&#39;defaults&#39;</span><span class="p">,</span> <span class="s1">&#39;analog_discovery_2_config.yml&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;config_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filename</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">labphew</span>   <span class="c1"># import this to use labphew style logging (by importing it before matplotlib it also prevents matplotlib from printing many debugs)</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+    <span class="c1"># from labphew.controller.digilent.waveforms import DfwController</span>
+
+    <span class="c1"># To import the actual device:</span>
+    <span class="c1"># from labphew.controller.digilent.waveforms import DfwController</span>
+
+    <span class="c1"># To import a simulated device:</span>
+    <span class="kn">from</span> <span class="nn">labphew.controller.digilent.waveforms</span> <span class="kn">import</span> <span class="n">SimulatedDfwController</span> <span class="k">as</span> <span class="n">DfwController</span>
+
+    <span class="n">instrument</span> <span class="o">=</span> <span class="n">DfwController</span><span class="p">()</span>
+
+    <span class="n">opr</span> <span class="o">=</span> <span class="n">Operator</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+    <span class="n">opr</span><span class="o">.</span><span class="n">load_config</span><span class="p">()</span>
+
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">opr</span><span class="o">.</span><span class="n">do_scan</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Sanli Faez
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

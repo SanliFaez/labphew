@@ -1,0 +1,729 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Base &mdash; labphew 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tools" href="tools.html" />
+    <link rel="prev" title="Core" href="../core.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> labphew
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Further in the docs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howtolabphew.html">How to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../walkthrough.html">A short guided tour</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.model.html">M for model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.view.html">V for view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.controller.html">C for controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.core.html">The core files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.logging.html">Logging and debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Simple examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devices.html">Supported devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customize.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../controller.html">Controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model.html">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../view.html">View</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../core.html">Core</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#operator-base-class">Operator Base Class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#view-base-classes">View Base Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tools-for-base-classes">Tools for base classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#base-camera-model">Base Camera Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#labphew-view-general-worker">labphew.view.general_worker</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html">Tools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">labphew</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../api.html">API documentation</a> &raquo;</li>
+        
+          <li><a href="../core.html">Core</a> &raquo;</li>
+        
+      <li>Base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/core/base.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-labphew.core.base.operator_base">
+<span id="base"></span><h1>Base<a class="headerlink" href="#module-labphew.core.base.operator_base" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="operator-base-class">
+<h2>Operator Base Class<a class="headerlink" href="#operator-base-class" title="Permalink to this headline">¶</a></h2>
+<p>Base class for operators.
+- When the object of the child class is created the base class checks if required and recommended methods are present</p>
+<blockquote>
+<div>in the child class (and in the base class itself).</div></blockquote>
+<ul class="simple">
+<li>By inheriting, methods from this base class will be used if they are missing in the child class. This allows to
+implement some fallback functionality and to warn the user.</li>
+<li>In addition it implements the __enter__ and __exit__ methods to allow the class to be used in a python with block.</li>
+</ul>
+<p>Example usage can be found at the bottom of the file under if __name__==’__main___’</p>
+<dl class="class">
+<dt id="labphew.core.base.operator_base.OperatorBase">
+<em class="property">class </em><code class="descclassname">labphew.core.base.operator_base.</code><code class="descname">OperatorBase</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/operator_base.html#OperatorBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.operator_base.OperatorBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="labphew.core.base.operator_base.OperatorBase.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/operator_base.html#OperatorBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.operator_base.OperatorBase.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.operator_base.OperatorBase._monitor_loop">
+<code class="descname">_monitor_loop</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/operator_base.html#OperatorBase._monitor_loop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.operator_base.OperatorBase._monitor_loop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.operator_base.OperatorBase.disconnect_devices">
+<code class="descname">disconnect_devices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/operator_base.html#OperatorBase.disconnect_devices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.operator_base.OperatorBase.disconnect_devices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.operator_base.OperatorBase.do_scan">
+<code class="descname">do_scan</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/operator_base.html#OperatorBase.do_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.operator_base.OperatorBase.do_scan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.operator_base.OperatorBase.load_config">
+<code class="descname">load_config</code><span class="sig-paren">(</span><em>filename</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/operator_base.html#OperatorBase.load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.operator_base.OperatorBase.load_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.operator_base.OperatorBase.save_scan">
+<code class="descname">save_scan</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/operator_base.html#OperatorBase.save_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.operator_base.OperatorBase.save_scan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-labphew.core.base.view_base"></span><div class="section" id="view-base-classes">
+<h2>View Base Classes<a class="headerlink" href="#view-base-classes" title="Permalink to this headline">¶</a></h2>
+<p>Base class for View Windows.
+- When the object of the child class is created the base class checks if required and recommended methods are present</p>
+<blockquote>
+<div>in the child class (and in the base class itself).</div></blockquote>
+<ul class="simple">
+<li>By inheriting, methods from this base class will be used if they are missing in the child class. This allows to
+implement some fallback functionality and to warn the user.</li>
+<li>In addition it implements the __enter__ and __exit__ methods to allow the class to be used in a python with block.</li>
+</ul>
+<p>Example usage can be found at the bottom of the file under if __name__==’__main___’</p>
+<dl class="class">
+<dt id="labphew.core.base.view_base.MonitorWindowBase">
+<em class="property">class </em><code class="descclassname">labphew.core.base.view_base.</code><code class="descname">MonitorWindowBase</code><span class="sig-paren">(</span><em>parent=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#MonitorWindowBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.MonitorWindowBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code></p>
+<dl class="method">
+<dt id="labphew.core.base.view_base.MonitorWindowBase.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>parent=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#MonitorWindowBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.MonitorWindowBase.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.MonitorWindowBase.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#MonitorWindowBase.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.MonitorWindowBase.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets called when the window is closed. Could be used to do some cleanup before closing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.MonitorWindowBase.load_scan_guis">
+<code class="descname">load_scan_guis</code><span class="sig-paren">(</span><em>scan_windows</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#MonitorWindowBase.load_scan_guis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.MonitorWindowBase.load_scan_guis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load scan windows and add them to a menu in this monitor window.
+Note that the scan windows should be instantiated before adding them.
+The keys of the dictionary should be strings that will act as the names in the Scan menu.
+The values of the dictionary could be the ScanWindowObjects or a list that also contains some PyQt gui settings
+in a dictionary: [ScanWindowObject, {‘shortcut’:”Ctrl+Shift+V”, ‘statusTip’:’Voltage sweep scan’}]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scan_windows</strong> (<em>dict</em>) – scan windows dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.MonitorWindowBase.open_scan_window">
+<code class="descname">open_scan_window</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#MonitorWindowBase.open_scan_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.MonitorWindowBase.open_scan_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the menu and opens Scan Windows that were “attached” to this Monitor gui with load_scan_guis().</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.MonitorWindowBase.start_monitor">
+<code class="descname">start_monitor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#MonitorWindowBase.start_monitor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.MonitorWindowBase.start_monitor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.MonitorWindowBase.stop_monitor">
+<code class="descname">stop_monitor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#MonitorWindowBase.stop_monitor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.MonitorWindowBase.stop_monitor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.MonitorWindowBase.update_monitor">
+<code class="descname">update_monitor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#MonitorWindowBase.update_monitor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.MonitorWindowBase.update_monitor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="labphew.core.base.view_base.ScanWindowBase">
+<em class="property">class </em><code class="descclassname">labphew.core.base.view_base.</code><code class="descname">ScanWindowBase</code><span class="sig-paren">(</span><em>parent=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#ScanWindowBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.ScanWindowBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QMainWindow</span></code></p>
+<dl class="method">
+<dt id="labphew.core.base.view_base.ScanWindowBase.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>parent=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#ScanWindowBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.ScanWindowBase.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.ScanWindowBase.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#ScanWindowBase.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.ScanWindowBase.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets called when the window is closed. Could be used to do some cleanup before closing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.ScanWindowBase.kill_scan">
+<code class="descname">kill_scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#ScanWindowBase.kill_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.ScanWindowBase.kill_scan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.ScanWindowBase.mod_scan_config">
+<code class="descname">mod_scan_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#ScanWindowBase.mod_scan_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.ScanWindowBase.mod_scan_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.ScanWindowBase.pause_scan">
+<code class="descname">pause_scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#ScanWindowBase.pause_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.ScanWindowBase.pause_scan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.ScanWindowBase.reset_fields">
+<code class="descname">reset_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#ScanWindowBase.reset_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.ScanWindowBase.reset_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.ScanWindowBase.start_scan">
+<code class="descname">start_scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#ScanWindowBase.start_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.ScanWindowBase.start_scan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.ScanWindowBase.stop_scan">
+<code class="descname">stop_scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#ScanWindowBase.stop_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.ScanWindowBase.stop_scan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.view_base.ScanWindowBase.update_scan">
+<code class="descname">update_scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/view_base.html#ScanWindowBase.update_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.view_base.ScanWindowBase.update_scan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-labphew.core.base.tools"></span><div class="section" id="tools-for-base-classes">
+<h2>Tools for base classes<a class="headerlink" href="#tools-for-base-classes" title="Permalink to this headline">¶</a></h2>
+<p>Functions used by the base classes</p>
+<dl class="function">
+<dt id="labphew.core.base.tools._check_method_presence">
+<code class="descclassname">labphew.core.base.tools.</code><code class="descname">_check_method_presence</code><span class="sig-paren">(</span><em>cls</em>, <em>base</em>, <em>method</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/tools.html#_check_method_presence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.tools._check_method_presence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test if a method is present in a class and whether it’s inherited, overwritten, or “new”.
+Table to explain return values:
+(cls, base)
+False, False    Neither child nor base has the method
+False, True     The child class inherits the method from the base class
+True,  False    The child has the method, the base doesn’t
+True,  True     Both classes have the method, but the child has overwritten the one from the base</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cls</strong> (<em>class</em>) – The child class</li>
+<li><strong>base</strong> (<em>class</em>) – The parent or base class from which the child inherits</li>
+<li><strong>method</strong> (<em>str</em>) – name of the method to test</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">uniquely present in cls, present in base</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool, bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="labphew.core.base.tools.check_method_presence_and_warn">
+<code class="descclassname">labphew.core.base.tools.</code><code class="descname">check_method_presence_and_warn</code><span class="sig-paren">(</span><em>cls</em>, <em>required</em>, <em>recommended</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/tools.html#check_method_presence_and_warn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.tools.check_method_presence_and_warn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test if required or recommended methods are present in the class and warns the user with print messages.
+Uses _check_method_presence() to check if the method is in the class itself or in the parent/base class and also
+warns when cls will fall back to parent/base class for recommended method.
+Will raise a NotImplementedError if a required method is missing from the class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cls</strong> (<em>python class</em>) – the (child) class to check</li>
+<li><strong>required</strong> (<em>list</em>) – required method names</li>
+<li><strong>recommended</strong> (<em>list</em>) – recommended method names</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-labphew.core.base.camera_base"></span><div class="section" id="base-camera-model">
+<h2>Base Camera Model<a class="headerlink" href="#base-camera-model" title="Permalink to this headline">¶</a></h2>
+<p>Camera class with the base methods. Having a base class exposes the general API for working with cameras.
+This file is important to keep track of the methods which are exposed to the View.
+The class BaseCamera should be subclassed when developing new Models for other cameras. This ensures that all the
+methods are automatically inherited and there are no breaks downstream.</p>
+<div class="section" id="conventions">
+<h3>Conventions<a class="headerlink" href="#conventions" title="Permalink to this headline">¶</a></h3>
+<p>Images are 0-indexed. Therefore, a camera with 1024pxx1024px will be used as img[0:1024, 0:1024] (remember Python
+leaves out the last value in the slice.</p>
+<p>Region of Interest is specified with the coordinates of the corners. A full-frame with the example above would be
+given by X=[0,1023], Y=[0,1023]. Be careful, since the maximum width (or height) of the camera is 1024.</p>
+<p>The camera keeps track of the coordinates of the initial pixel. For full-frame, this will always be [0,0]. When this
+is very important for the GUI, since after the first crop, if the user wants to crop even further, the information
+has to be referenced to the already cropped area.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>IMPORTANT</strong> Whatever new function is implemented in a specific model,</p>
+</div>
+<p>it should be first declared in the BaseCamera class. In this way the other models will have access to the method
+and the program will keep running (perhaps with non intended behavior though).</p>
+<dl class="class">
+<dt id="labphew.core.base.camera_base.BaseCamera">
+<em class="property">class </em><code class="descclassname">labphew.core.base.camera_base.</code><code class="descname">BaseCamera</code><span class="sig-paren">(</span><em>camera</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="labphew.core.base.camera_base.BaseCamera.ACQUISITION_MODE">
+<code class="descname">ACQUISITION_MODE</code><em class="property"> = {0: 'Single', 1: 'Continuous', 2: 'Keep Last'}</em><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.ACQUISITION_MODE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.GetCCDHeight">
+<code class="descname">GetCCDHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.GetCCDHeight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.GetCCDHeight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns: the CCD height in pixels</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.GetCCDWidth">
+<code class="descname">GetCCDWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.GetCCDWidth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.GetCCDWidth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the CCD width in pixels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="labphew.core.base.camera_base.BaseCamera.MODE_CONTINUOUS">
+<code class="descname">MODE_CONTINUOUS</code><em class="property"> = 1</em><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.MODE_CONTINUOUS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="labphew.core.base.camera_base.BaseCamera.MODE_LAST">
+<code class="descname">MODE_LAST</code><em class="property"> = 2</em><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.MODE_LAST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="labphew.core.base.camera_base.BaseCamera.MODE_SINGLE_SHOT">
+<code class="descname">MODE_SINGLE_SHOT</code><em class="property"> = 0</em><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.MODE_SINGLE_SHOT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>camera</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.acquisition_ready">
+<code class="descname">acquisition_ready</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.acquisition_ready"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.acquisition_ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the acquisition in the camera is over.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.clear_ROI">
+<code class="descname">clear_ROI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.clear_ROI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.clear_ROI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the ROI from the camera.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.clear_binning">
+<code class="descname">clear_binning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.clear_binning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.clear_binning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the binning of the camera to its default value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.configure">
+<code class="descname">configure</code><span class="sig-paren">(</span><em>properties: dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.configure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.getSerialNumber">
+<code class="descname">getSerialNumber</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.getSerialNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.getSerialNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the serial number of the camera.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.get_acquisition_mode">
+<code class="descname">get_acquisition_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.get_acquisition_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.get_acquisition_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the acquisition mode, either continuous or single shot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.get_exposure">
+<code class="descname">get_exposure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.get_exposure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.get_exposure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the exposure time of the camera.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.get_size">
+<code class="descname">get_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.get_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.get_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the size in pixels of the image being acquired. This is useful for checking the ROI settings.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.initialize">
+<code class="descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the camera.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.read_camera">
+<code class="descname">read_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.read_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.read_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the camera</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.set_ROI">
+<code class="descname">set_ROI</code><span class="sig-paren">(</span><em>X</em>, <em>Y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.set_ROI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.set_ROI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up the ROI. Not all cameras are 0-indexed, so this is an important
+place to define the proper ROI.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>list</em>) – array type with the coordinates for the ROI X[0], X[1]</li>
+<li><strong>Y</strong> (<em>list</em>) – array type with the coordinates for the ROI Y[0], Y[1]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">X, Y lists with the current ROI information</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.set_acquisition_mode">
+<code class="descname">set_acquisition_mode</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.set_acquisition_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.set_acquisition_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the readout mode of the camera: Single or continuous.
+:param int mode: One of self.MODE_CONTINUOUS, self.MODE_SINGLE_SHOT
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.set_binning">
+<code class="descname">set_binning</code><span class="sig-paren">(</span><em>xbin</em>, <em>ybin</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.set_binning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.set_binning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the binning of the camera if supported. Has to check if binning in X/Y can be different or not, etc.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xbin</strong> – </li>
+<li><strong>ybin</strong> – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.set_exposure">
+<code class="descname">set_exposure</code><span class="sig-paren">(</span><em>exposure</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.set_exposure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.set_exposure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the exposure of the camera.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.set_gain">
+<code class="descname">set_gain</code><span class="sig-paren">(</span><em>gain: float</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.set_gain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.set_gain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the gain on the camera, if possible</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gain</strong> – a float representing the gain</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.stopAcq">
+<code class="descname">stopAcq</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.stopAcq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.stopAcq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the acquisition without closing the connection to the camera.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.stop_camera">
+<code class="descname">stop_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.stop_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.stop_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the acquisition and closes the connection with the camera.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.camera_base.BaseCamera.trigger_camera">
+<code class="descname">trigger_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/camera_base.html#BaseCamera.trigger_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.camera_base.BaseCamera.trigger_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggers the camera.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<span class="target" id="module-labphew.core.base.general_worker"></span><div class="section" id="labphew-view-general-worker">
+<h2>labphew.view.general_worker<a class="headerlink" href="#labphew-view-general-worker" title="Permalink to this headline">¶</a></h2>
+<p>A Worker Thread is a simple class that re-implements QThread in order to perform a task in a
+separate thread.
+This is a very simple example, that could be further expanded, but it is sufficient for
+working with methods(operations) from an Operator class.
+The only requisite of QThreads is to re-implement the <code class="docutils literal notranslate"><span class="pre">run</span></code>
+method.
+Although it works, this may not be the optimum/correct way of doing things, as pointed out in this <a class="reference external" href="https://mayaposch.wordpress.com/2011/11/01/how-to-really-truly-use-qthreads-the-full-explanation/">blog post</a></p>
+<dl class="class">
+<dt id="labphew.core.base.general_worker.WorkThread">
+<em class="property">class </em><code class="descclassname">labphew.core.base.general_worker.</code><code class="descname">WorkThread</code><span class="sig-paren">(</span><em>function</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/general_worker.html#WorkThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.general_worker.WorkThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtCore.QThread</span></code></p>
+<dl class="method">
+<dt id="labphew.core.base.general_worker.WorkThread.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>function</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/general_worker.html#WorkThread.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.general_worker.WorkThread.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.general_worker.WorkThread.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/general_worker.html#WorkThread.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.general_worker.WorkThread.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="labphew.core.base.general_worker.WorkThread.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><em>timeout=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/core/base/general_worker.html#WorkThread.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.core.base.general_worker.WorkThread.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience method to gracefully stop thread before terminating forcefully after a timeout</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tools.html" class="btn btn-neutral float-right" title="Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../core.html" class="btn btn-neutral float-left" title="Core" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Sanli Faez
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

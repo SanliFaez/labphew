@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>V for view &mdash; labphew 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="C for controller" href="labphew.controller.html" />
+    <link rel="prev" title="M for model" href="labphew.model.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> labphew
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Further in the docs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howtolabphew.html">How to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="walkthrough.html">A short guided tour</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labphew.model.html">M for model</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">V for view</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#essential-methods">Essential methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="labphew.controller.html">C for controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labphew.core.html">The core files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="labphew.logging.html">Logging and debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Simple examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devices.html">Supported devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">labphew</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>V for view</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/labphew.view.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="v-for-view">
+<h1>V for view<a class="headerlink" href="#v-for-view" title="Permalink to this headline">¶</a></h1>
+<p>All the files related to the GUI should be placed within the View package. This is the third leg of the
+MVC design pattern. If the Model is properly built, the Views are relatively simple PyQt objects. It is
+important to point out that if there is any logic of the experiment that goes into the view, the code is
+going to become harder to share, unless it is for the exact same purpose.</p>
+<p>The real-time plots are built on <a class="reference external" href="http://www.pyqtgraph.org/">pyQtGraph</a>,
+a GUI library that gives access to a powerful set of tools for embedding plots in user interfaces.</p>
+<p>The icons used in the GUI are designed by <a class="reference external" href="https://toicon.com">The Artificial</a> and released under a CC-BY license.</p>
+<p>The view is one of the most challenging aspects of any program,
+since it requires a different set of skills compared to the rest of the program.
+Building the view on top of a well-defined model makes it also independent from it.
+By completely separating the logic of the experiment and the devices from the view itself,
+it is possible to quickly prototype solutions that in most cases are enough for a researcher,
+without getting lost in feature creep for the GUI.</p>
+<p>Unless your measurement requires a very specific user-interaction that is essential for operating your setup or
+your experiments, it is better to conform with the defaut GUI that comes with labphew.</p>
+<p>There are two main GUIs implemented in labphew</p>
+<p><code class="docutils literal notranslate"><span class="pre">MonitorWindow</span></code>: is meant to stay active while the experiment is running. One can use this
+interface to monitor the signals from the setup or make adjustments to the (physical) parameters.
+Think of focusing on a certain imaging plane or adjusting the feedback parameters for a control loop.
+Most of the operations that are required for safely starting and safely closing the connected devices
+are also programmed in the <code class="docutils literal notranslate"><span class="pre">MonitorWindow</span></code> methods. One can easily change which signals are viewed.</p>
+<p>One can also adjust the device or measurement parameters from the <code class="docutils literal notranslate"><span class="pre">MonitorWindow</span></code> which is effective done by
+editing the corresponding <cite>config.yml</cite> file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ScanWindow</span></code>: can be called either from the <code class="docutils literal notranslate"><span class="pre">MonitorWindow</span></code> (inheriting the adjusted parameters throught the config file)
+or from the command line (requires initializing the device connections, manually). The scan operations are measurement
+sequences that are run with a fixed set of parameters and are meant to be saved for further processing.</p>
+<p>It is relatively “easy” to define multiple scan operations and call them seprately from the <code class="docutils literal notranslate"><span class="pre">MonitorWindow</span></code>.</p>
+<div class="section" id="essential-methods">
+<h2>Essential methods<a class="headerlink" href="#essential-methods" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="labphew.controller.html" class="btn btn-neutral float-right" title="C for controller" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="labphew.model.html" class="btn btn-neutral float-left" title="M for model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Sanli Faez
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

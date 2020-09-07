@@ -1,0 +1,472 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Analog Discovery 2 View &mdash; labphew 0.3.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Core" href="../core.html" />
+    <link rel="prev" title="Blink View" href="blink.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> labphew
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Further in the docs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">How to install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howtolabphew.html">How to labphew</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../walkthrough.html">A short guided tour</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.model.html">M for model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.view.html">V for view</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.controller.html">C for controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.core.html">The core files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../labphew.logging.html">Logging and debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Simple examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devices.html">Supported devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customize.html">Customization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../controller.html">Controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model.html">Model</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../view.html">View</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="blink.html">Blink View</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Analog Discovery 2 View</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../core.html">Core</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">labphew</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../api.html">API documentation</a> &raquo;</li>
+        
+          <li><a href="../view.html">View</a> &raquo;</li>
+        
+      <li>Analog Discovery 2 View</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/view/digilent_ad2.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-labphew.view.analog_discovery_2_view"></span><div class="section" id="analog-discovery-2-view">
+<h1>Analog Discovery 2 View<a class="headerlink" href="#analog-discovery-2-view" title="Permalink to this headline">¶</a></h1>
+<p>This module contains 2 classes which are intended to work with a specific Operator (in this case
+labphew.model.analog_discovery_2_model.Operator )</p>
+<p>MonitorWindow class is used to display continuous stream of live data from the Digilent Analog Discovery 2.
+All the processes that are not relating to user interaction are handled by the Operator class in the model folder.</p>
+<p>ScanWindow class is used to control and visualize a specific scan defined in the Operator. Note that scan itself is
+performed in the Operator and the ScanWindow is only used to modify parameters, start/stop and visualize data.</p>
+<p>These Windows may be run separately, but it’s also possible to add the ScanWindow (or multiple ScanWindows) to the
+MonitorWindow.</p>
+<p>Examples of how to use can be found at the end of the file under if __name__==’__main__’</p>
+<dl class="class">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow">
+<em class="property">class </em><code class="descclassname">labphew.view.analog_discovery_2_view.</code><code class="descname">MonitorWindow</code><span class="sig-paren">(</span><em>operator</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/base.html#labphew.core.base.view_base.MonitorWindowBase" title="labphew.core.base.view_base.MonitorWindowBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">labphew.core.base.view_base.MonitorWindowBase</span></code></a></p>
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>operator</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the monitor window.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>operator</strong> (<em>labphew operator instance</em>) – The operator</li>
+<li><strong>parent</strong> (<em>QWidget</em>) – Optional parent GUI</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.ao1_value">
+<code class="descname">ao1_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.ao1_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.ao1_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when AO Channel 2 spinbox is modified.
+Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.ao2_value">
+<code class="descname">ao2_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.ao2_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.ao2_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when AO Channel 2 spinbox is modified.
+Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.apply_properties">
+<code class="descname">apply_properties</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.apply_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.apply_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply properties dictionary to gui elements.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets called when the window is closed. Could be used to do some cleanup before closing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.load_scan_guis">
+<code class="descname">load_scan_guis</code><span class="sig-paren">(</span><em>scan_windows</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.load_scan_guis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.load_scan_guis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load scan windows and add them to a menu in this monitor window.
+Note that the scan windows should be instantiated before adding them.
+The keys of the dictionary should be strings that will act as the names in the Scan menu.
+The values of the dictionary could be the ScanWindowObjects or a list that also contains some PyQt gui settings
+in a dictionary: [ScanWindowObject, {‘shortcut’:”Ctrl+Shift+V”, ‘statusTip’:’Voltage sweep scan’}]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scan_windows</strong> (<em>dict</em>) – scan windows dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.open_scan_window">
+<code class="descname">open_scan_window</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.open_scan_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.open_scan_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the menu and opens Scan Windows that were “attached” to this Monitor gui with load_scan_guis().</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.plot_points">
+<code class="descname">plot_points</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.plot_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.plot_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when plot points spinbox is modified.
+Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.set_UI">
+<code class="descname">set_UI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.set_UI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.set_UI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Code-based generation of the user-interface based on PyQT</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.start_monitor">
+<code class="descname">start_monitor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.start_monitor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.start_monitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when start button is pressed.
+Starts the monitor (thread and timer) and disables some gui elements</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.stop_monitor">
+<code class="descname">stop_monitor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.stop_monitor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.stop_monitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when stop button is pressed.
+Stops the monitor:
+- flags the operator to stop
+- uses the Workthread stop method to wait a bit for the operator to finish, or terminate thread if timeout occurs</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.time_step">
+<code class="descname">time_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.time_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.time_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when time step spinbox is modified.
+Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.MonitorWindow.update_monitor">
+<code class="descname">update_monitor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#MonitorWindow.update_monitor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.MonitorWindow.update_monitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if new data is available and updates the graph.
+Checks if thread is still running and if not: stops timer and reset gui elements
+(called by timer)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow">
+<em class="property">class </em><code class="descclassname">labphew.view.analog_discovery_2_view.</code><code class="descname">ScanWindow</code><span class="sig-paren">(</span><em>operator</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../core/base.html#labphew.core.base.view_base.ScanWindowBase" title="labphew.core.base.view_base.ScanWindowBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">labphew.core.base.view_base.ScanWindowBase</span></code></a></p>
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>operator</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.apply_properties">
+<code class="descname">apply_properties</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.apply_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.apply_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply properties dictionary to gui elements.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets called when the window is closed. Could be used to do some cleanup before closing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.kill_scan">
+<code class="descname">kill_scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.kill_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.kill_scan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forcefully terminates the scan thread</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.mod_scan_config">
+<code class="descname">mod_scan_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.mod_scan_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.mod_scan_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the Modify Config window for the scan properties</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.pause_scan">
+<code class="descname">pause_scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.pause_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.pause_scan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when pause button is clicked.
+Signals the operator scan to pause. Updates buttons accordingly</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.reset_fields">
+<code class="descname">reset_fields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.reset_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.reset_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets gui elements after a scan is finished, stopped or terminated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.scan_start_value">
+<code class="descname">scan_start_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.scan_start_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.scan_start_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when Scan Start spinbox is modified.
+Updates the parameter using a method of operator (which checks validity and also fixes the sign of step) and
+forces the (corrected) parameter in the gui elements</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.scan_step_value">
+<code class="descname">scan_step_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.scan_step_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.scan_step_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when Scan Step spinbox is modified.
+Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.scan_stop_value">
+<code class="descname">scan_stop_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.scan_stop_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.scan_stop_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when Scan Stop spinbox is modified.
+Updates the parameter using a method of operator (which checks validity and also fixes the sign of step) and
+forces the (corrected) parameter in the gui elements</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.set_UI">
+<code class="descname">set_UI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.set_UI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.set_UI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Code-based generation of the user-interface based on PyQT</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.start_scan">
+<code class="descname">start_scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.start_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.start_scan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when start button is pressed.
+Starts the monitor (thread and timer) and disables some gui elements</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.stop_scan">
+<code class="descname">stop_scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.stop_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.stop_scan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop all loop threads:
+- flags the operator to stop
+- uses the Workthread stop method to wait a bit for the operator to finish, or terminate thread if timeout occurs</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="labphew.view.analog_discovery_2_view.ScanWindow.update_scan">
+<code class="descname">update_scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/labphew/view/analog_discovery_2_view.html#ScanWindow.update_scan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#labphew.view.analog_discovery_2_view.ScanWindow.update_scan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if new data is available and updates the graph.
+Checks if thread is still running and if not: stops timer and reset gui elements
+(called by timer)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../core.html" class="btn btn-neutral float-right" title="Core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="blink.html" class="btn btn-neutral float-left" title="Blink View" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Sanli Faez
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
