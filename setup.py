@@ -8,7 +8,7 @@ DESCRIPTION = "Fun with computer-controlled experiments for beginners"  # test t
 setup(
 
     name="labphew",
-    version="0.3.1",
+    version="0.3.2",
 
     packages=find_packages(),
     url="https://github.com/sanlifaez/labphew",

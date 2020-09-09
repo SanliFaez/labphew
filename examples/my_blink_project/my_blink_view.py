@@ -31,7 +31,7 @@ from PyQt5.QtGui import QFont, QIcon
 import pyqtgraph as pg
 from labphew.core.base.general_worker import WorkThread
 from labphew.core.tools.gui_tools import fit_on_screen, ModifyConfig
-from labphew.core.base import MonitorWindowBase, ScanWindowBase
+from labphew.core.base.view_base import MonitorWindowBase, ScanWindowBase
 
 class MonitorWindow(MonitorWindowBase):
     def __init__(self, operator, parent=None):

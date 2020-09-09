@@ -15,7 +15,7 @@ from time import time, sleep, localtime, strftime
 import datetime
 import logging
 import xarray as xr
-from labphew.core.base import OperatorBase
+from labphew.core.base.operator_base import OperatorBase
 import labphew
 
 
