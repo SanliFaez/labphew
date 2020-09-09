@@ -271,7 +271,6 @@ class ScanWindow(ScanWindowBase):
         conf_win.show()
 
     def save(self):
-        print(self.operator.properties['scan']['filename'])
         try:
             fname = QFileDialog.getSaveFileName(self, 'Save data as', self.operator.properties['scan']['filename'],
                                                 filter="netCDF4 (*.nc);;All Files (*.*)")
