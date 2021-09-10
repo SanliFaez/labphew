@@ -126,7 +126,7 @@ class DfwController(dwf.Dwf):
         if channel == 0 or channel == -1:
             self._time_stabilized = max(self._time_stabilized, time.time()+0.013+0.005*abs(self._last_ao0-volt))
             self._last_ao0 = volt
-        if channel == 0 or channel == -1:
+        if channel == 1 or channel == -1:
             self._time_stabilized = max(self._time_stabilized, time.time()+0.013+0.005*abs(self._last_ao1-volt))
             self._last_ao1 = volt
 

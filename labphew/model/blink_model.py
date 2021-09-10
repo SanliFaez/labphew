@@ -104,7 +104,7 @@ class BlinkOperator(OperatorBase):
 
         :param param: optional dictionary of parameters that will used to update the scan parameters
         :type param: dict
-        :return: the AO voltage, and the measured AI voltages
+        :return: data_point number, the state of the devices (as 0 and 1)
         :rtype: list, list
         """
         if type(param) is dict:

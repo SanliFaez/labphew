@@ -92,6 +92,7 @@ class SaverWidget(QWidget):
         self.filename.setText(fname[0])
 
 
+
 class ModifyConfig(QDialog):
     """
     Window to modify any dictionary as if it were yaml text.
