@@ -351,6 +351,8 @@ class SimulatedDfwController:
     def close(self):
         pass
 
+    def power_supply(self, positive=None, negative=None, enable=True):
+        self.logger.info("power_supply method is not implemented in SimulatedDfwController")
 
 def close_all():
     """Close all Digilent "WaveForms" devices"""
