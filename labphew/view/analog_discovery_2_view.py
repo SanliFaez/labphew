@@ -431,7 +431,7 @@ class ScanWindow(ScanWindowBase):
         """
         Open the Modify Config window for the scan properties
         """
-        conf_win = ModifyConfig(self.operator.properties['scan'], apply_callback=self.apply_properties, parent=self)
+        conf_win = ModifyConfig(self.operator.properties[self.scan_name], apply_callback=self.apply_properties, parent=self)
         conf_win.show()
 
     def apply_properties(self):
