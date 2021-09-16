@@ -110,7 +110,8 @@ class DfwController(dwf.Dwf):
 
     def write_analog(self, volt, channel=-1, enable=True):
         """
-        Basic method to apply voltage to analog out channels.
+        Basic method to apply voltage to analog out channels (the Arbitrary Waveform Generator (AWG) pins W1 and W2).
+        Not that these pins can only supply about 2mA.
         In the background it also approximates the timestamp when the output will be stabilize (based on the change in voltage applied).
         To wait for that timestamp, call wait_for_stabilization()
 
@@ -182,6 +183,52 @@ class DfwController(dwf.Dwf):
             if time.time() > start_timestamp + read_timeout:
                 self.logger.error('AI read timeout occured')
                 return True
+
+    def power_supply(self, positive=None, negative=None, enable=True):
+        # """
+        # Set the voltage for the positive programmable power supply (V+, V-).
+        # These can supply larger current than the AWG pins, but are slower,
+        # probably less accurate and technically not rated for voltages
+        # below 0.5V (although they still appear to operate)
+        #
+        # :param positive: Voltage to apply to V+ (between 0 and 5)
+        # :type positive: float
+        # :param negative: Voltage to apply to V- (between -5 and 0)
+        # :type negative: float
+        # :param enable: enable the output (default is True)
+        # :type enable: bool
+        # """
+        if positive is not None:
+            if positive > 5.0:
+                self.logger.warning("positive power supply cannot be higher than 5.0. Setting V+ to 5.0V")
+                positive = 5.0
+            if positive < 0:
+                self.logger.warning("positive power supply cannot be lower than 0. Setting V+ to 0V")
+                positive = 0.0
+            self.AnalogIO.channelNodeSet(0, 1, positive)  # set V+ value
+        if negative is not None:
+            if negative < -5.0:
+                self.logger.warning("negative power supply cannot be lower than 5.0. Setting V- to -5.0V")
+                negative = -5.0
+            if negative > 0:
+                self.logger.warning("negative power supply cannot be higher than 0. Setting V- to 0V")
+                negative = 0.0
+            self.AnalogIO.channelNodeSet(1, 1, negative)  # set V- value
+        if not enable:
+            self.AnalogIO.enableSet(False)
+            self.AnalogIO.channelNodeSet(0, 0, False)
+            self.AnalogIO.channelNodeSet(1, 0, False)
+            self.logger.info('Disabling V+, V- and power supply master')
+        else:
+            if positive is not None and self.AnalogIO.channelNodeGet(0, 0) != bool(positive):
+                self.AnalogIO.channelNodeSet(0, 0, bool(positive))
+                self.logger.info('Enabling V+')
+            if negative is not None and self.AnalogIO.channelNodeGet(1, 0) != bool(negative):
+                self.AnalogIO.channelNodeSet(1, 0, bool(negative))
+                self.logger.info('Enabling V-')
+            if not self.AnalogIO.enableGet():
+                self.AnalogIO.enableSet(True)
+                self.logger.info('Enabling power supply master')
 
 
 class SimulatedDfwController:
