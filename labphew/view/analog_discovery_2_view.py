@@ -328,11 +328,12 @@ class MonitorWindow(MonitorWindowBase):
 
 
 class ScanWindow(ScanWindowBase):
-    def __init__(self, operator, parent=None):
+    def __init__(self, operator, scan_name='scan', parent=None):
         self.logger = logging.getLogger(__name__)
         super().__init__(parent)
         self.setWindowTitle('Analog Discovery 2')
         self.operator = operator
+        self.scan_name = scan_name
 
         # # For loading a .ui file (created with QtDesigner):
         # p = os.path.dirname(__file__)
@@ -438,25 +439,25 @@ class ScanWindow(ScanWindowBase):
         Apply properties dictionary to gui elements.
         """
         self.logger.debug('Applying config properties to gui elements')
-        self.operator._set_scan_start(self.operator.properties['scan']['start'])  # this optional line checks validity
-        self.scan_start_spinbox.setValue(self.operator.properties['scan']['start'])
+        self.operator._set_scan_start(self.operator.properties[self.scan_name]['start'])  # this optional line checks validity
+        self.scan_start_spinbox.setValue(self.operator.properties[self.scan_name]['start'])
 
-        self.operator._set_scan_stop(self.operator.properties['scan']['stop'])  # this optional line checks validity
-        self.scan_stop_spinbox.setValue(self.operator.properties['scan']['stop'])
+        self.operator._set_scan_stop(self.operator.properties[self.scan_name]['stop'])  # this optional line checks validity
+        self.scan_stop_spinbox.setValue(self.operator.properties[self.scan_name]['stop'])
 
-        self.operator._set_scan_step(self.operator.properties['scan']['step'])  # this optional line checks validity
-        self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
+        self.operator._set_scan_step(self.operator.properties[self.scan_name]['step'])  # this optional line checks validity
+        self.scan_step_spinbox.setValue(self.operator.properties[self.scan_name]['step'])
 
-        if 'title' in self.operator.properties['scan']:
-            self.box_scan.setTitle(self.operator.properties['scan']['title'])
-            self.plot1.setTitle(self.operator.properties['scan']['title'])
+        if 'title' in self.operator.properties[self.scan_name]:
+            self.box_scan.setTitle(self.operator.properties[self.scan_name]['title'])
+            self.plot1.setTitle(self.operator.properties[self.scan_name]['title'])
 
-        self.plot1.setLabel('bottom', self.operator.properties['scan']['x_label'], units=self.operator.properties['scan']['x_units'])
-        self.plot1.setLabel('left', self.operator.properties['scan']['y_label'], units=self.operator.properties['scan']['y_units'])
-        self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
+        self.plot1.setLabel('bottom', self.operator.properties[self.scan_name]['x_label'], units=self.operator.properties[self.scan_name]['x_units'])
+        self.plot1.setLabel('left', self.operator.properties[self.scan_name]['y_label'], units=self.operator.properties[self.scan_name]['y_units'])
+        self.plot1.setXRange(self.operator.properties[self.scan_name]['start'], self.operator.properties[self.scan_name]['stop'])
 
-        if 'filename' in self.operator.properties['scan']:
-            self.saver.filename.setText(self.operator.properties['scan']['filename'])
+        if 'filename' in self.operator.properties[self.scan_name]:
+            self.saver.filename.setText(self.operator.properties[self.scan_name]['filename'])
 
     def scan_start_value(self):
         """
@@ -465,10 +466,10 @@ class ScanWindow(ScanWindowBase):
         forces the (corrected) parameter in the gui elements
         """
         self.operator._set_scan_start(self.scan_start_spinbox.value())
-        self.scan_start_spinbox.setValue(self.operator.properties['scan']['start'])
-        self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
+        self.scan_start_spinbox.setValue(self.operator.properties[self.scan_name]['start'])
+        self.scan_step_spinbox.setValue(self.operator.properties[self.scan_name]['step'])
         set_spinbox_stepsize(self.scan_start_spinbox)
-        self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
+        self.plot1.setXRange(self.operator.properties[self.scan_name]['start'], self.operator.properties[self.scan_name]['stop'])
 
     def scan_stop_value(self):
         """
@@ -477,10 +478,10 @@ class ScanWindow(ScanWindowBase):
         forces the (corrected) parameter in the gui elements
         """
         self.operator._set_scan_stop(self.scan_stop_spinbox.value())
-        self.scan_stop_spinbox.setValue(self.operator.properties['scan']['stop'])
-        self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
+        self.scan_stop_spinbox.setValue(self.operator.properties[self.scan_name]['stop'])
+        self.scan_step_spinbox.setValue(self.operator.properties[self.scan_name]['step'])
         set_spinbox_stepsize(self.scan_stop_spinbox)
-        self.plot1.setXRange(self.operator.properties['scan']['start'], self.operator.properties['scan']['stop'])
+        self.plot1.setXRange(self.operator.properties[self.scan_name]['start'], self.operator.properties[self.scan_name]['stop'])
 
     def scan_step_value(self):
         """
@@ -488,7 +489,7 @@ class ScanWindow(ScanWindowBase):
         Updates the parameter using a method of operator (which checks validity) and forces the (corrected) parameter in the gui element
         """
         self.operator._set_scan_step(self.scan_step_spinbox.value())
-        self.scan_step_spinbox.setValue(self.operator.properties['scan']['step'])
+        self.scan_step_spinbox.setValue(self.operator.properties[self.scan_name]['step'])
         set_spinbox_stepsize(self.scan_step_spinbox)
 
     def reset_fields(self):
@@ -522,7 +523,7 @@ class ScanWindow(ScanWindowBase):
             self.stop_button.setEnabled(True)
             # self.operator._stop = False  # enable operator monitor loop to run
             self.scan_thread.start()  # start the operator monitor
-            self.scan_timer.start(self.operator.properties['scan']['gui_refresh_time'])  # start the update timer
+            self.scan_timer.start(self.operator.properties[self.scan_name]['gui_refresh_time'])  # start the update timer
             self.scan_start_spinbox.setEnabled(False)
             self.scan_stop_spinbox.setEnabled(False)
             self.scan_step_spinbox.setEnabled(False)
@@ -549,7 +550,7 @@ class ScanWindow(ScanWindowBase):
         self.stop_button.setEnabled(False)
         self.operator._stop = True
         if self.scan_thread.isRunning():
-            self.scan_thread.stop(self.operator.properties['scan']['stop_timeout'])
+            self.scan_thread.stop(self.operator.properties[self.scan_name]['stop_timeout'])
         self.operator._busy = False  # Reset in case the monitor was not stopped gracefully, but forcefully stopped
         self.reset_fields()
 

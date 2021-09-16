@@ -137,7 +137,7 @@ class Operator(OperatorBase):
             return
         return self.properties['scan']['ao_channel'], self.properties['scan']['ai_channel']
 
-    def _set_scan_start(self, value):
+    def _set_scan_start(self, value, scan_name='scan'):
         """
         Set scan start value.
         Forces value to be in valid range and updates properties dictionary.
@@ -150,10 +150,10 @@ class Operator(OperatorBase):
         if ao_ch is None:  # if _verify_scan_channels() returns nothing that means channel is invalid or not found
             return
         value = self.analog_out(ao_ch, value, verify_only=True)
-        self.properties['scan']['start'] = value
+        self.properties[scan_name]['start'] = value
         self._set_scan_step()
 
-    def _set_scan_stop(self, value):
+    def _set_scan_stop(self, value, scan_name='scan'):
         """
         Set scan stop value.
         Forces value to be in valid range and updates properties dictionary.
@@ -165,10 +165,10 @@ class Operator(OperatorBase):
         if ao_ch is None:  # if _verify_scan_channels() returns nothing that means channel is invalid or not found
             return
         value = self.analog_out(ao_ch, value, verify_only=True)
-        self.properties['scan']['stop'] = value
+        self.properties[scan_name]['stop'] = value
         self._set_scan_step()
 
-    def _set_scan_step(self, step=None):
+    def _set_scan_step(self, step=None, scan_name='scan'):
         """
         Set scan step value. Note that it will correct the sign automatically accroding to start and stop values.
         If no step value is supplied it only corrects the sign of step.
@@ -180,9 +180,9 @@ class Operator(OperatorBase):
             self.logger.warning('stepsize of 0 is not possible')
             return
         if step is not None:
-            self.properties['scan']['step'] = step
-        if np.sign(self.properties['scan']['step']) != np.sign(self.properties['scan']['stop'] - self.properties['scan']['start']):
-            self.properties['scan']['step'] *= -1
+            self.properties[scan_name]['step'] = step
+        if np.sign(self.properties[scan_name]['step']) != np.sign(self.properties[scan_name]['stop'] - self.properties[scan_name]['start']):
+            self.properties[scan_name]['step'] *= -1
 
     def _monitor_loop(self):
         """
