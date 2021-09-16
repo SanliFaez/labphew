@@ -189,13 +189,18 @@ class DfwController(dwf.Dwf):
         # Set the voltage for the positive programmable power supply (V+, V-).
         # These can supply larger current than the AWG pins, but are slower,
         # probably less accurate and technically not rated for voltages
-        # below 0.5V (although they still appear to operate)
+        # below 0.5V (although they still appear to operate).
         #
-        # :param positive: Voltage to apply to V+ (between 0 and 5)
+        # Both V+ and V- may be set at once: power_supply(3.3, -1.1)
+        # Or positive only: power_supply(3.3) or power_supply(positive=3.3)
+        # Or negative only: power_supply(negative=-1.1)
+        # The outputs are enabled by default. To disable set enable=False
+        #
+        # :param positive: (optional) Voltage to apply to V+ (between 0 and 5)
         # :type positive: float
-        # :param negative: Voltage to apply to V- (between -5 and 0)
+        # :param negative: (optional) Voltage to apply to V- (between -5 and 0)
         # :type negative: float
-        # :param enable: enable the output (default is True)
+        # :param enable: (optional) enable the output (default is True)
         # :type enable: bool
         # """
         if positive is not None:
