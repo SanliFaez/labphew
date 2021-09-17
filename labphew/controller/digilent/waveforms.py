@@ -283,7 +283,8 @@ class SimulatedDfwController:
 
     def __getattr__(self, item):
         """This method is called when an undefined method is called"""
-        self.logger.warning(f'method {item} is not implemented (in SimulatedDfwController)')
+        if item != 'shape':
+            self.logger.debug(f'method {item} is not implemented (in SimulatedDfwController)')
 
     # When running in PyCharm console, __len__ gets called and will result in the method above printing warnings.
     # Hence it's implemented here as an empty method
