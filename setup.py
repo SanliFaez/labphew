@@ -8,7 +8,7 @@ DESCRIPTION = "Fun with computer-controlled experiments for beginners"  # test t
 setup(
 
     name="labphew",
-    version="0.3.2",
+    version="0.3.3",
 
     packages=find_packages(),
     url="https://github.com/sanlifaez/labphew",
@@ -32,14 +32,14 @@ setup(
         ],
     },
     install_requires=[
-        'pint',
-        'pyqt5==5.13.2',
+        'matplotlib',
+        'xarray',
         'pyqtgraph',
-        'numpy',
-        'PyYAML',
         'pyserial',
-        'dwf',          # for Digilent WaveForms devices
-        'xarray',       # (to save in netcdf4 format, xarray requires scipy or netcdf4)
-        'scipy',
+        'pyyaml',
+        'dwf',
+        'pint',
+        'numpy',
+        'pyqt5',
     ],
 )
