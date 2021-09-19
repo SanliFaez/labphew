@@ -1,6 +1,7 @@
 import sys
 import os
 import labphew
+import logging
 from labphew.core.tools.gui_tools import open_config_dialog
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon
@@ -8,27 +9,29 @@ from PyQt5.QtGui import QIcon
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Optionally place the path to your default config file here:
 default_config = None
+# Example for pointing to a different config file:
+# default_config = os.path.join(labphew.repository_path, 'examples', 'my_own_config.yml')
 # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 def main(config_file = None):
     """
     Starts the GUI of the Digilent Analog Discovery 2 example.
-    Note, if config_file is not specified, or is set to '-default' or '-d', it will fall back to a default file
-    specified in this module.
+    Note, if config_file is not specified, or is set to '-default' or '-d',
+    it will fall back to a default file specified in this module.
     Note, if '-browse' or '-b' is used for config_file, it will display a window that allows you to browse to the file.
-    Note, if no config_file is specified, load_config() of the operator wil be called without
+    Note, if no config_file is specified, load_config() of the operator will be called without
 
     :param config_file: optional path to config file
     :type config_file: str
     """
 
     # If -browse (or -b) is used for config_file, display an open file dialog:
-    if config_file=='-browse' or config_file=='-b':
+    if config_file == '-browse' or config_file == '-b':
         config_file = open_config_dialog()
     # If -default (or -d) is used for config_file, switch it out for the default specified in the top of this file:
-    if config_file=='-default' or config_file=='-d':
+    if config_file == '-default' or config_file == '-d':
         config_file = default_config
-        print('Using default_config file specified in {}'.format(__name__))
+        print('Using default_config file specified in {}'.format(__file__))
     if config_file is None:
         print('Using Operator without specifying a config file.')
 
@@ -42,7 +45,7 @@ def main(config_file = None):
 
     instrument = DfwController()
     opr = Operator(instrument)
-    opr.load_config()
+    opr.load_config(default_config)
 
     # Create a PyQt application
     app = QApplication(sys.argv)
@@ -60,13 +63,24 @@ def main(config_file = None):
     # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     # This line will start the application:
-    error_code = app.exec_()
-    sys.exit(error_code)
+    exit_code = app.exec_()
+    # Print the exit code and exit unless it was run from interactive console):
+    if hasattr(sys, 'ps1'):
+        print('Finished with exit code', exit_code)
+    else:
+        sys.exit(exit_code)
 
 
 if __name__ == '__main__':
-    # When run from command line, this code will pass the command line argument as an argument in the main() function
+    # You could use this code to change the logging level:
+    logging.getLogger('labphew').setLevel(logging.INFO)
+
     if len(sys.argv) > 1:
+        # When run from command line, this code will pass the command line
+        # arguments as arguments in the main() function:
         main(sys.argv[1])
+    elif hasattr(sys, 'ps1'):
+        # When this file is run directly in an interactive python console it will use the default specified at the top
+        main(default_config)
     else:
         main()
