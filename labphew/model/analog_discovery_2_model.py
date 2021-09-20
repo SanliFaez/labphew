@@ -235,34 +235,35 @@ class Operator(OperatorBase):
         :return: the AO voltage, and the measured AI voltages
         :rtype: list, list
         """
-        if type(param) is dict:
-            self.logger.info('Updating scan properties with supplied parameters dictionary.')
-            self.properties['scan'].update(param)
-        # Start with various checks and warn+return if something is wrong
         if self._busy:
             self.logger.error('Scan should not be started while Operator is busy.')
             return
         if 'scan' not in self.properties:
             self.logger.error("The config file or properties dict should contain 'scan' section.")
             return
+        if type(param) is dict:
+            self.logger.info('Updating scan properties with supplied parameters dictionary.')
+            self.properties['scan'].update(param)
+        scan_properties = self.properties['scan']
+        # Start with various checks and warn+return if something is wrong
         required_keys = ['start', 'stop', 'step', 'ao_channel', 'ai_channel']
-        if not all(key in self.properties['scan'] for key in required_keys):
+        if not all(key in scan_properties for key in required_keys):
             self.logger.error("'scan' should contain: "+', '.join(required_keys))
             return
         try:
-            start = self.properties['scan']['start']
-            stop = self.properties['scan']['stop']
-            step = self.properties['scan']['step']
-            ch_ao = int(self.properties['scan']['ao_channel'])
-            ch_ai = int(self.properties['scan']['ai_channel'])
+            start = scan_properties['start']
+            stop = scan_properties['stop']
+            step = scan_properties['step']
+            ch_ao = int(scan_properties['ao_channel'])
+            ch_ai = int(scan_properties['ai_channel'])
         except:
-            self.logger.error("Error occured while reading scan config values")
+            self.logger.error("Error occurred while reading scan config values")
             return
         if ch_ai not in [1,2] or ch_ao not in [1,2]:
             self.logger.error("AI and AO channel need to be 1 or 2")
             return
-        if 'stabilize_time' in self.properties['scan']:
-            stabilize = self.properties['scan']['stabilize_time']
+        if 'stabilize_time' in scan_properties:
+            stabilize = scan_properties['stabilize_time']
         else:
             self.logger.info("stabilize_time not found in config, using 0s")
             stabilize = 0
@@ -320,7 +321,7 @@ class Operator(OperatorBase):
         :type store_conf: bool
         """
         # First test if the required data arrays have been generated (i.e. if the scan has run)
-        if not hasattr(self, "scan_voltages") or not hasattr(self, "measured_voltages"):
+        if not all(hasattr(self, var) for var in ['scan_voltages', 'measured_voltages']):
             self.logger.warning('no data to save yet')
             return
         if os.path.exists(filename):

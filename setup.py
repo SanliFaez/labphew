@@ -17,6 +17,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
     author='Sanli Faez, Aron Opheij',
     author_email='s.faez@uu.nl',
@@ -41,5 +42,6 @@ setup(
         'pint',
         'numpy',
         'pyqt5',
+        'scipy',
     ],
 )
