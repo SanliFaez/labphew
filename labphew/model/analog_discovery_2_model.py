@@ -303,6 +303,96 @@ class Operator(OperatorBase):
 
         return self.scan_voltages, self.measured_voltages
 
+    def do_iv_scan(self, param=None):
+        """
+        An example of a method that performs a scan (based on parameters in the config file).
+        This method can be run from a GUI, from command line or other script
+        This scan sweeps the voltage on one of the AO channels and reads one of the AI channels.
+
+        :param param: optional dictionary of parameters that will used to update the scan parameters
+        :type param: dict
+        :return: the AO voltage, and the measured AI voltages
+        :rtype: list, list
+        """
+        if self._busy:
+            self.logger.error('Scan should not be started while Operator is busy.')
+            return
+        if 'iv scan' not in self.properties:
+            self.logger.error("The config file or properties dict should contain 'iv scan' section.")
+            return
+        if type(param) is dict:
+            self.logger.info('Updating scan properties with supplied parameters dictionary.')
+            self.properties['iv scan'].update(param)
+        scan_properties = self.properties['iv scan']
+        # Start with various checks and warn+return if something is wrong
+        required_keys = ['start', 'stop', 'step', 'R', 'ai_ch_led', 'ai_ch_r']
+        if not all(key in scan_properties for key in required_keys):
+            self.logger.error("'iv scan' should contain: "+', '.join(required_keys))
+            return
+        try:
+            start = scan_properties['start']
+            stop = scan_properties['stop']
+            step = scan_properties['step']
+            R = scan_properties['R']
+            ai_ch_led = int(scan_properties['ai_ch_led'])
+            ai_ch_R = int(scan_properties['ai_ch_r'])
+        except:
+            self.logger.error("Error occurred while reading scan config values")
+            return
+        if ai_ch_led not in [1,2] or ai_ch_R not in [1,2]:
+            self.logger.error("AI and AO channel need to be 1 or 2")
+            return
+        if 'stabilize_time' in scan_properties:
+            stabilize = scan_properties['stabilize_time']
+        else:
+            self.logger.info("stabilize_time not found in config, using 0s")
+            stabilize = 0
+        num_points = np.int(round( (stop-start)/step+1 ))  # use round to catch the occasional rounding error
+        if num_points <= 0:
+            self.logger.error("Start, stop and step result in 0 or fewer points to sweep")
+            return
+
+        self.voltages_to_scan = np.linspace(start, stop, num_points)
+
+        self.V_f = []
+        self.V_r = []
+        self.I_f = []
+        self.scan_voltages = []
+
+        self._busy = True  # indicate that operator is busy
+
+        for i, voltage in enumerate(self.voltages_to_scan):
+            self.logger.debug('applying {} to ch V+'.format(voltage))
+            self.instrument.power_supply(voltage)
+            sleep(stabilize)
+            measured = self.analog_in()
+            V_f = measured[ai_ch_led-1]
+            V_r = measured[ai_ch_R-1]
+            I_f = V_r / scan_properties['R'] / 0.001
+            self.V_f.append(V_f)
+            self.V_r.append(V_r)
+            self.I_f.append(I_f)
+            self.scan_voltages.append(voltage)
+
+            # The remainder of the loop adds functionality to plot data and pause and stop the scan when it's run from a gui:
+            self._new_scan_data = True
+            # before the end of the loop: halt if pause is True
+            while self._pause:
+                sleep(0.05)
+                if self._stop: break
+            # if (soft) stop was requested, break out of loop
+            if self._stop:
+                break
+
+        self._stop = False  # reset stop flag to false
+        self._busy = False  # indicate operator is not busy anymore
+        self._pause = False  # is this necessary?
+
+        self.instrument.power_supply(0)
+
+        return self.V_f, self.I_f
+
+
     def save_scan(self, filename, metadata=None, store_conf=False):
         """
         Store data in xarray Dataset and save to netCDF4 file.
@@ -394,15 +484,16 @@ if __name__ == "__main__":
     # from labphew.controller.digilent.waveforms import DfwController
 
     # To import the actual device:
-    # from labphew.controller.digilent.waveforms import DfwController
+    from labphew.controller.digilent.waveforms import DfwController
 
     # To import a simulated device:
-    from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
+    # from labphew.controller.digilent.waveforms import SimulatedDfwController as DfwController
 
     instrument = DfwController()
 
-    opr = Operator(instrument)
-    opr.load_config()
 
-    x, y = opr.do_scan()
+    opr = Operator(instrument)
+    opr.load_config(os.path.join(labphew.repository_path, 'examples', 'ed21.yml'))
+
+    x, y = opr.do_iv_scan()
     plt.plot(x,y)
