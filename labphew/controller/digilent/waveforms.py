@@ -235,6 +235,179 @@ class DfwController(dwf.Dwf):
                 self.AnalogIO.enableSet(True)
                 self.logger.info('Enabling power supply master')
 
+    def read_digital(self, as_list=True):
+        """
+        Returns a list of all 16 pins values (regardless of whether it is
+        in Input or Output mode).
+        Optionally by setting as_list=False, it returns the values as a single
+        "16 bit integer" where the bits represent the pins.
+
+        :param as_list: (optional, default is True)
+        :type as_list:
+        :return: list of 16, 0 or 1 values (or "16 bit integer")
+        :rtype: list (or int)
+        """
+        status = self.DigitalIO.inputStatus()
+        if as_list:
+            return self._convert_number_to_list(status)
+        else:
+            return status
+
+    def _convert_number_to_list(self, number):
+        """
+        Internal helper function that converts a number to a list where the
+        elements represent the values of the bits.
+
+        :param number: integer in range [0 - 65535]
+        :type number: int
+        :return: list consisting of 0 and 1, of length 16
+        :rtype: list
+        """
+        if number < 0 or number > 65535:
+            self.logger.error("Number out of range [0 - 65535]")
+            return
+        return [int(c) for c in '{0:016b}'.format(number)[::-1]]
+
+    def _convert_value_and_pin_to_bits(self, value, pin=None):
+        """
+        Internal helper function that does a lot of argument type checking
+        (with appropriate error messages) and converts it to the number
+        required by dwf module (where the bits represent the pins).
+        It can take an iterable (list/tuple/array) of 16 boolean (0, 1)
+        elements as input, or a number where the bits represent the state, or
+        a single value and pin number can be specified. In the latter case,
+        when the value is 0 (or False) it will return the "inverted" number,
+        i.e. all bits are 1 except the one specified by 'pin'.
+
+        :param value: mode of specific pin, or list of all pins, or "16 bit integer"
+        :type value: int or list
+        :param pin: (optional) pin number [0 - 16]
+        :type pin: int
+        :return: the "16 bit integer" where each bit represents a pin
+        :rtype: int
+        """
+        if pin is not None:
+            if type(pin) is not int or pin<0 or pin>15:
+                self.logger.error("If pin is specified it needs to be an integer [0 - 15]")
+                return
+            if type(value) is not bool and (type(value) is not int or value not in (0,1)):
+                self.logger.error("When specifing pin number, the value needs to be a single boolean, or a 0 or a 1")
+                return
+            ret = 1 << pin
+            if value == 0:
+                return 65535 - ret
+            else:
+                return ret
+        elif type(value) is int:
+            if value<0 or value > 65535:
+                self.logger.error("When specifing the number directly it needs to be in range [0 - 65535]")
+                return
+            return value
+        else:
+            try:
+                iterator = iter(value)
+                assert(len(value)==16)
+            except TypeError:
+                self.logger.error("When not specifying the pin, a list/tuple/array of 16 elements needs to be passed, or a single number")
+                return
+            ret = 0
+            for v in reversed(value):
+                ret <<= 1
+                ret += v
+            return ret
+
+    def get_IO_pin_mode(self, as_list=True):
+        """
+        Returns a list of all 16 pin modes. 1 means Output, 0 means Input.
+        Optionally by setting as_list=False, it returns the values as a single
+        "16 bit integer" where the bits represent the pins.
+
+        :param as_list: (optional, default is True)
+        :type as_list:
+        :return: list of 16, 0 or 1 values (or "16 bit integer")
+        :rtype: list (or int)
+        """
+        modes = self.DigitalIO.outputEnableGet()
+        if as_list:
+            return self._convert_number_to_list(modes)
+        else:
+            return modes
+
+    def set_IO_pin_mode(self, value, pin=None):
+        """
+        Set the mode of one or all digital IO pins.
+        True or 1 means Output, False or 1 means Input.
+        To set one specific pin: specify value (True, False, 0 or 1) and
+        pin-number [0 - 16].
+        To set all pins at once, one can specify a list (of length 16), or
+        specify the integer number where each bit represents a pin.
+
+        :param value: mode of specific pin, or list of all pins, or "16 bit integer"
+        :type value: int, or list
+        :param pin: (optional) pin number [0 - 16]
+        :type pin: int
+
+        """
+        if value == 'all':
+            change_modes = 65535
+        else:
+            change_modes = self._convert_value_and_pin_to_bits(value, pin)
+        if change_modes is None:
+            self.logger.error("Incorrect arguments in enable_digital_ouput()")
+            return
+        if pin is not None:
+            # This means only a specific pin will be set
+            current_modes = self.DigitalIO.outputEnableGet()
+            if value:
+                change_modes |= current_modes
+            else:
+                change_modes &= current_modes
+        self.DigitalIO.outputEnableSet(change_modes)
+
+
+
+    def write_digital(self, value, pin=None):
+        """
+        Write the output of one or all digital Output pins.
+        To write to one specific pin: specify value (True, False, 0 or 1) and
+        pin-number [0 - 16].
+        To write all values at once, one can specify a list (of length 16), or
+        specify the integer number where each bit represents a pin.
+
+        Note: For a single pin it will enable Output mode if it was not set yet.
+        When setting all pins it will only warn when some pins are changed but
+        not set as Output.
+
+        :param value: value of specific pin, or list of all pins, or "16 bit integer"
+        :type value: int, or list
+        :param pin: (optional) pin number [0 - 16]
+        :type pin: int
+        """
+        change_ouput = self._convert_value_and_pin_to_bits(value, pin)
+        if change_ouput is None:
+            self.logger.error("Incorrect arguments in write_digital()")
+            return
+        current_modes = self.DigitalIO.outputEnableGet()
+        current_values = self.DigitalIO.inputStatus()
+        if pin is None:
+            if (current_values ^ change_ouput) & ~current_modes:
+                self.logger.warning('Some of the pins being changed are not set as output!')
+            self.DigitalIO.outputSet(change_ouput)
+            return
+        else:
+            if not ((1 << pin) & current_modes):
+                self.logger.info("Setting pin {} as Output (it was set as Input)")
+            self.enable_digital_ouput_mode(True, pin)
+        if value:
+            change_ouput |= current_modes
+        else:
+            change_ouput &= current_modes
+        self.DigitalIO.outputSet(change_ouput)
+
+
+
+
+
 
 class SimulatedDfwController:
     """
@@ -353,7 +526,31 @@ class SimulatedDfwController:
         pass
 
     def power_supply(self, positive=None, negative=None, enable=True):
+        """Dummy method for "simulated device". See DfwController for intended use."""
         self.logger.info("power_supply method is not implemented in SimulatedDfwController")
+
+    def write_digital(self, value, pin=None):
+        """Dummy method for "simulated device". See DfwController for intended use."""
+        pass
+
+    def read_digital(self, as_list=True):
+        """Dummy method for "simulated device". See DfwController for intended use."""
+        if as_list:
+            return [0]*16
+        else:
+            return 0
+
+    def set_IO_pin_mode(self, value, pin=None):
+        """Dummy method for "simulated device". See DfwController for intended use."""
+        pass
+
+    def get_IO_pin_mode(self, as_list=True):
+        """Dummy method for "simulated device". See DfwController for intended use."""
+        if as_list:
+            return [0] * 16
+        else:
+            return 0
+
 
 def close_all():
     """Close all Digilent "WaveForms" devices"""
@@ -556,3 +753,4 @@ if __name__ == '__main__':
 
     # or to close all devices:
     # close_all()
+
