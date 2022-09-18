@@ -27,9 +27,9 @@ package_path = os.path.dirname(os.path.abspath(__file__))
 repository_path = os.path.abspath(os.path.join(package_path, os.pardir))
 parent_path = os.path.abspath(os.path.join(repository_path, os.pardir))
 
-from pint import UnitRegistry
-ureg = UnitRegistry()
-Q_ = ureg.Quantity
+# from pint import UnitRegistry
+# ureg = UnitRegistry()
+# Q_ = ureg.Quantity
 
 import logging
 # Set standard logging format and level.

@@ -86,8 +86,8 @@ class BlinkOperator(OperatorBase):
         :param time_step: time step between acquisitions in the monitor loop (seconds)
         :type time_step: float
         """
-        if time_step < 0.001:
-            time_step = 0.001
+        if time_step < 0.01:
+            time_step = 0.01
             self.logger.warning(f"time_step too small, setting: {time_step}s")
         elif time_step> 0.1:
             self.logger.warning(f"setting time_step to {time_step}s (are you sure?)")
